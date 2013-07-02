@@ -1,0 +1,28 @@
+#center{
+	margin: 0;
+	padding: 0;	
+}
+#box{
+	width: 808px;
+	margin: auto;
+	}
+#ans1{
+	margin-left: 260px;
+	
+}
+#fly{
+	position: absolute;
+	top: 112px;
+}
+a.button-green {
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0.5, #52D64D), color-stop(0.5, #30C24E));
+background: -moz-linear-gradient(top, #52D64D 50%, #30C24E 50%);
+border: 1px solid #52D64D;
+color: white;
+text-shadow: 0 1px 1px #004F6D;
+behavior: url(/PIE.htc);
+width: 70px;
+float: right;
+margin-top: -44px;
+margin-right: 2px;
+}
