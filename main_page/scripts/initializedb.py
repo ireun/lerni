@@ -132,7 +132,7 @@ def main(argv=sys.argv):
         Titles("mgr"),
         Titles("dr"),
         Titles("ks."),
-        People(u"Administrator","",u"","pesel","2","1",u"admin",u"Administrator",u"admin","admin@mail.com",1),
+        People(u"Administrator","",u"","01010100000","2","1",u"admin",u"Administrator",u"admin","admin@mail.com",1),
         AppCodes(63, "some_text", u"some_text", u"some_text"),
         SupportSections(u"Dział IT"),
         SupportSections(u"Sekretariat"),

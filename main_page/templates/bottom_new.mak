@@ -13,6 +13,8 @@
     <script type="text/javascript" src="//raw.github.com/mrjasonroy/jBreadCrumb/master/js/jquery.jBreadCrumb.1.1.js"></script>   
     <script src="/static/js/jflickrfeed.min.js"></script>
     <script src="/static/js/jquery.nested.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.4.5/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.4.5/bootstrap-editable/js/bootstrap-editable.min.js"></script>
   </div>
   </body>
 </html>

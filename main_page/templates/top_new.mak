@@ -60,7 +60,10 @@
               <li><a href="/login">Login</a></li>
             </ul>
             <div class="pull-right">
-              lol
+               <ul class="nav">
+                  <li><a href="/admin">Panel administratora</a></li>
+                  <li><a href="/account" class="cogwheel"></a></li>
+               </ul>
             </div>
           </div>
         </div>
