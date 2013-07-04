@@ -244,9 +244,9 @@ def main(argv=sys.argv):
         Groups(u"3d"),
         Groups(u"3e")])
         #Lessons(1, teacher_subject_id, group_id, part_1, part_2, day, order, room)
-        import_pages()
-        import_competitors()
-        import_tweets()
+        #import_pages()
+        #import_competitors()
+        #import_tweets()
         
 def import_competitors():
     mypath="../main_page/main_page/data/competitors/"

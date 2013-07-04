@@ -10,7 +10,7 @@ Getting Started
 
 - $venv/bin/python setup.py develop
 
-- $venv/bin/populate_main_page development.ini
+- $venv/bin/initialize_main_page_db development.ini
 
 - $venv/bin/pserve development.ini
 
