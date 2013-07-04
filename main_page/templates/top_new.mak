@@ -18,10 +18,25 @@
                                    <link rel="shortcut icon" href="../assets/ico/favicon.png">
     <link href="/static/styles/base.css" rel="stylesheet">
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.1/jquery.min.js"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.0.3/jquery.noty.js"></script>
-    <script type="text/javascript" src="${request.static_url('main_page:static/topRight.js')}"></script>
-    <script type="text/javascript" src="${request.static_url('main_page:static/top.js')}"></script>
-    <script type="text/javascript" src="${request.static_url('main_page:static/default.js')}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.0.3/jquery.noty.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.0.3/jquery.noty.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.0.3/layouts/bottomCenter.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.0.3/layouts/bottomLeft.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.0.3/layouts/bottomRight.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.0.3/layouts/center.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.0.3/layouts/centerLeft.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.0.3/layouts/centerRight.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.0.3/layouts/inline.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.0.3/layouts/top.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.0.3/layouts/topCenter.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.0.3/layouts/topLeft.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.0.3/layouts/topRight.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.0.3/layouts/top.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.0.3/themes/default.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.js"></script> 
+    <script type="text/javascript" src="/static/js/jquery.squishy.js"></script>    
+    <script src="//unslider.com/unslider.min.js"></script>
+    <script src="/static/js/base.js"></script>
   </head>
   <body>
   <div id="wrapper">

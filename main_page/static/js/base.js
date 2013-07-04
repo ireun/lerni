@@ -119,3 +119,6 @@ $(function() {
 	}).resize();
 
 });
+var show_allert = function(message, type, allert_location){
+   var noty2 = $('.custom_container').noty({text: message, type: type, layout: allert_location})
+};
