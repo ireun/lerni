@@ -132,7 +132,7 @@ def main(argv=sys.argv):
         Titles("mgr"),
         Titles("dr"),
         Titles("ks."),
-        People(u"Administrator","",u"","1","2","1",u"admin",u"Administrator",u"admin","123456789",1),
+        People(u"Administrator","",u"","pesel","2","1",u"admin",u"Administrator",u"admin","123456789",1),
         AppCodes(63, "some_text", u"some_text", u"some_text"),
         SupportSections(u"Dział IT"),
         SupportSections(u"Sekretariat"),
@@ -246,6 +246,7 @@ def main(argv=sys.argv):
         #Lessons(1, teacher_subject_id, group_id, part_1, part_2, day, order, room)
         import_pages()
         import_competitors()
+        import_tweets()
         
 def import_competitors():
     mypath="../main_page/main_page/data/competitors/"
@@ -297,4 +298,41 @@ def import_pages():
         if data!="":
             with transaction.manager:
                 DBSession.add_all([ SubPages(page_id, url_name, name, data) ])
-
+def import_tweets():
+    mypath="../main_page/main_page/data/tweets/"
+    for x in [ f for f in listdir(mypath) if isfile(join(mypath,f)) ]:
+        f = codecs.open(mypath+x, "r", "utf-8")
+        tekst = f.read().split("\n")
+        f.close()
+        with transaction.manager:
+            DBSession.add_all([TweetsCategories(x)])
+        category_id=1
+        data=""
+        for y in tekst[1:]:
+            if len(y)>0:
+                if y[0]=="#":
+                    if data!="":
+                        with transaction.manager:
+                            DBSession.add_all([ DBSession.add_all([Tweets(datetime.datetime.now(), pesel,1,category_id, data) ]) ])
+                    date=y.split("|||")[0]
+                    pesel=y.split("|||")[1]
+                    data=""
+                else:
+                    data+=y 
+        if data!="":
+            with transaction.manager:
+                DBSession.add_all([ SubPages(page_id, url_name, name, data) ])
+                
+    
+    
+    
+    for x in [ f for f in listdir(mypath) if isfile(join(mypath,f)) ]:
+        f = codecs.open(mypath+x, "r", "utf-8")
+        tekst = f.read().split("|||")
+        f.close()
+        with transaction.manager:
+            DBSession.add_all([TweetsCategories(x)])
+        for y in tekst:
+            if len(y)>0:
+                with transaction.manager:
+                    DBSession.add_all([Tweets(add_date, author_id,state,category_id, hits, content) ])

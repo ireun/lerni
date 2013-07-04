@@ -1,18 +1,11 @@
 # -*- coding: utf-8 -*-
 from base import *
 
-@view_config(route_name='view_home')
-def my_view(request):
-    return HTTPFound(location = request.route_url('home', page_number ='1'))
-        
 @view_config(route_name='home', renderer='main.mak')
 def my_view3(request):
     breadcrumbs=[]
-    try:
-        page_num = int(request.matchdict['page_number'])
-    except:
-        raise exception_response(404)
     editor=0
+    page_num=1
     if has_permission('edit_articles', request.context, request):
         editor=1
     logged_in = authenticated_userid(request)

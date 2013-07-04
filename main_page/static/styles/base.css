@@ -4,14 +4,14 @@ background: rgb(215, 241, 247) url('/static/images/greadient.gif') repeat-x left
 color: rgb(113, 113, 113);}
 #footer {position:absolute; bottom:0; width:100%; height:60px; background-color: #f5f5f5;}
 #header {margin-bottom: -10px;padding-bottom: 10px;margin: 0 auto;max-width: 1280px;width: 100%;overflow: hidden;}
-#main{position: relative; padding-bottom:160px; max-width: 1280px; margin: 0 auto;}
+#main{position: relative; padding-bottom:20px; max-width: 1280px; margin: 0 auto;}
 div#inner-wrapper {
     padding-bottom: 20px;
     position: relative;    
     z-index: 3;    
-    margin: 0 auto;    
-    max-width: 1008px;    
-    width: 100%;
+    margin: 0 auto; 
+    max-width: 1158px;
+    width: 98%;
 }
 
 #wrapper {min-height:100%; position:relative; background: url('../images/bg.gif') fixed;}
@@ -36,24 +36,6 @@ div#inner-wrapper {
     width: 99% !important;
     background: #FFF;
 }
-
-
-@media (max-width: 767px) {
-    #footer {
-        margin-left: -20px;
-        margin-right: -20px;
-        padding-left: 20px;
-        padding-right: 20px;
-    }
-    .left, .right, #slider{
-        min-width: 96%;
-        max-width: 96%;
-        margin: auto;
-        float: none;
-        display: block;
-    }
-    #wrapper { background: none !important;}
-}
 .slider img{width: 100%; position: relative; left: -24px;}
     .slider{width: 100% !important;}
 .slider { position: relative; overflow: auto; }
@@ -66,7 +48,147 @@ div#inner-wrapper {
     height: 50px;
 }
 
+.thumb{
+    width: 50%;
+    display: inline-block;
+    height: 50%;;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    }
+.thumbs{width: 100%;line-height: 0;margin: auto;}
 #last-news{
-    background: #f2f2f2;
+    width: 65.66666666663%;
+    height: 300px;
 }
+#best-content{
+    width: 32.33333333333%;
+    height: 300px;
+}
+#last-photos{
+    overflow: visible;
+    width: 32.33333333336%;
+}
+#competitions, #video, #events{
+    width: 33.33333333336%;
+}
+#api{width: 32.33333333336%;}
+.article{background: #f2f2f2;}
+.container .title{
+    font-family: 'Open Sans',sans-serif;
+font-weight: normal;
+font-size: 20px;
+line-height: 40px;
+}
+.author{float: left;font-size: 12px;color: #AAA;}
+.timeago{
+    font-size: 12px;
+    color: #AAA;
+    float: right;}
+.content{width: 100%;margin: auto;}
 
+
+	#content {
+	background-color:#FDFDFD;
+	border-left:2px solid #333333;
+	border-right:2px solid #333333;
+	margin:0 auto 0;
+	padding:10px;
+	position:relative;
+	width:930px;
+	height:100%;
+	}	
+	#page {
+		margin:0 auto;
+		width:960px;	
+	}
+	#page h2 {
+		font-weight:bolder;
+		position:relative;
+		float:left;
+		margin:10px;
+	}	
+	#page .advertBottom {
+		margin:20px;
+		float:left;
+		position:relative;
+	}
+#wrapped-support {
+position: fixed;
+left: 0;
+padding-left: 20px;
+padding-right: 20px;
+padding-top: 10px;
+padding-bottom: 10px;
+top: 380px;
+-webkit-transform-origin: 0 50%;
+height: 200px;}
+#support-button {
+left: -54%;
+position: relative;
+height: 27px;
+border: 1px solid #dfdfdf;
+border-left: none;
+-webkit-border-radius: 0 3px 3px 0;
+-moz-border-radius: 0 3px 3px 0;
+border-radius: 0 3px 3px 0;
+-webkit-box-shadow: 0 0 2px rgba(0,0,0,0.2);
+-moz-box-shadow: 0 0 2px rgba(0,0,0,0.2);
+box-shadow: 0 0 2px rgba(0,0,0,0.2);
+background: #fff;
+color: #404040;
+cursor: pointer;
+font-weight: bold;
+padding-left: 15px;
+padding-right: 15px;
+padding-top: 7px;
+padding-bottom: 0;
+-webkit-transform: rotate(270deg);
+-moz-transform: rotate(270deg);
+-o-transform: rotate(270deg);
+-ms-transform: rotate(270deg);}
+#space{height: 100px;}
+
+
+/*Sign in form*/
+.form-signin {
+    position: relative;
+    top: 100px;
+    max-width: 300px;
+    padding: 19px 29px 29px;
+    margin: 0 auto 20px;
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+       -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+            box-shadow: 0 1px 2px rgba(0,0,0,.05);}
+.form-signin .form-signin-heading,
+.form-signin .checkbox{margin-bottom: 10px;}
+.form-signin input[type="text"],
+.form-signin input[type="password"] {
+    font-size: 16px;
+    height: auto;
+    margin-bottom: 15px;
+    padding: 7px 9px;}
+    
+    
+@media (max-width: 767px) {
+    #footer {
+        margin-left: -40px;
+        margin-right: -40px;
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+    .left, .right, #slider{
+        min-width: 94%;
+        max-width: 94%;
+        margin: auto;
+        float: none;
+        display: block;
+    }
+    .form-signin {top: 0;}
+    #wrapper { background: none !important;}
+}

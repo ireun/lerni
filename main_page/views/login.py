@@ -22,17 +22,14 @@ from main_page.models import (
     )
 #import re
 #from docutils.core import publish_parts
-
 from pyramid.httpexceptions import (
     HTTPFound,
     HTTPNotFound,
-    )    
-    
+    )        
 from pyramid.view import (
     view_config,
     forbidden_view_config,
     )
-
 from pyramid.security import (
     remember,
     forget,
@@ -66,7 +63,7 @@ def login(request):
             return response
         response = Response(body='Wrong username or password', content_type='text/plain')
         return response
-    response = Response(body='No login form submited', content_type='text/plain')
+    response = []
     return response
     
     

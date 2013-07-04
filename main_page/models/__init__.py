@@ -8,3 +8,4 @@ from .dziennik import *
 from .pages import *
 from .flash_cards import *
 from .files import *
+from .tweets import *
