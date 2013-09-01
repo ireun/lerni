@@ -9,8 +9,8 @@ class FlashCategories(Base):
     add_date = Column(DateTime)
     state = Column(Boolean)
     sticked = Column(Boolean)
-    category_id = Column(Integer, ForeignKey('articles_categories.id'))
-    category = relationship("ArticlesCategories")
+    category_id = Column(Integer)#, ForeignKey('articles_categories.id'))
+    #category = relationship("ArticlesCategories")
     hits = Column(Integer)    
     def __init__(self, add_date, author_id,state,sticked,category_id,hits):
         self.add_date = add_date
@@ -29,8 +29,8 @@ class FlashDecks(Base):
     add_date = Column(DateTime)
     state = Column(Boolean)
     sticked = Column(Boolean)
-    category_id = Column(Integer, ForeignKey('articles_categories.id'))
-    category = relationship("ArticlesCategories")
+    category_id = Column(Integer)#, ForeignKey('articles_categories.id'))
+    #category = relationship("ArticlesCategories")
     hits = Column(Integer)    
     def __init__(self, add_date, author_id,state,sticked,category_id,hits):
         self.add_date = add_date

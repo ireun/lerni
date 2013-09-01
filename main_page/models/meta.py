@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from sqlalchemy import (
     Column,
     Integer,
@@ -18,6 +19,9 @@ from zope.sqlalchemy import ZopeTransactionExtension
 from sqlalchemy import ForeignKey
 from sqlalchemy import ForeignKeyConstraint
 from sqlalchemy.orm import relationship, backref
+
+import hashlib
+import datetime
 
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 Base = declarative_base()

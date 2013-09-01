@@ -1,3 +1,10 @@
 *.pyc
 *.sqlite
 *~
+main_page/static/js
+main_page/static/css
+main_page/static/libs
+main_page/data
+main_page/data2
+main_page/static/.webassets-cache/
+main_page.egg-info/

@@ -1,90 +1,88 @@
-<%include file="top.mak"/>
- <script type='text/javascript'>
-        $(document).ready(function() {
-            //  Randomly Create Data Rows
-            for (var i = 0; i < 50; i++) {
-              var tr = $('<tr>' +
-                '<td>Value' + Math.floor(Math.random() * 500) + '</td>' +
-                '<td>' + Math.floor(Math.random() * 500) + ' </td>' +
-                '<td>' + (Math.random() > 0.5 ? 'yes' : 'no') + '</td>' +
-                '<td>' + (Math.random() <= 0.333 ? 'Item 1' : Math.random() > 0.5 ? 'Item 2' : 'Item 3') + '</td>' +
-                '<td></td>' +
-                '<td>' + parseInt(10 + Math.random() * 18) + '/' + parseInt(10 + Math.random() * 2) + '/2009</td>' +
-                '<td></td>' +
-                '</tr>');
-              $('#demotable1 tbody').append(tr);
-            }
-
-          // Initialise Plugin
-            var options1 = {
-                additionalFilterTriggers: [$('#onlyyes'), $('#onlyno'), $('#quickfind')],
-                clearFiltersControls: [$('#cleanfilters')],
-                matchingRow: function(state, tr, textTokens) {
-                  if (!state || !state.id) {
-                    return true;
-                  }
-                  var child = tr.children('td:eq(2)');
-                  if (!child) return true;
-                  var val = child.text();
-                  switch (state.id) {
-                  case 'onlyyes':
-                    return state.value !== true || val === 'yes';
-                  case 'onlyno':
-                    return state.value !== true || val === 'no';
-                  default:
-                    return true;
-                  }
-                }
-            };
-
-            $('#demotable1').tableFilter(options1);
-        });
-    </script>
-<div id="main_page">
-	<div id="left"> 
-		<div id="nav">
-			<ul>
-				% for row in menu_left_list:
-					<li><a href="${row[0]}" class="indent${row[2]}" id="homenav">${row[1]}</a></li>
-				% endfor
-			</ul>
-		</div>
-	</div>
-	<div id="right">
-		<h2>Filtry</h2>
-		<label><span>Imię:</span><input type="text" name="price-min"></label>
-		<label><span>Nazwisko:</span><input type="text" name="price-max"></label>
-		<label><span>Stanowisko:</span><input type="text" name="price-max"></label>
-		<label><span>Strona</span><input type="text" name="price-max"></label>
-	</div>
-	<div id="center">
-      <div id="people_list_wrapper">
-         <table id="people_list">
-				<colgroup>
-					<col width="60px;"/>
-					<col width="140px;"/>
-					<col width="180px;"/>
-					<col width="70px;"/>
-					<col width="63px;"/>
-					<col width="52px;"/>
-					<col width="43px;"/>
-				</colgroup>
-            <thead>
-               <tr>
-                  <th>ID</th>
-                  <th>Imię</th>
-                  <th>Nazwisko</th>
-                  <th>Stanowisko</th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-               </tr>
-            </thead>
-            <tbody>
-            </tbody>
-         </table>
-      </div>
+# -*- coding: utf-8 -*-
+<%include file="top_admin.mak"/>
+<section id="main">
+    <div class="navbar navbar-static-top">
+        <div class="navbar-inner">
+            <ul class="breadcrumb">
+                %for row in breadcrumbs[:-1]:
+                <li><a href="${row[0]}">${row[1]}</a> <span class="divider"></span></li>
+                %endfor
+                <li class="active">${breadcrumbs[-1][1]}</li>
+            </ul>
+        </div>
     </div>
-	</div>
-</div>	
-<%include file="bottom.mak"/>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="page-header line1">
+                    <h4>${title}<small>${title_desc}</small></h4>
+                </div>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="accordion" id="accordion1">
+                    %for row in tables:
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapse${row[0]}">${row[1]}</a>
+                        </div>
+                        <div id="collapse${row[0]}" class="accordion-body collapse
+                        %if row[0]=="1":
+                        in
+                        %endif
+                        ">
+                        <div class="accordion-inner" style="padding: 9px 10px;">
+                            <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                %for r in row[2]:
+                                <th class="${r[0]}">${r[1]}</th>
+                                %endfor
+                                </tr>
+                            </thead>
+                            <tbody>
+                                % for r in row[3]:
+                                <tr>
+                                %for z in r:
+                                <td class="${z[0]}">${z[1]}</td>
+                                % endfor
+                                </tr>
+                                % endfor
+                            </tbody>
+                            </table>
+                        </div>
+                        </div>
+                    </div>
+                    %endfor
+                    <!--- Opcja dodania nauczyciela -->
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseAdd">Dodaj</a>
+                        </div>
+                        <div id="collapseAdd" class="accordion-body collapse">
+                        <div class="accordion-inner">
+                            Dodaj 
+                        </div>
+                        </div>
+                    </div>
+                    <!--- Wyszukiwanie dostępnych nauczycieli -->
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseSearch">
+                            Wyszukaj
+                            </a>
+                        </div>
+                        <div id="collapseSearch" class="accordion-body collapse">
+                        <div class="accordion-inner" style="padding: 9px 10px;">
+                            Szukaj
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--/ END Template Main Content -->
+<%include file="bottom_admin.mak"/>

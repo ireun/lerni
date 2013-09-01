@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 from base import *
-import hashlib
-import random
 
-@view_config(route_name='support', renderer='pages.mak')
+@view_config(route_name='support', renderer='support.mak')
 def support(request):
    menu_left_list=menu_left(request)
    page={'editor':0, 'breadcrumbs':[["","Support"]], 'menu_left_list':menu_left_list, 'allerts':[]}
@@ -21,16 +19,7 @@ def support(request):
    page['menu_top_list']=menu_top(request)
    page['name']=username(logged_in)
    return page
-   
-@view_config(route_name='support_services', renderer='support_services.mak')
-def support_services(request):
-   page={'editor':0, 'breadcrumbs':[["","Support"]], 'menu_left_list':menu_left_list, 'allerts':[]}
-   logged_in = authenticated_userid(request)
-   page['logged_in']=logged_in
-   page['menu_top_list']=menu_top(request)
-   page['name']=username(logged_in)
-   return page
-   
+      
 @view_config(route_name='support_stats', renderer='support_stats.mak')
 def support_stats(request):
    page={'editor':0, 'breadcrumbs':[["","Support"]], 'menu_left_list':menu_left_list, 'allerts':[]}
@@ -42,7 +31,7 @@ def support_stats(request):
    
 @view_config(route_name='support_ask', renderer='support_ask.mak')
 def support_ask(request):
-	page={'editor':0, 'breadcrumbs':[["","Support"],["","Zapytaj"]], 'menu_left_list':menu_left_list, 'allerts':[]}
+	page={'editor':0, 'breadcrumbs':[["","Support"],["","Zapytaj"]], 'menu_left_list':menu_left_list, 'allerts':[], 'recaptcha_public':recaptcha_public}
 	logged_in = authenticated_userid(request)
 	page['logged_in']=logged_in
 	if 'topic' in request.params:

@@ -1,120 +1,113 @@
 # -*- coding: utf-8 -*-
-from pyramid.response import Response
-from pyramid.view import view_config
+from base import *
 
-from sqlalchemy.exc import DBAPIError
-import locale
-from sqlalchemy import desc    ######################################
-from main_page.models import (
-    DBSession,
-    MenuTop,
-    MenuLeft,
-    Articles,
-    Substitutions,
-    Absent,
-    Replace,
-    People,
-    Lessons,
-    Groups,
-    Duty,
-    Shift,
-    Places,
-    )
-    
-#import re
-#from docutils.core import publish_parts
+@view_config(route_name='register', renderer='login.mak')
+def register(request):
+   page={'editor':0, 'allerts':[], 'recaptcha_public':recaptcha_public, 'active':'register'}
+   logged_in = authenticated_userid(request)
+   page['logged_in']=logged_in   
+   page['name']=username(logged_in)
+   page.update({'css_url':request.webassets_env['r_css'].urls()[0],'js_url':request.webassets_env['r_js'].urls()[0],'libs_url':request.webassets_env['libs_js'].urls()[0]}) 
+   if logged_in: return HTTPFound(location = request.route_url('home'))
 
-from pyramid.httpexceptions import (
-    HTTPFound,
-    HTTPNotFound,
-    )    
-    
-from pyramid.view import (
-    view_config,
-    forbidden_view_config,
-    )
+   if set(['recaptcha_challenge_field','recaptcha_response_field2','name','secondname','surname',
+   'pesel','birthdate','phonenumber','email','password','repeat-password','gpg']) <= set(request.params):
+	   response = captcha.submit(request.params['recaptcha_challenge_field'],request.params['recaptcha_response_field2'],recaptcha_private,request.remote_addr)
+	   try:
+	   	input_file = request.POST['gpg'].file
+	   	key_data = input_file.read()
+	   	import_result = gpg.import_keys(key_data)
+	   	fingerprint = import_result.results[0]['fingerprint']
+	   	use_gpg=1
+	   except AttributeError:
+	   	use_gpg=0
+	   if use_gpg and not 'ok' in import_result.results[0]:
+	   	page['allerts'].append([u"Import klucza publicznego zakończony niepowodzeniem.","information","topRight"])	
+	   elif request.params['name'] == "" or request.params['surname']=="":
+	   	page['allerts'].append([u"Zapomniałeś podać swojego imienia bądź nazwiska.","information","topRight"])
+	   elif not is_pesel_correct(request.params['pesel']):
+	   	page['allerts'].append([u"Numer pesel nie jest poprawny.","information","topRight"])	
+	   elif not is_date_correct(request.params['birthdate']):
+	  		page['allerts'].append([u"Podana data urodzenia jest nieprawidłowa.","information","topRight"])
+	   elif request.params['password'] != request.params['repeat-password']:
+			page['allerts'].append([u"Podane hasła nie są takie same.","information","topRight"])
+	   elif len(request.params['password'])<6:
+			page['allerts'].append([u"Hasło zbyt krótkie. Aby hasło było bezpiecznie musi składać się z przynajmniej sześciu znaków.","information","topRight"])
+	   elif not True:#response.is_valid:
+			page['allerts'].append([u"Captcha incorrect","information","topRight"])
+	   else:
+	   	session = DBSession(expire_on_commit=False)
+   		wallet=Wallet(0)
+   		session.add(wallet)
+   		transaction.commit()		##Warto zrobić jakoś ładnie
+   		session2=DBSession()
+   		user = People(request.params['name'],request.params['secondname'],request.params['surname'],
+   		request.params['pesel'],datetime.datetime.strptime(request.params['birthdate'], '%d/%m/%Y').date(),
+   		request.params['phonenumber'],request.params['email'],request.params['password'],
+   		key_data,fingerprint,wallet.id,0,0,0,0)
+   		session2.add(user)
+   		transaction.commit()
+   		session.flush()
+   		if use_gpg:
+		   	message=(u"Witaj "+request.params['name']+" "+request.params['surname']+"!\n"+u"Kliknij w poniższy link aby aktywować konto:\n"
+		   	+request.route_url('activate_account', _query={'gpg-token':URLSafeSerializer(secret, salt='activate-salt-gpg').dumps(request.params['email'])})+"\n\n"
+		   	+u"Pozdrawiamy,\nstaszic.edu.pl")
+		   	send_mail(request,u"Rejestracja - staszic.edu.pl",[request.params['email']],message,fingerprint)
+   		else:
+		   	message=(u"Witaj "+request.params['name']+" "+request.params['surname']+"!\n"+u"Kliknij w poniższy link aby aktywować konto:\n"
+		   	+request.route_url('activate_account', _query={'token':URLSafeSerializer(secret, salt='activate-salt').dumps(request.params['email'])})+"\n\n"
+		   	+u"Pozdrawiamy,\nstaszic.edu.pl")
+		   	send_mail(request,u"Rejestracja - staszic.edu.pl",[request.params['email']],message)
+	   	return Response("Captcha correct", content_type='text/plain', status_int=500)
+   return page
 
-from pyramid.security import (
-    remember,
-    forget,
-    authenticated_userid,
-    )
+@view_config(route_name='forgot_password', renderer='login.mak')
+def forgot_password(request):
+   page={'editor':0, 'allerts':[], 'recaptcha_public':recaptcha_public, 'active':'forgot_password'}
+   page.update({'css_url':request.webassets_env['r_css'].urls()[0],'js_url':request.webassets_env['r_js'].urls()[0],'libs_url':request.webassets_env['libs_js'].urls()[0]}) 
+   logged_in = authenticated_userid(request)
+   page['logged_in']=logged_in
+   page['name']=username(logged_in)
+   if logged_in: return HTTPFound(location = request.route_url('home'))
+   if 'email' in request.params:
+	   	mailer = request.registry['mailer']  
+	   	message = Message(subject=u"Przypomnienie hasła - staszic.edu.pl",
+			                  sender="mailer.staszic@gmail.com",
+			                  recipients=[request.params['email']],
+			                  body=u"Witaj "+request.params['name']+" "+request.params['surname']+"!\n"
+			                  +u"Kliknij w poniższy link aby aktywować konto:\n"
+			                  +request.route_url('forgot_password', _query={'token':URLSafeSerializer(secret, salt='new_password-salt').dumps(request.params['email'])})+"\n\n"
+			                  +u"Pozdrawiamy,\nstaszic.edu.pl"
+			                  )
+	   	mailer.send_immediately(message)
+   return page
+   
+@view_config(route_name='activate_account', renderer='login.mak')
+def activate_account(request):
+   page={'editor':0, 'allerts':[], 'recaptcha_public':recaptcha_public, 'active':'forgot_password'}
+   page.update({'css_url':request.webassets_env['r_css'].urls()[0],'js_url':request.webassets_env['r_js'].urls()[0],'libs_url':request.webassets_env['libs_js'].urls()[0]}) 
+   logged_in = authenticated_userid(request)
+   page['logged_in']=logged_in
+   page['name']=username(logged_in)
+   sig_okay, email = URLSafeSerializer(secret, salt='activate-salt').loads_unsafe(request.params['token'])
+   if sig_okay:
+   	page['allerts'].append([email,"information","topRight"])
+   else:
+   	page['allerts'].append([u"Token aktywacyjny wygasł.","information","topRight"])
+   return page
+   
+   
+def is_pesel_correct(pesel):
+   if len(pesel)!=11 or not pesel.isnumeric():
+   	return False   	
+   sum, ct = 0, [1, 3, 7, 9, 1, 3, 7, 9, 1, 3, 1]
+   for i in range(11):
+      sum += (int(pesel[i]) * ct[i])
+   return (str(sum)[-1] == '0')
 
-from pyramid.security import authenticated_userid
-
-import random
-import md5
-import string
-###################################################
-##   REGISTER FORM      ###########################
-###################################################
-
-@view_config(route_name='register', renderer='register.mak')
-def my_view(request):
-    logged_in = authenticated_userid(request)
-    try:
-       menu_top_list =[]
-       for position in DBSession.query(MenuTop):
-       	menu_top_list.append([position.link,position.name])
-       menu_left_list =[]
-       for position in DBSession.query(MenuLeft):
-       	menu_left_list.append([position.link,position.name])
-       articles =[]
-       for position in DBSession.query(Articles):
-       	username = DBSession.query(People).filter_by(id=position.author_id).first().username
-       	articles.append([position.title,str(position.add_date)[:str(position.add_date).find(".")],username,position.content])
-       	
-       rs=''.join(random.choice(string.ascii_lowercase + string.digits) for x in range(15))
-       i=["mg","na","dv","aw","sa"]
-       random.shuffle(i)
-       i.append(i[random.randint(0,4)])
-       m=md5.md5(rs[:4]+i[0]+rs[4:6]+i[1]+rs[6:9]+i[2]+rs[9:10]+i[3]+rs[10:12]+i[4]+rs[12:15]+i[5])
-       text = m.hexdigest()
-       names = {"mg":"banana","na":"jablko","dv":"slonia","aw":"krowe","sa":"lolface"}
-    except DBAPIError:
-        return Response(conn_err_msg, content_type='text/plain', status_int=500)
-    return {'menu_top_list':menu_top_list, 'menu_left_list':menu_left_list, 'articles':articles, 'logged_in':logged_in,
-    'captcha':rs[:4]+rs[4:6]+rs[6:9]+rs[9:10]+rs[10:12]+rs[12:15]+text, 'quest':names[i[5]]}
-    
-    
-#####################################################
-# CAPTCHA ###########################################
-#####################################################
-@view_config(route_name='captcha')
-def add_page(request):
-    hc = request.matchdict['hashcode']  #### MOZNA LADNIEJ, NIE CHCE MI SIE
-    str_to_return="none"
-    for a in ["mg","na","dv","aw","sa"]:
-        for b in ["mg","na","dv","aw","sa"]:
-            for c in ["mg","na","dv","aw","sa"]:
-                for d in ["mg","na","dv","aw","sa"]:
-                    for e in ["mg","na","dv","aw","sa"]:
-                        for f in ["mg","na","dv","aw","sa"]:
-                            m=md5.md5(hc[:4]+a+hc[4:6]+b+hc[6:9]+c+hc[9:10]+d+hc[10:12]+e+hc[12:15]+f)
-                            if m.hexdigest() == hc[15:]:
-                                str_to_return=a+b+c+d+e
-    response = Response(content_type='image/jpeg')
-    response.app_iter = open('./main_page/captcha/done/'+str_to_return+'.png', 'rb')
-    return response
-#####################################################
-## CAPTCHA VALIDATE 
-@view_config(route_name='captcha_validate')
-def validate(request):
-    hc = request.matchdict['hashcode']  #### MOZNA LADNIEJ, NIE CHCE MI SIE
-    str_to_return="none"
-    ids = {"mg":"1","na":"2","dv":"3","aw":"4","sa":"5"}
-    for a in ["mg","na","dv","aw","sa"]:
-        for b in ["mg","na","dv","aw","sa"]:
-            for c in ["mg","na","dv","aw","sa"]:
-                for d in ["mg","na","dv","aw","sa"]:
-                    for e in ["mg","na","dv","aw","sa"]:
-                        for f in ["mg","na","dv","aw","sa"]:
-                            m=md5.md5(hc[1:5]+a+hc[5:7]+b+hc[7:10]+c+hc[10:11]+d+hc[11:13]+e+hc[13:16]+f)
-                            ids2 = {"1_":ids[a],"2_":ids[b],"3_":ids[c],"4_":ids[d],"5_":ids[e]}
-                            if m.hexdigest() == hc[16:]:
-                                if ids[f] == ids2[str(str(hc[0])+"_")]:
-                                    str_to_return="OK"
-                                else:
-                                    str_to_return="WRONG"
-    response = Response(body=str_to_return, content_type='text/plain')
-    return response
+def is_date_correct(date):
+	try:
+		datetime.datetime.strptime(date, '%d/%m/%Y').date()
+		return True
+	except:
+		return False 

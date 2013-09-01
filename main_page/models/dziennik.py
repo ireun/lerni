@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
+
 from .meta import *
 class SchoolYears(Base):
     __tablename__ = 'log_school_years'
     id = Column(Integer, primary_key=True)
+    add_date = Column(Date)
     start = Column(Date)
     end = Column(Date)
-    add_date = Column(Date)
-    def __init__(self, start, end, add_date): 	# Rok szkolny - start.year/end.year
+    def __init__(self, start, end): 	# Rok szkolny - start.year/end.year
+        self.add_date = datetime.datetime.now()
         self.start = start
         self.end = end
-        add_date = add_date
+        
 class Terms(Base):
     __tablename__ = 'log_terms'						# Semestr 1 / Semestr 2
     id = Column(Integer, primary_key=True)
@@ -18,14 +20,23 @@ class Terms(Base):
     start = Column(Date)
     end = Column(Date)
     add_date = Column(Date)
-    def __init__(self, year_id, start, end, add_date):
+    def __init__(self, year_id, start, end):
         self.year_id = year_id 
         self.start = start
         self.end = end
-        add_date = add_date
+        self.add_date = datetime.datetime.now()
 
 class Subjects(Base):								### Nazwy przemiotów nauczanych w placówce
     __tablename__ = 'log_subjects'
+    id = Column(Integer, primary_key=True)
+    name = Column(Text)
+    short = Column(Text)
+    def __init__(self, name, short):
+        self.name = name
+        self.short = short
+        
+class DivisionsCategories(Base):									### Gimnazjum, Liceum, Klasy Językowe
+    __tablename__ = 'log_divisions_categories'
     id = Column(Integer, primary_key=True)
     name = Column(Text)
     short = Column(Text)
@@ -38,25 +49,23 @@ class Divisions(Base):									### Klasy utworzone w danym roku szkolnym
     id = Column(Integer, primary_key=True)
     name = Column(Text)
     year_id = Column(Integer)
-    def __init__(self, name, year_id):
+    category_id = Column(Integer, ForeignKey('log_divisions_categories.id'))
+    category = relationship("DivisionsCategories")
+    def __init__(self, category_id, name, year_id):
+        self.category_id = category_id
         self.name = name
         self.year_id = year_id
-class DivisionGroup(Base):								### Lista grup w danej klasie
-    __tablename__ = 'log_divisions_groups'
-    id = Column(Integer, primary_key=True)
-    division_id = Column(Integer, ForeignKey('log_divisions.id'))
-    division = relationship("Divisions")
-    group_id = Column(Integer, ForeignKey('log_groups.id'))
-    group = relationship("Groups")
-    def __init__(self, division_id, group_id):
-        self.division_id = division_id
-        self.group_id = group_id
+        
 class Groups(Base):									### Lista grup
     __tablename__ = 'log_groups'
     id = Column(Integer, primary_key=True)
+    division_id = Column(Integer, ForeignKey('log_divisions.id'))
+    division = relationship("Divisions")
     name = Column(Text)
-    def __init__(self, name):
+    def __init__(self, division_id, name):
         self.name = name
+        self.division_id = division_id
+        
 class Courses(Base):										# Kurs - połączenie semestru, przedmiotu, _grup_ i _nauczycieli_
     __tablename__ = 'log_courses'							# Klasa uczestniczy w kursie
     id = Column(Integer, primary_key=True)					# Do jednego kursu może być przypisanych kilku nauczycieli
@@ -78,7 +87,7 @@ class GroupCorse(Base):									# Lista grup uczestniczących w danym kursie
     def __init__(self, group_id, course_id):
         self.group_id = group_id
         self.course_id = course_id
-class TeacherCourse(Base):   						# Nauczyciele uczący na danym kursie 
+class TeacherCourse(Base):   						# Nauczyciele uczący na danym kursie
     __tablename__ = 'log_teacher_course'
     id = Column(Integer, primary_key=True)
     teacher_id = Column(Integer, ForeignKey('people.id'))
@@ -112,7 +121,7 @@ class CourseWeights(Base):
     def __init__(self,course_id,weight_id):
         self.course_id = course_id
         self.weight_id = weight_id
-### Uczniowie i ich oceny
+### Uczniowie i ich oceny#
 class Marks(Base):
     __tablename__ = 'log_marks'
     id = Column(Integer, primary_key=True)
@@ -152,7 +161,7 @@ class EndMarks(Base):
         self.student_id = student_id
         self.value = value
 
-### Plan lekcji
+### Plan lekcji#
 class Schedules(Base):
     __tablename__ = 'log_schedules'
     id = Column(Integer, primary_key=True)
@@ -160,32 +169,49 @@ class Schedules(Base):
     start = Column(Date)
     end = Column(Date)
     updated = Column(DateTime)
-    
-    def __init__(self, year_id, start, end, updated):
-        self.year_id = year_id
+    def __init__(self, start, end):
+        self.year_id = 1
         self.start = start
         self.end = end
-        self.updated = updated
+        self.updated = datetime.datetime.now()
 
 class Lessons(Base):
-    __tablename__ = 'lessons'
+    __tablename__ = 'log_lessons'
     id = Column(Integer, primary_key=True)
     schedule_id = Column(Integer, ForeignKey('log_schedules.id'))
     schedule = relationship("Schedules")
-    course_id = Column(Integer, ForeignKey('log_courses.id'))
-    course = relationship("Courses")
-    parts = Column(Integer) # 1-gr pierwsza, 3- grupa pierwsza i druga, 5- grupa pierwsza i trzecia
-    day = Column(Integer)			# zastanowić się, czy nie lepiej dodać wszystkie grupy osobno !
+    teacher_id = Column(Integer, ForeignKey('people.id'))
+    teacher = relationship("People")
+    group_id = Column(Integer, ForeignKey('log_groups.id'))
+    group = relationship("Groups")
+    subject_id = Column(Integer, ForeignKey('log_subjects.id'))
+    subject = relationship("Subjects")
+    day = Column(Integer)
     order = Column(Integer)
     room = Column(Integer)
-    
-    def __init__(self, schedule_id, teacher_subject_id, group_id, part_1, part_2, day, order, room):
+    updated = Column(DateTime)
+    def __init__(self, schedule_id, teacher_id, group_id, subject_id, day, order, room):
         self.schedule_id = schedule_id
-        self.teacher_subject_id = teacher_subject_id
+        self.teacher_id = teacher_id
         self.group_id = group_id
-        self.part_1 = part_1
-        self.part_2 = part_2
+        self.subject_id = subject_id
         self.day = day
         self.order = order
         self.room = room
-        ## Odbyte lekcje
+        self.updated = datetime.datetime.now()
+
+class LessonsLog(Base):
+    __tablename__ = 'log_lessons_log'
+    id = Column(Integer, primary_key=True)
+    start=Column(DateTime)
+    end=Column(DateTime)
+    add_date=Column(DateTime)
+    def __init__(self, start, end):
+        self.start = start
+        self.end = end
+        self.updated = datetime.datetime.now()
+        
+
+class Settings(Base):
+    __tablename__ = 'settings'
+    id = Column(Integer, primary_key=True)

@@ -1,49 +1,29 @@
-<%include file="top.mak"/>
-			<div id="main_page">
-			<div id="left"> 
-				<div id="nav">
-					<ul>
-						% for row in menu_left_list:
-							<li><a href="${row[0]}" id="homenav">${row[1]}</a></li>
-						% endfor
-	    			</ul>
-			 </div>
-			</div>
-				<div id="center" style="width:820px;">
-					<div class="settings_container" style="width:800px;">
-						<div class="settings_header">${title}</div>
-
-
-
-                <div id="contacts">
-                                <th colspan="2">
-                                    <input type="text" class="search" placeholder="Przeszukaj listę">
-                                </th>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th class="sort  " data-sort="name">Imię i Nazwisko</th>
-                                <th class="sort  " data-sort="category">Rodzaj konkursu</th>
-                                <th class="sort  " data-sort="type">Opiekun</th>
-                                <th class="sort desc " data-sort="year">Rok szkolny</th>
-                            </tr>
-                        </thead>
-                        <tbody class="list">
-                        % for row in competitors:
-                            <tr>
-                                <td class="id" style="display:none;">${row[0]}</td>
-                                <td class="name">${row[1]}</td>
-                                <td class="category">${row[2]}</td>
-                                <td class="type">${row[4]}</td>
-                                <td class="year">${row[5]}</td>
-                            </tr>
-                        % endfor
-                        </tbody>
-                    </table>
-                </div>     
-					</div>
-				</div>
-			</div>
+ <div id="contacts">
+                 <th colspan="2">
+                     <input type="text" class="search" placeholder="Przeszukaj listę">
+                 </th>
+     <table>
+         <thead>
+             <tr>
+                 <th class="sort  " data-sort="name">Imię i Nazwisko</th>
+                 <th class="sort  " data-sort="category">Rodzaj konkursu</th>
+                 <th class="sort  " data-sort="type">Opiekun</th>
+                 <th class="sort desc " data-sort="year">Rok szkolny</th>
+             </tr>
+         </thead>
+         <tbody class="list">
+         % for row in competitors:
+             <tr>
+                 <td class="id" style="display:none;">${row[0]}</td>
+                 <td class="name">${row[1]}</td>
+                 <td class="category">${row[2]}</td>
+                 <td class="type">${row[4]}</td>
+                 <td class="year">${row[5]}</td>
+             </tr>
+         % endfor
+         </tbody>
+     </table>
+ </div> 
 
 <script type="text/javascript">
 
@@ -118,5 +98,3 @@
         });
     }
 </script>
-
-<%include file="bottom.mak"/>

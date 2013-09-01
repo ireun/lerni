@@ -1,0 +1,256 @@
+#lucky_number{
+height: 100px;
+font-size: 200px;
+text-align: center;
+padding-top: 90px;
+}
+
+#header {
+	position: relative;
+	z-index: 1010;
+	display: block;
+	width: 100%;
+}
+#Grid .mix{
+width: 71px;
+height: 20px;
+}
+#header .container {width: 100%;}
+.dropdown-menu{z-index: 99999 !important;}
+#Grid2 .mix {width: 190px;}
+
+.twitter-typeahead, .tt-hint, .tt-query, .tt-dropdown-menu{
+width: 100%;
+}
+.twitter-typeahead{top: -2px;}
+.typeahead,
+.tt-hint {
+  width: width: 100%;
+  height: 30px;
+  padding: 8px 12px;
+  font-size: 24px;
+  line-height: 30px;
+  border: 1px solid #024e6a;
+  -webkit-border-radius: 8px;
+     -moz-border-radius: 8px;
+          border-radius: 8px;
+  outline: none;
+}
+.typeahead {
+  background-color: #fff;
+}
+.tt-hint {
+  color: #999;
+  margin-top: 2px;
+}
+.tt-dropdown-menu {
+  margin-top: 12px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  -webkit-border-radius: 8px;
+     -moz-border-radius: 8px;
+          border-radius: 8px;
+  -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+     -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+          box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+.tt-suggestion {
+  padding: 8px 20px;
+  font-size: 14px;
+  line-height: 18px;
+}
+.tt-suggestion + .tt-suggestion {
+  font-size: 14px;
+  border-top: 1px solid #ccc;
+}
+.tt-suggestions .user-email {
+  float: right;
+  font-style: italic;
+}
+.tt-suggestions .user-name {
+  font-size: 20px;
+  font-weight: bold;
+}
+.tt-suggestions .repo-pesel {
+  margin: 0;
+}
+.twitter-typeahead .tt-suggestion.tt-is-under-cursor {
+  color: #03739c;
+}
+.tt-suggestion .row-fluid{
+    position: relative;
+    top: 13px;
+}
+
+
+
+
+
+
+
+.connectedSortable{
+	min-height: 100px;
+	min-width: 100px; 
+}
+
+/*Twitter 3 Parts */
+.list-group-item {
+position: relative;
+display: block;
+padding: 10px 30px 10px 15px;
+margin-bottom: -1px;
+border: 1px solid #dddddd;
+}
+a.list-group-item.active {
+z-index: 2;
+color: #ffffff;
+background-color: #428bca;
+border-color: #428bca;
+}
+.list-group-item:first-child {
+border-top-right-radius: 4px;
+border-top-left-radius: 4px;
+}
+.list-group-item:last-child {
+margin-bottom: 0;
+border-bottom-right-radius: 4px;
+border-bottom-left-radius: 4px;
+}
+.list-group-item > .badge {
+float: right;
+margin-right: -15px;
+}
+/*/*/
+
+#Grid .mix{opacity: 0; display: none;}
+#Grid{margin: 0 0;}
+
+.yearpicker .bar div{
+    vertical-align: top;
+    font-size: 80px;
+    margin-top: -10px;
+}
+.yearpicker .bar .title{
+    text-align: center;
+    position: relative;
+    font-size: 40px;
+    position: relative;
+    top: 30px;
+}
+.yearpicker .years table{
+    width: 100%;
+    height: 300px;
+    text-align: center;
+    vertical-align: middle;
+    margin-bottom: -10px;
+}
+.yearpicker .years table td{
+    border: grey solid 1px;
+    font-size: 30px;
+}
+.yearpicker .years table td:hover{
+    background-color: #eee;
+    cursor: pointer;
+}
+.yearpicker .bar .arrow-right{
+    text-align: right;
+}
+.icon-long-arrow-right{
+    position: relative;
+    text-align: right;
+}
+.icon-long-arrow-left{
+    position: relative;
+}
+.yearpicker .years table .prev, .yearpicker .years table .next{
+    color: #AAA;
+}
+@media (min-width: 1606px){
+
+}
+@media (min-width: 1325px) and (max-width: 1605px) {
+    .yearpicker .bar div{
+        font-size: 40px;
+    }
+    .yearpicker .bar .title{
+        font-size: 30px;
+        top: 15px;
+    }
+    .yearpicker .years table td{
+        font-size: 25px;
+    }
+}
+@media (min-width: 980px) and (max-width: 1325px) {
+    .yearpicker .bar div{
+        font-size: 40px;
+    }
+    .yearpicker .bar .title{
+        font-size: 20px;
+        top: 10px;
+    }
+    .yearpicker .years table{
+        height: 150px;
+    }
+    .yearpicker .years table td{
+        font-size: 20px;
+    }    
+}
+@media (min-width: 768px) and (max-width: 979px) {
+    .yearpicker .bar div{
+        font-size: 40px;
+    }
+    .yearpicker .bar .title{
+        font-size: 20px;
+        top: 10px;
+    }
+    .yearpicker .years table{
+        height: 180px;
+    }
+    .yearpicker .years table td{
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 767px) {
+    .yearpicker .bar div::after{
+        clear: none;        
+    }
+    .yearpicker .bar div{
+        float: left !important;
+        width: 24% !important;
+    }
+    .yearpicker .bar .title{
+        width: 50% !important;
+    }
+    .yearpicker .bar .row-fluid{
+        width: 100% !important;
+    }
+}
+@media (max-width: 480px) {
+    .yearpicker .bar div{
+        font-size: 50px;
+    }
+    .yearpicker .bar .title{
+        font-size: 30px;
+        top: 15px;
+    }
+    .yearpicker .years table{
+        height: 150px;
+    }
+    .yearpicker .years table td{
+        font-size: 20px;
+    }
+}
+@media (max-width: 360px) {
+    .yearpicker .bar div{
+        font-size: 40px;
+    }
+    .yearpicker .bar .title{
+        font-size: 20px;
+        top: 10px;
+    }
+    .yearpicker .years table td{
+        font-size: 15px;
+    }
+}

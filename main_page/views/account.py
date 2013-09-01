@@ -2,44 +2,28 @@
 from base import *
 import hashlib
 import random
-@view_config(route_name='account', renderer='account.mak')
+@view_config(route_name='account', renderer='account.mak', permission='account_settings')
 def account_base(request):
-   menu_left_list=[[request.route_url('account'),"Edytuj profil"],[request.route_url('phone_app'),u"Powiadomienia"]]
-   menu_left_list+=[[request.route_url('phone_app'),u"Powiązane konta"],[request.route_url('phone_app'),u"Aplikacja na telefon"],
-   [request.route_url('logout'),u"Wyloguj"]]
-   page={'editor':0, 'breadcrumbs':[["","Ustawienia"],["","Edytuj profil"]], 'menu_left_list':menu_left_list, 'allerts':[]}
+   page={'editor':0, 'allerts':[]}
    logged_in = authenticated_userid(request)
-   page['logged_in']=logged_in
    try:
-      page['menu_top_list']=[]
-      for position in DBSession.query(MenuTop):
-         page['menu_top_list'].append([position.link,position.name])
-      page['name']=""
-      if logged_in:
-         page['name']=DBSession.query(People).filter_by(login=logged_in).first().username
-         page['first_name']=DBSession.query(People).filter_by(login=logged_in).first().first_name
-         page['second_name']=DBSession.query(People).filter_by(login=logged_in).first().second_name
-         page['last_name']=DBSession.query(People).filter_by(login=logged_in).first().last_name
-         pesel=DBSession.query(People).filter_by(login=logged_in).first().pesel
-         century=["19","20","21","22","18"][int(pesel[2:4])/20]
-         birthday_passed=datetime.date(2000,datetime.datetime.today().month,datetime.datetime.today().day)<datetime.date(2000,int(pesel[2:4]),int(pesel[4:6]))
-         page['years']=datetime.datetime.today().year-datetime.date(int(century+pesel[:2]),int(pesel[2:4]),int(pesel[4:6])).year-birthday_passed
-         page['gender']=[u"Kobieta",u"Mężczyzna"][int(pesel[9])%2]
-         page['group']="Todo"#klasa + grupa
-         page['language_group']="Todo"#lektorat + grupa
-         page['extension_group']="Todo"#rozszerzenie
-      else:
-      	return Response("User not logged in", content_type='text/plain', status_int=500) #dodać redirecta na stronę logowania
+   	user = DBSession.query(People).filter_by(email=logged_in).first()
    except DBAPIError:
       return Response("Mysql connection error", content_type='text/plain', status_int=500)
+   page['logged_in']=logged_in       ## Not really important
+   page['name']=username(logged_in)  ##
+   page.update({'first_name':user.first_name,'second_name':user.second_name,'last_name':user.last_name,
+   'pesel':user.pesel,'birthdate':str(user.birthdate),'gender':[u"Kobieta",u"Mężczyzna"][user.is_male],
+   'group':"todo",'language_group':"todo",'extension_group':"todo"})
    return page
 @view_config(route_name='phone_app', renderer='phone_app.mak')
 def account_phone_app(request):
-   menu_left_list=[[request.route_url('account'),"Edytuj profil"],[request.route_url('phone_app'),u"Powiadomienia"]]
-   menu_left_list+=[[request.route_url('phone_app'),u"Powiązane konta"],[request.route_url('phone_app'),u"Aplikacja na telefon"],
-   [request.route_url('logout'),u"Wyloguj"]]
-   page={'editor':0, 'breadcrumbs':[["","Ustawienia"],["","Aplikacja na telefon"]], 'menu_left_list':menu_left_list, 'allerts':[]}
+   page={'editor':0, 'allerts':[]}
    logged_in = authenticated_userid(request)
+   try:
+   	user = DBSession.query(People).filter_by(email=logged_in).first()
+   except DBAPIError:
+      return Response("Mysql connection error", content_type='text/plain', status_int=500)
    page['logged_in']=logged_in
    try:
       page['menu_top_list']=[]
@@ -71,3 +55,60 @@ def account_phone_app(request):
    except DBAPIError:
       return Response("Mysql connection error", content_type='text/plain', status_int=500)
    return page
+
+
+@view_config(route_name='account_folders', renderer='admin_log_timetables.mak')
+def account_folders(request):
+    page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["",u"Moje konto"],["",u"Foldery"]], 'allerts':[]}
+    page.update(get_basic_account_info())
+    logged_in = authenticated_userid(request)
+    page['name']=username(logged_in)
+    page['title']=u"Foldery"
+    page['title_desc']= u"Stwórz folder w którym będziesz umieszczać swoje wpisy.\
+                        Możesz utworzyć więcej niż jeden folder."
+    page['table_name']="table_folders"
+    return page
+
+@view_config(route_name='account_entries', renderer='admin_log_timetables.mak')
+def account_entries(request):
+    page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["",u"Moje konto"],["",u"Wpisy"]], 'allerts':[]}
+    page.update(get_basic_account_info())
+    logged_in = authenticated_userid(request)
+    page['name']=username(logged_in)
+    page['title']=u"Wpisy"
+    page['title_desc']= u"Poniżej możesz utworzyć nowy wpis."
+    page['table_name']="table_entries"
+    return page
+
+@view_config(route_name='account_presentations', renderer='admin_log_timetables.mak')
+def account_presentations(request):
+    page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["",u"Moje konto"],["",u"Prezentacje"]], 'allerts':[]}
+    page.update(get_basic_account_info())
+    logged_in = authenticated_userid(request)
+    page['name']=username(logged_in)
+    page['title']=u"Prezentacje"
+    page['title_desc']= u"Poniżej możesz utworzyć nową prezentację."
+    page['table_name']="table_folders"
+    return page
+
+@view_config(route_name='account_tasks_sets', renderer='admin_log_timetables.mak')
+def account_tasks_sets(request):
+    page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["",u"Moje konto"],["",u"Foldery"]], 'allerts':[]}
+    page.update(get_basic_account_info())
+    logged_in = authenticated_userid(request)
+    page['name']=username(logged_in)
+    page['title']=u"Zestawy zadań"
+    page['title_desc']= u"Tutaj możesz utworzyć zestaw zadań (not done yet)"
+    page['table_name']="table_folders"
+    return page
+
+#@view_config(route_name='account_competitions', renderer='admin_log_timetables.mak')
+#def account_tasks_sets(request):
+#    page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["",u"Moje konto"],["",u"Konkursy"]], 'allerts':[]}
+#    page.update(get_basic_account_info())
+#    logged_in = authenticated_userid(request)
+#    page['name']=username(logged_in)
+#    page['title']=u"Foldery"
+#    page['title_desc']= u"Tutaj możesz utworzyć stronę konkursu (not done yet)"
+#    page['table_name']="table_folders"
+#    return page

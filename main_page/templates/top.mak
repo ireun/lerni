@@ -73,8 +73,9 @@
       
       <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/wysihtml5/0.3.0/wysihtml5.min.js"></script>
 
-      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
-      <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css" type="text/css" />
+      
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap-responsive.min.css">
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
 
       <script type="text/javascript" src="${request.static_url('main_page:static/bootstrap-wysihtml5.js')}"></script>
       <link rel="stylesheet" src="${request.static_url('main_page:static/styles/bootstrap-wysihtml5.css')}"></link>

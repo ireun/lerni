@@ -3,7 +3,7 @@ from base import *
 import os
 import uuid
 import re
-import md5
+import md5   #Zastapic hashlib
 import random
 import time
 

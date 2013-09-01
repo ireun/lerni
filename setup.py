@@ -14,7 +14,23 @@ requires = [
     'pyramid_debugtoolbar',
     'zope.sqlalchemy',
     'waitress',
-    'pyramid-mailer'
+    'pyramid-mailer',
+    'psutil',
+    'itsdangerous',
+    'recaptcha-client',
+    'python-gnupg',
+    'BeautifulSoup',
+    'TransmissionClient',
+    'pyramid_rewrite',
+    'pyramid_webassets',
+    'pyscss',
+    'closure',
+    'cssmin',
+    'bbcode',
+    'xmpppy',
+    'pdfkit',
+    'cherrypy',
+    'PasteScript'
     ]
 
 setup(name='main_page',
