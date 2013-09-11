@@ -191,7 +191,7 @@ Informacji udzielają również pedagog i psycholog szkolny, pok. 135.''','news'
         Teachers(8,2),
         Tweets(4, u"Znamy już wstępne wyniki tegorocznego egzaminu maturalnego z przedmiotów obowiązkowych. Ze wszystkich egzaminów uczniowie naszego liceum osiągnęli najlepsze wyniki w mieście i zdecydowanie wyższe wyniki niż średnia.", "", ""),
         Tweets(4, u"Rozpoczęcie roku szkolnego 2013/14 odbędzie się o godzinie 9.00. Msza św. w kościele św. Tomasza o 8.00. Zbiórka I klasy gimnazjalnej w sali nr 44.", "", ""),
-        Tweets(4, u"Informujemy, że osoby uprawnione do otrzymania dofinansowania do podręczników szkolnych (II klasa LO), mogą składać wnioski do dyrekcji szkoły najpóźniej do 04. 09. 2013 roku.", u"/entry/2", u"więcej"),
+        Tweets(4, u"Informujemy, że osoby uprawnione do otrzymania dofinansowania do podręczników szkolnych (II klasa LO), mogą składać wnioski do dyrekcji szkoły najpóźniej do 04. 09. 2013 roku.", u"więcej", ""),
 
         Tweets(2, u"Marcin Muszalski z klasy 2MAT1 laureatem Ogólnopolskiego Sejmiku Matematyków.", u"", ""),
         Tweets(2, u"31 osób wyróżnionych w konkursie matematycznym Kangur.", u"", ""),
@@ -224,7 +224,6 @@ Informacji udzielają również pedagog i psycholog szkolny, pok. 135.''','news'
         SetsItems(2,3,u"Z energetyką w przyszłość", None, u"/konkursenergetyka"),
         SetsItems(2,3,u"XIV KRAM Z POEZJĄ", None, u"/konkurs-13-kram-z-poezj"),
         SetsItems(2,3,u"IX OKoP", None, u"/newsy-szkolne/1088-8-okoomaturalny-konkurs-polonistyczny"),
-        SetsItems(2,4,u"Zastępstwa", None, u"/zastepstwa"),
         SetsItems(2,4,u"Tematy Maturalne", None, u"/pliki/matura2014.doc"),
         SetsItems(2,4,u"Bibliografia", None, u"/pliki/bibl.pdf"),
         SetsItems(2,4,u"Comenius", None, u"/comenius"),

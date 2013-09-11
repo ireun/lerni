@@ -28,9 +28,7 @@ requires = [
     'cssmin',
     'bbcode',
     'xmpppy',
-    'pdfkit',
-    'cherrypy',
-    'PasteScript'
+    'pdfkit'
     ]
 
 setup(name='main_page',
