@@ -7,7 +7,7 @@ Lerni is open source software, every contribution would be great.
 Please be sure to read current TODO and general overview before you jump into writing code.
 
 1. [Current TODO](http://docs.lerni.info/todo)
-2. [General Overview](http://docs.lerni.info/overview
+2. [General Overview](http://docs.lerni.info/overview)
 
 Use Lerni on your own computer
 --------------------------------------
@@ -23,7 +23,7 @@ Clone this repository
 ```bash
 git clone https://github.com/kamilx3/lerni.git
 ```
-To test if everything works fine download sample initialization data set.
+To test if everything works fine you can download sample initialization data set.
 ```bash
 git submodule update --init
 ```
@@ -38,13 +38,13 @@ cd lerni
 ```
 Develop the project.
 ```bash
-$venv/bin/python setup.py develop
+python setup.py develop
 ```
 Initialize testing database.
 ```bash
-$venv/bin/initialize_main_page_db development.ini
+initialize_main_page_db development.ini
 ```
 And finally the application.
 ```bash
-$venv/bin/pserve development.ini
+pserve development.ini
 ```
