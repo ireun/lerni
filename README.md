@@ -44,7 +44,7 @@ Initialize testing database.
 ```bash
 initialize_main_page_db development.ini
 ```
-And finally the application.
+And finally run the application.
 ```bash
 pserve development.ini
 ```
