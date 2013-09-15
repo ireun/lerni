@@ -15,7 +15,9 @@
 				<div class="article">
 				    <div class="author">${x[0]}</div> <div class="timeago" title="${x[1]}"></div> <br>
 				    <div class="content">${x[2]}
+				    %if x[3] != None:
                     <a href="${x[3]}">${x[4]}</a>
+                    %endif
                     </div>
 				</div>
 				%endfor
