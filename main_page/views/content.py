@@ -110,7 +110,7 @@ def about(request):
     return page
 
 @view_config(route_name='lucky', renderer='sis/lucky.mak', permission='view')
-def entry(request):
+def lucky(request):
    page={'editor':0, 'allerts':[]} #referrer #
    logged_in = authenticated_userid(request)
    try: user = DBSession.query(People).filter_by(email=logged_in).first()
