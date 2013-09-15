@@ -162,12 +162,4 @@ class Association(Base):
         self.part_1 = part_1
         self.part_2 = part_2
         
-class LuckyNumbers(Base):
-    __tablename__ = 'lucky_numbers'
-    id = Column(Integer, primary_key=True)
-    date = Column(Date)
-    number = Column(Integer)
 
-    def __init__(self, date, number):
-        self.date = date
-        self.number = number

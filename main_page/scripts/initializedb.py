@@ -202,6 +202,7 @@ def main(argv=sys.argv):
         #import_pages()
         import_competitors()
         import_support()
+        import_lucky_numbers()
 def import_support():
     pass
 def import_easy_links():
@@ -237,11 +238,12 @@ def import_lucky_numbers():
     f.close()
     with transaction.manager:
         for x in dataMap['numbers']:
-            DBSession.add_all([ Subjects(x['date'], x['number']) ])
+            DBSession.add_all([ LuckyNumbers(x['date'], x['number']) ])
 
 def import_folders():
     mypath="./main_page/data/folders/"
     w=1
+    z=1
     for x in [ f for f in listdir(mypath) if isfile(join(mypath,f)) ]:
         f = open(mypath+x)
         dataMap = yaml.safe_load(f)
@@ -249,9 +251,9 @@ def import_folders():
         with transaction.manager:
             DBSession.add_all([ Folders(2), FoldersVersions(w, dataMap['title'], dataMap['tags']) ])
             for x in dataMap['entries']:
-                DBSession.add_all([ Entries(2,w), EntriesVersions(w, x['title'], x['text'], x['tags']) ])
-                w+=1
-
+                DBSession.add_all([ Entries(2,w), EntriesVersions(z, x['title'], x['text'], x['tags']) ])
+                z+=1
+            w+=1
 def import_subjects():
     f = open('main_page/data/subjects.yaml')
     dataMap = yaml.safe_load(f)

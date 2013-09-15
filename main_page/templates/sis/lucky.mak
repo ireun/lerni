@@ -4,8 +4,8 @@
             <title>
                 SIS | Szczęśliwy numerek
             </title>
-            <link rel="stylesheet" type="text/css" href="/base.css" />
-            <link rel="stylesheet" type="text/css" href="/beta.css" />
+            <link rel="stylesheet" type="text/css" href="//sis.staszic.edu.pl/base.css" />
+            <link rel="stylesheet" type="text/css" href="//sis.staszic.edu.pl/beta.css" />
         </head>
         <body>
             <div id="header">
@@ -36,25 +36,20 @@
             Aktualny szczęśliwy numerek
         </a></h3>
     <div class="lucky_number">
-        <div class="lucky_number_number">33</div>
-        <div class="lucky_number_date">2013-06-06</div>
+        <div class="lucky_number_number">${lucky_number}</div>
+        <div class="lucky_number_date">${lucky_number_date}</div>
     </div>
         <h3><a href="/lucky/week">
             Szczęśliwe numerki na ten tydzień
         </a></h3>
                 <ul>
+                    %for x in numbers:
                     <li>
-                        2013-06-03 - <strong>36</strong>
-                    </li><li>
-                        2013-06-04 - <strong>30</strong>
-                    </li><li>
-                        2013-06-05 - <strong>34</strong>
-                    </li><li>
-                        2013-06-06 - <strong>33</strong>
-                    </li><li>
-                        2013-06-07 - <strong>16</strong>
+                        ${x[0]} - <strong>${x[1]}</strong>
                     </li>
+                    %endfor
                 </ul>
+        <!--
         <h3><a href="/lucky/left">
             Pozostały do wylosowania
         </a></h3>
@@ -79,6 +74,7 @@
         <h3>
             <a href="/lucky/all">Archwium szczęśliwych numerków</a>
         </h3>
+        -->
             </div>
         </body>
 </html>

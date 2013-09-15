@@ -109,3 +109,28 @@ def about(request):
     [u"Dojazd","/p/dojazd"],[u"Plan lekcji",""],[u"Panorama",""],[u"Kalendarium",""],[u"Staszic na Facebooku",""]]
     return page
 
+@view_config(route_name='lucky', renderer='sis/lucky.mak', permission='view')
+def entry(request):
+   page={'editor':0, 'allerts':[]} #referrer #
+   logged_in = authenticated_userid(request)
+   try: user = DBSession.query(People).filter_by(email=logged_in).first()
+   except DBAPIError: return Response("Mysql connection error", content_type='text/plain', status_int=500)
+   lucky_number=DBSession.query(LuckyNumbers).filter_by(date=datetime.datetime.now().date()+datetime.timedelta(1)).first()
+   try:
+      page['lucky_number']=lucky_number.number
+      page['lucky_number_date']=lucky_number.date
+   except AttributeError:
+       page['lucky_number']="??"
+       page['lucky_number_date']=""
+   week=get_week(datetime.datetime.now().date()+datetime.timedelta(1))
+   page['numbers']=[]
+   for x in DBSession.query(LuckyNumbers).filter(LuckyNumbers.date.between(week[0], week[1])):
+       page['numbers'].append([x.date, x.number])
+   return page
+
+
+def get_week(day):
+    #day_of_week = datetime.timedelta(day.weekday()).days
+    start=day-datetime.timedelta(day.weekday())
+    end=day+datetime.timedelta(6-day.weekday())
+    return (start,end)

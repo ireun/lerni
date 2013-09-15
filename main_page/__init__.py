@@ -149,6 +149,7 @@ def main(global_config, **settings):
     config.add_route('presentation', '/presentation/{id}')
     config.add_route('set', '/set/{id}')
 
+    config.add_route('lucky', '/lucky')
     config.add_route('easy_link', '/{link}')
 
 

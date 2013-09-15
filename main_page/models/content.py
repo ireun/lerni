@@ -397,6 +397,17 @@ class EasyLinks(Base):
         self.views = 0
         self.state = False
         self.deleted = False
+
+class LuckyNumbers(Base):
+    __tablename__ = 'lucky_numbers'
+    id = Column(Integer, primary_key=True)
+    date = Column(Date)
+    number = Column(Integer)
+
+    def __init__(self, date, number):
+        self.date = date
+        self.number = number
+
 # Do usunięcia
 #class Articles_Comments(Base):
 #    __tablename__ = 'articles_comments'
