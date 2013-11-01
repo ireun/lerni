@@ -105,17 +105,11 @@ def main(argv=sys.argv):
     import_tweets()
     import_easy_links()
     import_banners()
+    import_groups()
     date_now=datetime.datetime.today()
 
     with transaction.manager:
         DBSession.add_all([
-        Teachers(3,1),
-        Teachers(4,1),
-        Teachers(5,1),
-        Teachers(6,0),
-        Teachers(7,0),
-        Teachers(8,2),
-
         TweetsMain(1,1),TweetsMain(2,1),TweetsMain(3,1),TweetsMain(4,2),TweetsMain(5,2),TweetsMain(6,2),
         Videos(2, 2, "68137365"),
         VideosMain(1),
@@ -143,66 +137,58 @@ def main(argv=sys.argv):
         SchoolYears(datetime.date(2013, 9, 3),datetime.date(2014, 6, 28)),
         Terms(1,datetime.date(2013,9,3),datetime.date(2014,2,1)),
         Terms(1,datetime.date(2014,2,2),datetime.date(2014,6,28)),
-        Schedules(datetime.date(2013,9,3),datetime.date(2014,2,1)),
-
-        DivisionsCategories(u"Gimnazjum",u"gm"),
-        DivisionsCategories(u"Liceum",u"lic"),
-        DivisionsCategories(u"Klasy językowe",u"ling"),
-        DivisionsCategories(u"Rozszerzenia",u"roz"),
-        Divisions(1,u"1gm",1),
-        Divisions(2,u"1bch1",1),
-        Divisions(2,u"1bch2",1),
-        Divisions(2,u"1pol",1),
-        Divisions(2,u"1mat1",1),
-        Divisions(2,u"1mat2",1),
-        Divisions(3,u"1a",1),
-        Divisions(3,u"1b",1),
-        Divisions(3,u"1c",1),
-        Divisions(3,u"1d",1),
-        Divisions(3,u"1e",1),
-        Divisions(1,u"2gm",1),
-        Divisions(2,u"2jęz",1),
-        Divisions(2,u"2bch",1),
-        Divisions(2,u"2pol",1),
-        Divisions(2,u"2mat1",1),
-        Divisions(2,u"2mat2",1),        
-        Divisions(4,u"2rchem1",1),
-        Divisions(4,u"2rchem2",1),
-        Divisions(4,u"2rfiz1",1),
-        Divisions(4,u"2rfiz2",1),
-        Divisions(4,u"2rgeo",1),
-        Divisions(4,u"2rinf",1),
-        Divisions(4,u"2rpol",1),
-        Divisions(4,u"2rwos",1),
-        Divisions(3,u"2a",1),
-        Divisions(3,u"2b",1),
-        Divisions(3,u"2c",1),
-        Divisions(3,u"2d",1),
-        Divisions(3,u"2e1",1),
-        Divisions(3,u"2e2",1),
-        Divisions(1,u"3gm",1),
-        Divisions(2,u"3jęz",1),
-        Divisions(2,u"3bch",1),
-        Divisions(2,u"3pol",1),
-        Divisions(2,u"3mat1",1),
-        Divisions(2,u"3mat2",1),
-        Divisions(4,u"3rchem1",1),
-        Divisions(4,u"3rchem2",1),
-        Divisions(4,u"3rfiz",1),
-        Divisions(4,u"3rgeo",1),
-        Divisions(4,u"3rinf",1),
-        Divisions(4,u"3rpol",1),
-        Divisions(4,u"3rwos",1),
-        Divisions(3,u"3a",1),
-        Divisions(3,u"3b",1),
-        Divisions(3,u"3c",1),
-        Divisions(3,u"3d",1),
-        Divisions(3,u"3e",1)])
+        Schedules(datetime.date(2013,9,3),datetime.date(2014,2,1))])
         #Lessons(1, teacher_subject_id, group_id, part_1, part_2, day, order, room)
         #import_pages()
         import_competitors()
         import_support()
         import_lucky_numbers()
+        import_schedules()
+
+def import_schedules():
+    f = open('main_page/data/schedule.yaml')
+    dataMap = yaml.safe_load(f)
+    f.close()
+    w=1
+    timetable_id=0
+    with transaction.manager:
+        for x in dataMap['timetables']:
+            timetable_id += 1
+            DBSession.add_all([Schedules(datetime.datetime.strptime(x['start'], '%d-%m-%Y').date(),
+                                         datetime.datetime.strptime(x['end'], '%d-%m-%Y').date())])
+            for y in x['lessons']:
+                session = DBSession()
+                t=y['teacher']
+                s=y['subject']
+                teacher=None
+                subject=None
+                if t != None:
+                    teacher = DBSession.query(People).filter_by(first_name=t.split(" ")[0],last_name=t.split(" ")[1]).first()
+                if s != None:
+                    subject = DBSession.query(Subjects).filter_by(name=s).first()
+                if subject == None:
+                    subject = Subjects(s,"")
+                    session.add(subject)
+
+                if teacher != None:
+                    DBSession.add_all([Lessons(timetable_id, teacher.id, subject.id, y['day'], y['order'], y['room'])])
+                transaction.commit()
+
+def import_groups():
+    f = open('main_page/data/groups.yaml')
+    dataMap = yaml.safe_load(f)
+    f.close()
+    w=1
+    with transaction.manager:
+        DBSession.add_all([
+            DivisionsCategories(u"Gimnazjum",u"gm"),
+            DivisionsCategories(u"Liceum",u"lic"),
+            DivisionsCategories(u"Klasy Językowe",u"lk")])
+        for x in dataMap['groups']:
+            DBSession.add_all([ Divisions(x['category_id'], x['name'], x['year_id']) ])
+            DBSession.add_all([Groups(w,x['name']+u"1"),Groups(w,x['name']+u"2")])
+            w+=1
+
 def import_support():
     pass
 def import_easy_links():
@@ -288,8 +274,10 @@ def import_users():
                        x['phonenumber'],x['email'],x['password'],x['key_data'],x['fingerprint'],w,
                        x['email_confirmed'],x['gpg_confirmed'],x['phone_confirmed'],x['group_id'])
             ])
+            if x['teacher']:
+                DBSession.add_all([ Teachers(w,x['teacher'])])
             w+=1
-        
+
 def import_competitors():
     mypath="./main_page/data/competitors/"
     for x in [ f for f in listdir(mypath) if isfile(join(mypath,f)) ]:

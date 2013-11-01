@@ -161,7 +161,7 @@ def lesson_list(request):
     query=DBSession.query(Lessons)
     for position in query:
         page['Records'].append({"LessonID":position.id,"Teacher":position.teacher_id,"Subject":position.subject_id,
-                                "Group":position.group_id,"Room":position.room,"ModificationDate":str(position.updated.date())})
+                                "Room":position.room,"ModificationDate":str(position.updated.date())})
     page['TotalRecordCount']=query.count()
     return page
 @view_config(route_name='delete_lesson', renderer='jsonp')
@@ -182,7 +182,6 @@ def update_lesson(request):
             lesson = DBSession.query(Lessons).filter_by(id=request.params['LessonID']).first()
             lesson.schedule_id=request.params["timetableID"]
             lesson.teacher_id=request.params["Teacher"]
-            lesson.group_id=request.params["Group"]
             lesson.subject_id=request.params["Subject"]
             lesson.day=request.params["day"]
             lesson.order=request.params["hour"]
@@ -198,7 +197,7 @@ def create_lesson(request):
     if "Teacher" in request.params and "Subject" in request.params:
         #try:
         session = DBSession()
-        lesson = Lessons(request.params["timetableID"], request.params["Teacher"], request.params["Group"],
+        lesson = Lessons(request.params["timetableID"], request.params["Teacher"],
                          request.params["Subject"],request.params["day"],request.params["hour"],request.params["Room"])
         session.add(lesson)
         #except LOL:
@@ -279,7 +278,7 @@ def options_subjects_list(request):
 @view_config(route_name='options_groups_list', renderer='jsonp')
 def options_groups_list(request):
     page={"Result":"OK","Options":[]}
-    for position in DBSession.query(Divisions):
+    for position in DBSession.query(Groups):
         page['Options'].append({"DisplayText":position.name,"Value":position.id})
     return page
 

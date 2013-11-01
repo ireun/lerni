@@ -14,6 +14,7 @@ progression = {progression: "/static/libs/progression/progression.min.js"}
 mailcheck = {mailcheck: "/static/libs/mailcheck/mailcheck.min.js"}
 jquery_browser = {jquery_browser: "/static/libs/jquery.browser/jquery.browser.min.js"}
 social_count = {social_count: "/static/libs/socialcount/socialcount.min.js"}
+select2 = {select2: "//cdnjs.cloudflare.com/ajax/libs/select2/3.4.1/select2.min.js"}
 
 uiji = {uiji: "/static/libs/uiji/uiji.min.js"}
 raptor = {raptor: "/static/libs/raptor/default.min.js"}

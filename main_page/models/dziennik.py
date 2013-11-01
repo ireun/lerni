@@ -35,7 +35,7 @@ class Subjects(Base):								### Nazwy przemiotów nauczanych w placówce
         self.name = name
         self.short = short
         
-class DivisionsCategories(Base):									### Gimnazjum, Liceum, Klasy Językowe
+class DivisionsCategories(Base):
     __tablename__ = 'log_divisions_categories'
     id = Column(Integer, primary_key=True)
     name = Column(Text)
@@ -165,12 +165,10 @@ class EndMarks(Base):
 class Schedules(Base):
     __tablename__ = 'log_schedules'
     id = Column(Integer, primary_key=True)
-    year_id = Column(Integer)
     start = Column(Date)
     end = Column(Date)
     updated = Column(DateTime)
     def __init__(self, start, end):
-        self.year_id = 1
         self.start = start
         self.end = end
         self.updated = datetime.datetime.now()
@@ -182,23 +180,31 @@ class Lessons(Base):
     schedule = relationship("Schedules")
     teacher_id = Column(Integer, ForeignKey('people.id'))
     teacher = relationship("People")
-    group_id = Column(Integer, ForeignKey('log_groups.id'))
-    group = relationship("Groups")
     subject_id = Column(Integer, ForeignKey('log_subjects.id'))
     subject = relationship("Subjects")
     day = Column(Integer)
     order = Column(Integer)
     room = Column(Integer)
     updated = Column(DateTime)
-    def __init__(self, schedule_id, teacher_id, group_id, subject_id, day, order, room):
+    def __init__(self, schedule_id, teacher_id, subject_id, day, order, room):
         self.schedule_id = schedule_id
         self.teacher_id = teacher_id
-        self.group_id = group_id
         self.subject_id = subject_id
         self.day = day
         self.order = order
         self.room = room
         self.updated = datetime.datetime.now()
+
+class LessonsGroups(Base):
+    __tablename__ = 'log_lessons_groups'
+    id = Column(Integer, primary_key=True)
+    lesson_id = Column(Integer, ForeignKey('log_lessons.id'))
+    lesson = relationship("Lessons")
+    group_id = Column(Integer, ForeignKey('log_groups.id'))
+    group = relationship("Groups")
+    def __init__(self, lesson_id, group_id):
+        self.lesson_id = lesson_id
+        self.group_id = group_id
 
 class LessonsLog(Base):
     __tablename__ = 'log_lessons_log'

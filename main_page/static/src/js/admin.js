@@ -204,7 +204,22 @@ var make_table = function(x){
             },
             Group: {
                 title: 'Grupy',
-                options: "/api/jsonp/options-groups-list/"+"1"
+                /*options: "/api/jsonp/options-groups-list/"+"1"*/
+                input: function (data) {
+                        if (data.record) {
+                            /*return '<input type="text" name="Name" style="width:200px" value="' + data.record.Name + '" />';*/
+                            return '<input type="hidden" id="e6" style="width: 500px;" value="34:Donnie Darko,54:Heat,27:No Country for Old Men"  />'
+                        } else {
+                            return '<input type="hidden" id="e6" style="width: 500px;" value="34:Donnie Darko,54:Heat,27:No Country for Old Men"  />' +
+                                '<script>' +
+                                'head.js(select2, function(){ \
+                                MultiAjaxAutoComplete("#e6", "http://api.rottentomatoes.com/api/public/v1.0/movies.json");\
+                                console.log("Q!#!#!#!");\
+                                })' +
+                                '</script>'
+                        }
+
+                }
             },
             Room: {
                 title: 'Sala'
@@ -221,6 +236,63 @@ var make_table = function(x){
     });
     $('#table'+x).jtable('load');
 }
+
+
+
+
+
+    function MultiAjaxAutoComplete(element, url) {
+        $(element).select2({
+            placeholder: "Search for a movie",
+            minimumInputLength: 1,
+            multiple: true,
+            ajax: {
+                url: url,
+                dataType: 'jsonp',
+                data: function(term, page) {
+
+                    return {
+                        q: term,
+                        page_limit: 10,
+                        apikey: "z4vbb4bjmgsb7dy33kvux3ea" //my own apikey
+                    };
+                },
+                results: function(data, page) {
+                    return {
+                        results: data.movies
+                    };
+                }
+            },
+            formatResult: formatResult,
+            formatSelection: formatSelection,
+            initSelection: function(element, callback) {
+                var data = [];
+                $(element.val().split(",")).each(function(i) {
+                    var item = this.split(':');
+                    data.push({
+                        id: item[0],
+                        title: item[1]
+                    });
+                });
+                //$(element).val('');
+                callback(data);
+            }
+        });
+    };
+
+    function formatResult(movie) {
+        return '<div>' + movie.title + '</div>';
+    };
+
+    function formatSelection(data) {
+        return data.title;
+    };
+
+
+
+
+
+
 
 
 var done=new Array()

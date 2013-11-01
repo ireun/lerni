@@ -24,6 +24,7 @@
   <link href="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/css/base/jquery.ui.all.min.css"  rel="stylesheet">
   <link href="/static/libs/jtable/jtable_metro_base.min.css"  rel="stylesheet">
   <link href="/static/libs/jtable/blue/jtable.min.css"  rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/select2/3.4.1/select2.min.css"  rel="stylesheet">
 </head>
 <body>
   <div id="wrapper" class="">
