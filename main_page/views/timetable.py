@@ -10,9 +10,10 @@ def plan(request):
     for position in DBSession.query(Teachers):
         if DBSession.query(Lessons).filter_by(teacher_id=position.id).first():
             page['teachers'].append(position.user.full_name)
-    for position in DBSession.query(Groups):
+    for position in DBSession.query(Divisions):
         page['groups'].append(position.name)
-    #    pass
+    page['groups'].sort()
+    page['teachers'].sort(key=lambda teacher: teacher.split(" ")[1])
     return page
 
 @view_config(route_name='schedule', renderer='sis/timetable_show.mak', request_method='POST')
@@ -42,9 +43,10 @@ def plan_post(request):
 
     if 'group_name' in request.params:
         page['who'] = request.params['group_name']
-        group = DBSession.query(Groups).filter_by(name=page['who']).first()
-        for position in DBSession.query(LessonsGroups).filter_by(group_id=group.id):
-            page['lessons'][position.lesson.order-1][position.lesson.day+1][1] = position.lesson.room
-            if position.lesson.subject.name:
-                page['lessons'][position.lesson.order-1][position.lesson.day+1][0].append(position.lesson.subject.name)
+        division = DBSession.query(Divisions).filter_by(name=page['who']).first()
+        for group in DBSession.query(Groups).filter_by(division_id=division.id):
+            for position in DBSession.query(LessonsGroups).filter_by(group_id=group.id):
+                page['lessons'][position.lesson.order-1][position.lesson.day+1][1] = position.lesson.room
+                if position.lesson.subject.name:
+                    page['lessons'][position.lesson.order-1][position.lesson.day+1][0].append(position.lesson.subject.name)
     return page
