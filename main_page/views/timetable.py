@@ -35,7 +35,8 @@ def plan_post(request):
     if 'teacher_last_name' in request.params:
         page['who'] = request.params['teacher_last_name']
         t = page['who']
-        teacher = DBSession.query(People).filter_by(first_name=t.split(" ")[0], last_name=t.split(" ")[1]).first()
+        teacher = DBSession.query(People).filter_by(first_name=t.split(" ")[0], last_name=t.split(" ")[1])
+        teacher = DBSession.query(Teachers).filter_by(user_id=teacher.first().id).first()
         for position in DBSession.query(Lessons).filter_by(teacher_id=teacher.id):
             page['lessons'][position.order-1][position.day+1][1] = position.room
             for x in DBSession.query(LessonsGroups).filter_by(lesson_id=position.id):

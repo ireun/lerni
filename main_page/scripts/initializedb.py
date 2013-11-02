@@ -106,7 +106,6 @@ def main(argv=sys.argv):
     import_tweets()
     import_easy_links()
     import_banners()
-    #import_groups()
     date_now=datetime.datetime.today()
 
     with transaction.manager:
@@ -161,14 +160,16 @@ def import_schedules():
         transaction.commit()
         for y in x['lessons']:
             session = DBSession()
-            t=y['teacher']
-            s=y['subject']
-            teacher=None
+            t = y['teacher']
+            s = y['subject']
+            teacher = None
             subject=None
             if t != None:
                 teacher = DBSession.query(People).filter_by(first_name=t.split(" ")[0],last_name=t.split(" ")[1])
-            if teacher != None:
-                teacher = teacher.first()
+            if teacher != None and teacher.first() != None:
+                teacher = DBSession.query(Teachers).filter_by(user_id=teacher.first().id).first()
+            else:
+                teacher = None
             #if teacher != None:
             #    teacher = teacher[0]
             if s != None:
@@ -197,7 +198,6 @@ def import_schedules():
                     session.add(lesson_group)
                     session.flush()
             transaction.commit()
-
 def import_groups():
     f = open('main_page/data/groups.yaml')
     dataMap = yaml.safe_load(f)
