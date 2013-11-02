@@ -85,16 +85,13 @@ class AALogin(Base):
 		self.accept_language = accept_language
 		self.date = date
 
-
-class Teachers(Base):  #jeden do jednego
-	__tablename__ = 'teachers'
-	id = Column(Integer, primary_key=True)
-	user_id = Column(Integer, ForeignKey('people.id'), unique=True)
-	user = relationship("People")
-	state = Column(Integer)
-	def __init__(self, user_id, state):
-		self.user_id = user_id
-		self.state = state
+class Teachers(Base):
+    __tablename__ = 'log_teachers'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('people.id'), unique=True)
+    user = relationship("People")
+    def __init__(self, user_id):
+        self.user_id = user_id
 
 class Students(Base):
 	__tablename__ = 'students'

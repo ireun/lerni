@@ -45,11 +45,6 @@ def home(request):
     return page
 
 
-@view_config(route_name='plan')#, renderer='plan.mak')
-def plan(request):
-    return Response(body="text", content_type='text/plain')
-
-
 
 
 

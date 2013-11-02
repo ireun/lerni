@@ -65,6 +65,7 @@ from ..models import (
     Divisions,
     Groups,
     Lessons,
+    LessonsGroups,
     Association,
     AppCodes,
     SupportSections,
@@ -105,7 +106,7 @@ def main(argv=sys.argv):
     import_tweets()
     import_easy_links()
     import_banners()
-    import_groups()
+    #import_groups()
     date_now=datetime.datetime.today()
 
     with transaction.manager:
@@ -151,28 +152,51 @@ def import_schedules():
     f.close()
     w=1
     timetable_id=0
-    with transaction.manager:
-        for x in dataMap['timetables']:
-            timetable_id += 1
-            DBSession.add_all([Schedules(datetime.datetime.strptime(x['start'], '%d-%m-%Y').date(),
-                                         datetime.datetime.strptime(x['end'], '%d-%m-%Y').date())])
-            for y in x['lessons']:
-                session = DBSession()
-                t=y['teacher']
-                s=y['subject']
-                teacher=None
-                subject=None
-                if t != None:
-                    teacher = DBSession.query(People).filter_by(first_name=t.split(" ")[0],last_name=t.split(" ")[1]).first()
-                if s != None:
-                    subject = DBSession.query(Subjects).filter_by(name=s).first()
-                if subject == None:
-                    subject = Subjects(s,"")
-                    session.add(subject)
+    for x in dataMap['timetables']:
+        session = DBSession()
+        timetable_id += 1
+        schedule=Schedules(datetime.datetime.strptime(x['start'], '%d-%m-%Y').date(),
+                                     datetime.datetime.strptime(x['end'], '%d-%m-%Y').date())
+        session.add(schedule)
+        transaction.commit()
+        for y in x['lessons']:
+            session = DBSession()
+            t=y['teacher']
+            s=y['subject']
+            teacher=None
+            subject=None
+            if t != None:
+                teacher = DBSession.query(People).filter_by(first_name=t.split(" ")[0],last_name=t.split(" ")[1])
+            if teacher != None:
+                teacher = teacher.first()
+            #if teacher != None:
+            #    teacher = teacher[0]
+            if s != None:
+                subject = DBSession.query(Subjects).filter_by(name=s).first()
+            if subject == None:
+                subject = Subjects(s,"")
+                session.add(subject)
+                session.flush()
 
-                if teacher != None:
-                    DBSession.add_all([Lessons(timetable_id, teacher.id, subject.id, y['day'], y['order'], y['room'])])
-                transaction.commit()
+            if teacher != None:
+                lesson = Lessons(timetable_id, teacher.id, subject.id, y['day'], y['order'], y['room'])
+                session.add(lesson)
+                for g in y['groups']:
+                    group = DBSession.query(Groups).filter_by(name=g['name'])
+                    group = group.first()
+                    if group == None:
+                        division = DBSession.query(Divisions).filter_by(name=g['name'][:-1]).first()
+                        if division == None:
+                            division = Divisions(1,g['name'][:-1],1)
+                            session.add(division)
+                            session.flush()
+                        group = Groups(division.id, g['name'])
+                        session.add(group)
+                        session.flush()
+                    lesson_group=LessonsGroups(lesson.id,group.id)
+                    session.add(lesson_group)
+                    session.flush()
+            transaction.commit()
 
 def import_groups():
     f = open('main_page/data/groups.yaml')
@@ -275,7 +299,7 @@ def import_users():
                        x['email_confirmed'],x['gpg_confirmed'],x['phone_confirmed'],x['group_id'])
             ])
             if x['teacher']:
-                DBSession.add_all([ Teachers(w,x['teacher'])])
+                DBSession.add_all([ Teachers(w)])
             w+=1
 
 def import_competitors():

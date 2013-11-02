@@ -37,7 +37,7 @@ def main(global_config, **settings):
     config.add_route('forgot_password', '/forgot-password')
     config.add_route('activate_account', '/activate-account')
 
-    config.add_route('zastepstwa', '/zastepstwa/')
+    config.add_route('zastepstwa', '/zastepstwa')
     config.add_renderer('jsonp', JSONP(param_name='callback'))
     config.add_route('jsonp_post_comments', '/api/jsonp/post_comments')
     config.add_route('jsonp_year_add', '/api/jsonp/year/add') #articles zrobic podobnie#
@@ -84,7 +84,7 @@ def main(global_config, **settings):
     config.add_route('edit_page', '/p_edit/{pagename}')
 
 
-    config.add_route('plan', '/plan')
+    config.add_route('schedule', '/schedule')
     config.add_route('admin', '/admin')
     config.add_route('admin_overview', '/admin/overview')
     config.add_route('admin_articles', '/admin/articles')
@@ -151,6 +151,8 @@ def main(global_config, **settings):
 
     config.add_route('lucky', '/lucky')
     config.add_route('easy_link', '/{link}')
+
+    config.add_route('user','/u/{user_name}')
 
 
     for x in os.walk("main_page/static/src/"):

@@ -61,6 +61,7 @@ from main_page.models import (
     Divisions,
     Groups,
     Lessons,
+    LessonsGroups,
     Association,
     SupportSections,
     SupportSubSections,
