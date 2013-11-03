@@ -1,0 +1,112 @@
+body {
+    margin: 0px;
+    color: #333;
+    font-size: 12px;
+    font-family: 'Lucida Grande', 'DejaVu Sans', 'Bitstream Vera Sans', Verdana, Arial, sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: #5b80b2;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #666;
+}
+
+p {
+    max-width: 700px;
+}
+
+#flash {
+    padding: 2px 10px;
+    background-color: #ffc;
+    color: #333940;
+}
+
+#header {
+    overflow: hidden;
+    width: 100%;
+    color: #ffc;
+    background-color: #333940;
+}
+
+#header h1 {
+    margin: 8px 0px;
+    padding: 0px 10px;
+    font-size: 18px;
+    font-weight: normal;
+    color: white;
+}
+
+#header a:link, #header a:visited {
+    color: white
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+#user-tools {
+    font-size: 11px;
+    padding: 1.2em 10px;
+    position: absolute;
+    right: 0px;
+    text-align: right;
+    top: 0px;
+}
+
+#content {
+    margin: 10px 15px;
+}
+
+#menu {
+    font-size: 11px;
+    color: #999;
+    border-bottom: 1px solid #ccc;
+    padding: 2px 8px 3px;
+    background: white url('/menu-bg.gif') repeat-x 0px -10px;
+}
+
+#menu ul {
+    display: inline;
+    padding: 0px;
+    margin-left: 10px;
+}
+
+#menu li {
+    display: inline;
+    margin: 0px 8px;
+}
+
+div .lucky_number {
+    border: 1px solid;
+    text-align: center;
+    width: 200px;
+    color: white;
+    background-color: #333;
+}
+
+.lucky_number_number {
+    font-size: 140px;
+    width: 200px;
+    height: 175px;
+    border-bottom: 2px solid #ff0066;
+}
+
+.lucky_number_date {
+    font-size: 30px;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table, td, th {
+    border: 1px solid #666;
+}
+
+td, th {
+    padding: 4px;
+    vertical-align: top;
+}
