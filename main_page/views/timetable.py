@@ -1,6 +1,16 @@
 # -*- coding: utf-8 -*-
 from base import *
 
+@view_config(route_name='sis_home', renderer='sis/home.mak')
+def sis_home(request):
+    page={'editor':0, 'allerts':[]}
+    page['last_update'] = '2013-11-01'
+    return page
+@view_config(route_name='sis_about', renderer='sis/about.mak')
+def sis_about(request):
+    page={'editor':0, 'allerts':[]}
+    page['last_update'] = '2013-11-01'
+    return page
 @view_config(route_name='schedule', renderer='sis/timetable.mak')
 def plan(request):
     page={'editor':0, 'allerts':[]}

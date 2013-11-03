@@ -84,7 +84,7 @@ def main(global_config, **settings):
     config.add_route('edit_page', '/p_edit/{pagename}')
 
 
-    config.add_route('schedule', '/schedule')
+
     config.add_route('admin', '/admin')
     config.add_route('admin_overview', '/admin/overview')
     config.add_route('admin_articles', '/admin/articles')
@@ -149,11 +149,14 @@ def main(global_config, **settings):
     config.add_route('presentation', '/presentation/{id}')
     config.add_route('set', '/set/{id}')
 
-    config.add_route('lucky', '/lucky')
-    config.add_route('easy_link', '/{link}')
-
     config.add_route('user','/u/{user_name}')
 
+    config.add_route('lucky', '/sis/lucky')
+    config.add_route('sis_home', '/sis')
+    config.add_route('sis_about', '/sis/about')
+    config.add_route('schedule', '/sis/schedule')
+
+    config.add_route('easy_link', '/{link}')
 
     for x in os.walk("main_page/static/src/"):
         for y in x:

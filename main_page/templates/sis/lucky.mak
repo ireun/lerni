@@ -4,13 +4,13 @@
             <title>
                 SIS | Szczęśliwy numerek
             </title>
-            <link rel="stylesheet" type="text/css" href="//sis.staszic.edu.pl/base.css" />
-            <link rel="stylesheet" type="text/css" href="//sis.staszic.edu.pl/beta.css" />
+            <link rel="stylesheet" type="text/css" href="/static/sis/base.min.css" />
+            <link rel="stylesheet" type="text/css" href="/static/sis/beta.min.css" />
         </head>
         <body>
             <div id="header">
                 <h1>
-                    <a href="/">System Informacyjny Staszica</a> <span class="beta">beta</span>
+                    <a href="/sis">System Informacyjny Staszica</a> <span class="beta">beta</span>
                 </h1>
                 <div id="user-tools">
                     Ostatnia aktualizacja planu: 2013-05-26 |
@@ -22,12 +22,14 @@
             <div id="menu">
                 Menu:
                 <ul>
-                    <li><a href="/">Home</a></li>
+                    <li><a href="/sis">Home</a></li>
+                    <!--
                     <li><a href="/now">Now!</a></li>
-                    <li><a href="/schedule">Plan</a></li>
-                    <li><a href="/lucky">Szczęśliwy numerek</a></li>
+                    -->
+                    <li><a href="/sis/schedule">Plan</a></li>
+                    <li><a href="/sis/lucky">Szczęśliwy numerek</a></li>
                     <li><a href="http://www.staszic.edu.pl/zastepstwa/">Zastępstwa</a></li>
-                    <li><a href="/about">About</a></li>
+                    <li><a href="/sis/about">About</a></li>
                 </ul>
             </div>
             <div id="content">
