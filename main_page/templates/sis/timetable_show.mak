@@ -43,11 +43,11 @@
             %for x in lessons:
             <tr>
                 <td>${x[0]}.</td>
-                <td>${",".join(x[1][0])} ${x[1][1]}</td>
-                <td>${",".join(x[2][0])} ${x[2][1]}</td>
-                <td>${",".join(x[3][0])} ${x[3][1]}</td>
-                <td>${",".join(x[4][0])} ${x[4][1]}</td>
-                <td>${",".join(x[5][0])} ${x[5][1]}</td>
+                <td>${"/".join(x[1])}</td>
+                <td>${"/".join(x[2])}</td>
+                <td>${"/".join(x[3])}</td>
+                <td>${"/".join(x[4])}</td>
+                <td>${"/".join(x[5])}</td>
             </tr>
             %endfor
         </table>
