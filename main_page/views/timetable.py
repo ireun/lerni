@@ -50,7 +50,7 @@ def plan_post(request):
                     for z in all_groups:
                         page['lessons'][position.order-1][position.day+1].remove(z)
                     page['lessons'][position.order-1][position.day+1].append(division.name)
-            #page['lessons'][position.order-1][position.day+1][1] = position.room
+            page['lessons'][position.order-1][position.day+1][-1] += "["+str(position.room)+"]"
             #    page['lessons'][position.order-1][position.day+1][0].append(x.group.name)
 
     if 'group_name' in request.params:
