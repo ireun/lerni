@@ -40,19 +40,19 @@
             rzeczywistym.
         </p>
         -->
-        <h3><a href="/schedule">Plan</a></h3>
+        <h3><a href="/sis/schedule">Plan</a></h3>
         <p>
             Czyli wszystko co związane z planem zajęć lekcyjnych -
             dla ucznia i dla nauczyciela!
         </p>
-        <h3><a href="/lucky">Szczęśliwy numerek</a></h3>
+        <h3><a href="/sis/lucky">Szczęśliwy numerek</a></h3>
         <p>
             Sprawdź aktualny szczęśliwy numerek, a także numerki na ten,
             czy na przyszły tydzień. W razie wątpliwości co do częstości
             występowania danego numerka zawsze możesz sprawdzić nasze
-            <a href="/lucky/all">archiwum</a>.
+            <a href="/sis/lucky/all">archiwum</a>.
         </p>
-        <h3><a href="/about">About</a></h3>
+        <h3><a href="/sis/about">About</a></h3>
         <p>Jeśli chcesz wiedzieć więcej...</p>
             </div>
         </body>
