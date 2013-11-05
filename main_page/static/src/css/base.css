@@ -12,11 +12,7 @@
 
 html, body {height: 100%; margin:0; min-width: 219px;}
 body{	
-	background: #D7F1F7;
-	background: -moz-linear-gradient(top, #0f3166 0%, #144187 100%); /* firefox */
-   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#0f3166), color-stop(100%,#144187)); /* webkit */
-   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0f3166', endColorstr='#144187',GradientType=0 ); /* ie */
-   height: 100%; margin: 0; background-repeat: no-repeat; background-attachment: fixed;
+	background: #002147;
 }
 #owlCarousel {opacity: 1!important;}
 #aaowlCarousel .item img{display: block; width: 100%; height: auto; }
