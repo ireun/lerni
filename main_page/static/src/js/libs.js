@@ -1,7 +1,7 @@
 /*progression = "/static/libs/progression/progression.min.js"*/
 hogan={hogan:"/static/libs/hogan/hogan-2.0.0.min.js"}
 typeahead={typeahead:"/static/libs/typeahead/typeahead.min.js"}
-bootstrap = {bootstrap:"/static/libs/bootstrap/bootstrap.js"}
+bootstrap = {bootstrap:"/static/libs/bootstrap/bootstrap.min.js"}
 sparkline = {sparkline:"/static/libs/jquery.sparkline/jquery.sparkline.min.js"}
 mixitup = {mixitup: "/static/libs/jquery.mixitup/jquery.mixitup.min.js"}
 tagsinput = {tagsinput: "/static/libs/jquery.tagsinput/jquery.tagsinput.min.js"}

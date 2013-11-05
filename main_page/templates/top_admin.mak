@@ -83,6 +83,8 @@
                     <li class=""><a href="/admin/studnets"> <span class="icon icon-angle-right"></span>Uczniowie</a></li>
                   </ul>
                 </li>
+
+                <!--
                 <li class="accordion-group ">
                   <a data-toggle="collapse" data-parent="#navigation" href="#submenu3"> <span class="icon icon-th-list"></span>
                     <span class="text">Dziennik</span><span class="arrow icon-caret-down"></span>
@@ -105,15 +107,12 @@
                     <li class=""><a href="media.html"> <span class="icon icon-angle-right"></span>Media</a></li>
                   </ul>
                 </li>
-                <!--/ END Menu -->
-                <!-- START Menu -->
                 <li class="accordion-group ">
                   <a data-toggle="collapse" data-parent="#navigation"
                   href="#submenu5"> <span class="icon icon-sitemap"></span>
                     <span class="text">Budowa strony</span>
                     <span class="arrow icon-caret-down"></span>
                   </a>
-                  <!-- START Submenu Menu -->
                   <ul id="submenu5" class="collapse ">
                     <li>
                       <a href="page-login.html"> <span class="icon icon-angle-right"></span>
@@ -156,6 +155,7 @@
                     </li>
                   </ul>
                 </li>
+                -->
                 <li class="accordion-group ">
                   <a data-toggle="collapse" data-parent="#navigation"
                   href="#submenu7"> <span class="icon icon-list-alt"></span>
@@ -163,6 +163,9 @@
                     <span class="arrow icon-caret-down"></span>
                   </a>
                   <ul id="submenu7" class="collapse ">
+                    <li class="">
+                      <a href="widget-default.html"> <span class="icon icon-angle-right"></span>Strona główna</a>
+                    </li>
                     <li class="">
                       <a href="widget-default.html"> <span class="icon icon-angle-right"></span>Galeria</a>
                     </li>
@@ -198,6 +201,7 @@
                   </ul>
                 </li>
                 <li class="divider">Nauka</li>
+                  <!--
                 <li class="accordion-group ">
                   <a href="/admin/overview"> <span class="icon icon-file-text"></span>
                     <span class="text">Do przczytania</span>
@@ -219,6 +223,7 @@
                     <li class=""><a href="statistic.html"> <span class="icon icon-angle-right"></span>Zobacz dostępne konkursy</a></li>
                   </ul>
                 </li>
+                -->
                 <li class="accordion-group ">
                   <a data-toggle="collapse" data-parent="#navigation"
                   href="#submenu11"> <span class="icon icon-folder-open"></span>
