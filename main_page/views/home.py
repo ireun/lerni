@@ -26,12 +26,12 @@ def home(request):
 
 
     page['rows']=[[]]
-    page['rows'][0].append([u"Ostatnie video","last_video","video",last_video,"span8"])
+    page['rows'][0].append([u"Ostatnie video","last_video","video",last_video,"col-md-8"])
     lern_message=u'''Strona, którą oglądasz powstała dzięki <a href="https://github.com/kamilx3/lerni">Lerni</a>.<br>
                 Dla ciebie (jako ucznia) oznacza to wygodę w załatwianiu wszelkich spraw związanych ze szkołą, możliwość dzielenia się efektami swojej pozaszkolnej pracy z innymi, lepszy dostęp do materiałów edukacyjnych i informacji o konkursach.<br>
                 Dla nauczyciela - mniej pracy - automatyczne sprawdzanie testów, wspomaganie wypełniania dziennika, łatwy kontakt z uczniami sprawią, że znowu można skupić się na nauczaniu.<br>
                 Jeśli umiesz programować możesz pomóc w rozwoju projektu albo napisać własną aplikację korzystającą z <a href="https://github.com/kamilx3/lerni">oficjalnego api</a>.'''
-    page['rows'][0].append([u"Dowiedz się więcej","learn_more","",lern_message,"span4"])
+    page['rows'][0].append([u"Dowiedz się więcej","learn_more","",lern_message,"col-md-4"])
     page['news']=[]
     for position in DBSession.query(TweetsMain).order_by('-id').filter_by(category_id=1).limit(8):
         page['news'].append([position.tweet.user.full_name,position.tweet.date,position.tweet.text,position.tweet.link,position.tweet.link_name])

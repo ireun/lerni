@@ -29,32 +29,38 @@
 <body>
   <div id="wrapper" class="">
     <header id="header">
-      <div class="navbar navbar-medium navbar-inverse navbar-static-top">
-        <div class="navbar-inner">
-          <div class="container">
-            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span></button>
-            <a class="brand" href="/">ZSO nr 15 w Sosnowcu</a>
-            <div class="nav-collapse collapse">
-              <ul class="nav">
-                <li> <a href="/about">Szkoła</a></li>
-                <li> <a href="/education">Edukacja</a></li>
-                <li> <a href="/">Konkursy</a></li>
-                <li> <a href="/">Strefa ucznia</a></li>
-                <li> <a href="/support">Support</a></li>
-                <li> <a href="/login">Login</a></li>
-              </ul>
-              <div class="pull-right">
-                <ul class="nav">
-                  <li> <a href="/admin">Panel administratora</a></li>
-                  <li style="float:right;height:40px;">
-					<li style="font-size: 22px;"><a href="/account" class="icon-cog"></a></li>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
+      <div class="navbar navbar-inverse navbar-static-top" role="navigation">
+        <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">ZSO nr 15 w Sosnowcu</a>
         </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/about">Szkoła</a></li>
+            <li><a href="/education">Edukacja</a></li>
+            <li><a href="/competitions">Konkursy</a></li>
+            <li><a href="/student_zone">Strefa ucznia</a></li>
+            <li><a href="/support">Support</a></li>
+            <li><a href="/login">Login</a></li>
+          </ul>
+            %if logged_in:
+            <div class="pull-right">
+              <ul class="nav navbar-nav">
+                <li><a href="/admin">Panel administratora</a></li>
+                <li style="font-size: 22px;"><a href="/account" class="icon-cog"></a></li>
+              </ul>
+            </div>
+            %endif
+        </div><!--/.nav-collapse -->
+        </div>
+      </div>
     </header>
+
     <aside id="sidebar">
       <div class="sidebar-content">
         <ul class="nav nav-tabs">
@@ -64,7 +70,7 @@
         </ul>
         <div class="tab-content">
           <div class="tab-pane active" id="tab-menu">
-            <nav id="nav" class="accordion">
+            <nav id="nav" class="accordion panel-group">
               <ul id="navigation">
                 <li class="divider">Główne menu</li>
                 <li class="accordion-group active">
@@ -76,7 +82,7 @@
                   <a data-toggle="collapse" data-parent="#navigation" href="#submenu2"> <span class="icon icon-user"></span>
                     <span class="text">Ludzie</span><span class="arrow icon-caret-down"></span>
                   </a>
-                  <ul id="submenu2" class="collapse ">
+                  <ul id="submenu2" style="height: 0px;">
                     <li class=""><a href="/admin/users"> <span class="icon icon-angle-right"></span>Lista użytkowników</a></li>
                     <li class=""><a href="/admin/teachers"> <span class="icon icon-angle-right"></span>Nauczyciele</a></li>
                     <li class=""><a href="/admin/personel"> <span class="icon icon-angle-right"></span>Personel</a></li>
@@ -89,7 +95,7 @@
                   <a data-toggle="collapse" data-parent="#navigation" href="#submenu3"> <span class="icon icon-th-list"></span>
                     <span class="text">Dziennik</span><span class="arrow icon-caret-down"></span>
                   </a>
-                  <ul id="submenu3" class="collapse ">
+                  <ul id="submenu3" style="height: 0px;">
                     <li class=""><a href="/admin/log/years"> <span class="icon icon-angle-right"></span>Lata Szkolne</a></li>
                     <li class=""><a href="/admin/log/groups"> <span class="icon icon-angle-right"></span>Klasy</a></li>
                     <li class=""><a href="/admin/log/groups"> <span class="icon icon-angle-right"></span>Sale lekcyjne</a></li>
@@ -101,7 +107,7 @@
                   <a data-toggle="collapse" data-parent="#navigation" href="#submenu4"> <span class="icon icon-cogs"></span>
                     <span class="text">Rekrutacja</span> <span class="arrow icon-caret-down"></span>
                   </a>
-                  <ul id="submenu4" class="collapse ">
+                  <ul id="submenu4" style="height: 0px;">
                     <li class=""><a href="jquery-ui.html"> <span class="icon icon-angle-right"></span>Jquery UI</a></li>
                     <li class=""><a href="calendar.html"> <span class="icon icon-angle-right"></span>Calendar</a></li>
                     <li class=""><a href="media.html"> <span class="icon icon-angle-right"></span>Media</a></li>
@@ -113,7 +119,7 @@
                     <span class="text">Budowa strony</span>
                     <span class="arrow icon-caret-down"></span>
                   </a>
-                  <ul id="submenu5" class="collapse ">
+                  <ul id="submenu5" style="height: 0px;">
                     <li>
                       <a href="page-login.html"> <span class="icon icon-angle-right"></span>
                         <span class="text">Rejestracja</span>
@@ -162,7 +168,7 @@
                     <span class="text">Ustawienia strony</span>                                                                                                                                                                             </span>
                     <span class="arrow icon-caret-down"></span>
                   </a>
-                  <ul id="submenu7" class="collapse ">
+                  <ul id="submenu7" style="height: 0px;">
                     <li class="">
                       <a href="widget-default.html"> <span class="icon icon-angle-right"></span>Strona główna</a>
                     </li>
@@ -180,7 +186,7 @@
                     <span class="text">Chmura</span>
                     <span class="arrow icon-caret-down"></span>
                   </a>
-                  <ul id="submenu8" class="collapse ">
+                  <ul id="submenu8" style="height: 0px;">
                     <li class=""><a href="chart.html"> <span class="icon icon-angle-right"></span>Moje pliki</a></li>
                     <li class=""><a href="statistic.html"> <span class="icon icon-angle-right"></span>Moje programy</a></li>
                     <li class=""><a href="statistic.html"> <span class="icon icon-angle-right"></span>Pliki do wydrukowania</a></li>
@@ -192,7 +198,7 @@
                     <span class="text">Moje konto</span>
                     <span class="arrow icon-caret-down"></span>
                   </a>
-                  <ul id="submenu9" class="collapse ">
+                  <ul id="submenu9" style="height: 0px;">
                     <li class=""><a href="chart.html"> <span class="icon icon-angle-right"></span>Dane personalne</a></li>
                     <li class=""><a href="statistic.html"> <span class="icon icon-angle-right"></span>Kursy</a></li>
                     <li class=""><a href="statistic.html"> <span class="icon icon-angle-right"></span>Bezpieczeństwo</a></li>
@@ -218,7 +224,7 @@
                     <span class="text">Konkursy</span>
                     <span class="arrow icon-caret-down"></span>
                   </a>
-                  <ul id="submenu10" class="collapse ">
+                  <ul id="submenu10" style="height: 0px;">
                     <li class=""><a href="chart.html"> <span class="icon icon-angle-right"></span>Dodaj konkurs</a></li>
                     <li class=""><a href="statistic.html"> <span class="icon icon-angle-right"></span>Zobacz dostępne konkursy</a></li>
                   </ul>
@@ -230,7 +236,7 @@
                     <span class="text">Moja praca</span>
                     <span class="arrow icon-caret-down"></span>
                   </a>
-                  <ul id="submenu11" class="collapse ">
+                  <ul id="submenu11" style="height: 0px;">
                     <li class=""><a href="/account/folders"> <span class="icon icon-angle-right"></span>Foldery</a></li>
                     <li class=""><a href="/account/entries"> <span class="icon icon-angle-right"></span>Wpisy</a></li>
                     <li class=""><a href="/account/presentations"> <span class="icon icon-angle-right"></span>Prezentacje</a></li>

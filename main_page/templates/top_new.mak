@@ -34,33 +34,33 @@
   </head>
   <body>
   <div id="wrapper">
-	<div class="navbar navbar-medium navbar-inverse navbar-static-top">
-	  <div class="navbar-inner">
-	    <div class="container">
-	      <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+	      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	      </button>
-	      <a class="brand" href="/">ZSO nr 15 w Sosnowcu</a>
-	      <div class="nav-collapse collapse">
-	        <ul class="nav"> 
-	          <li><a href="/about">Szkoła</a></li>
-	          <li><a href="/education">Edukacja</a></li>
-	          <li><a href="/competitions">Konkursy</a></li>
-	          <li><a href="/student_zone">Strefa ucznia</a></li>
-	          <li><a href="/support">Support</a></li>
-	          <li><a href="/login">Login</a></li>
-	        </ul>
+          <a class="navbar-brand" href="/">ZSO nr 15 w Sosnowcu</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/about">Szkoła</a></li>
+            <li><a href="/education">Edukacja</a></li>
+            <li><a href="/competitions">Konkursy</a></li>
+            <li><a href="/student_zone">Strefa ucznia</a></li>
+            <li><a href="/support">Support</a></li>
+            <li><a href="/login">Login</a></li>
+          </ul>
             %if logged_in:
-	        <div class="pull-right">
-	          <ul class="nav">
-	            <li><a href="/admin">Panel administratora</a></li>
-	            <li style="font-size: 22px;"><a href="/account" class="icon-cog"></a></li>
-	          </ul>
-	        </div>
+            <div class="pull-right">
+              <ul class="nav navbar-nav">
+                <li><a href="/admin">Panel administratora</a></li>
+                <li style="font-size: 22px;"><a href="/account" class="icon-cog"></a></li>
+              </ul>
+            </div>
             %endif
-	      </div>
-	    </div>
-	  </div>
-	</div>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>

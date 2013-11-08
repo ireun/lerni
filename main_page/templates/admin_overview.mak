@@ -13,15 +13,15 @@
         </div>
     </div>
     <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span12">
+        <div class="row">
+            <div class="col-md-12">
                 <div class="page-header line1">
                     <h4>Kokpit <small>Tutaj znajdują się wszystkie podstawowe informacje zgromadzone w jednym miejscu.</small></h4>
                 </div>
             </div>
         </div>
-        <div class="row-fluid">
-            <div class="span4 widget dark">
+        <div class="row">
+            <div class="col-md-4 widget dark">
             <header><h4 class="title">Szczęśliwy numerek (data)</h4></header>
             <section class="body">
                 <div class="body-inner">
@@ -31,7 +31,7 @@
                 </div>
             </section>
             </div>
-            <div class="span4 widget dark">
+            <div class="col-md-4 widget dark">
             <header><h4 class="title">Jutrzejszy dzień</h4></header>
             <section class="body">
                 <div class="body-inner">
@@ -41,7 +41,7 @@
                 </div>
             </section>
             </div>
-            <div class="span4 widget dark">
+            <div class="col-md-4 widget dark">
             <header><h4 class="title">Notyfikacje</h4></header>
             <section class="body">
                 <div class="body-inner">
@@ -54,8 +54,8 @@
             </div>
         </div>
         <!--
-        <div class="row-fluid">
-            <div class="span12 widget borderless">
+        <div class="row">
+            <div class="col-md-12 widget borderless">
                 <section class="body">
                     <div class="body-inner no-padding" style="text-align:center;">
                         <figure class="stats sparkline stacked">
@@ -86,8 +86,8 @@
                 </section>
             </div>
         </div>
-        <div class="row-fluid">
-            <div class="span12 widget stacked">
+        <div class="row">
+            <div class="col-md-12 widget stacked">
                 <header>
                     <h4 class="title">Rich Chart</h4>
                     <ul class="toolbar pull-right">
@@ -104,11 +104,11 @@
                 </header>
                 <section class="body">
                     <div class="body-inner">
-                        <div class="row-fluid">
-                            <div class="span8">
+                        <div class="row">
+                            <div class="col-md-8">
                                 <div class="flot" id="chart2" style="height:220px;"></div>
                             </div>
-                            <div class="span4 widget">
+                            <div class="col-md-4 widget">
                                 <section class="body">
                                     <div class="body-inner">
                                         <div class="flot" id="chart4"></div>
@@ -157,15 +157,13 @@
             </div>
         </div>
             -->
-        <div class="row-fluid">
-            <div class="span6 widget dark">
+        <div class="row">
+            <div class="col-md-6 widget dark">
                 <header>
                     <h4 class="title">Zadania</h4>
                     <span class="label label-important pull-right">2 Oczekujące</span>
                 </header>
-                <section class="body">
-                    <div class="body-inner no-padding">
-                        <table class="table table-striped">
+                <table class="table table-striped">
                             <thead>
                                 <tr>
                                     <th><input type="checkbox" class="checkall"></th>
@@ -175,102 +173,24 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>Lorem ipsum dolor sit amet</td>
-                                    <td><span class="label label-important">Pending</span></td>
+                                    <td><input type="button"></td>
+                                    <td>Dokończyć kod listy zadań</td>
+                                    <td><span class="pending"></span></td>
                                 </tr>
                                 <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>Eos ei tamquam ornatus deleniti</td>
-                                    <td><span class="label label-success">Success</span></td>
+                                    <td><input type="button"></td>
+                                    <td>Zrobić obrazki do podstron</td>
+                                    <td><span class="waiting"></span></td>
                                 </tr>
                                 <tr>
-                                    <td><input type="checkbox"></td>
+                                    <td><input type="button"></td>
                                     <td>Mei minim saepe sententiae no</td>
-                                    <td><span class="label">Draf</span></td>
+                                    <td><span class="waiting"></span></td>
                                 </tr>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>Ius commune elaboraret scripserit te</td>
-                                    <td><span class="label label-success">Success</span></td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>In ipsum delicata duo, quaeque corpora</td>
-                                    <td><span class="label label-success">Success</span></td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>Dissentias deterruisset ne ius</td>
-                                    <td><span class="label label-important">Pending</span></td>
-                                </tr>
+
                             </tbody>
                         </table>
                     </div>
                 </section>
             </div>
-            <div class="span6 widget dark">
-                <header>
-                    <h4 class="title"><span class="icon icon-envelope-alt"></span> Ostatnie emaile.</h4>
-                    <ul class="toolbar pull-right">
-                        <li><a href="#" class="link"><span class="icon icon-cog"></span></a></li>
-                        <li>
-                            <a href="#" class="link" data-toggle="dropdown"><span class="icon icon-ellipsis-vertical"></span></a>
-                            <ul class="dropdown-menu pull-right">
-                                <li><a href="#"><span class="icon icon-pencil"></span> Edit</a></li>
-                                <li><a href="#"><span class="icon icon-trash"></span> Delete</a></li>
-                                <li><a href="#"><span class="icon icon-cog"></span> Setting</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </header>
-                <section class="body">
-                    <div class="body-inner no-padding">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th><input type="checkbox" class="checkall"></th>
-                                    <th>Lista zadań</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>Lorem ipsum dolor sit amet</td>
-                                    <td><span class="label label-important">Pending</span></td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>Eos ei tamquam ornatus deleniti</td>
-                                    <td><span class="label label-success">Success</span></td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>Mei minim saepe sententiae no</td>
-                                    <td><span class="label">Draf</span></td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>Ius commune elaboraret scripserit te</td>
-                                    <td><span class="label label-success">Success</span></td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>In ipsum delicata duo, quaeque corpora</td>
-                                    <td><span class="label label-success">Success</span></td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox"></td>
-                                    <td>Dissentias deterruisset ne ius</td>
-                                    <td><span class="label label-important">Pending</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
-            </div>
-        </div>
-    </div>
-</section>
 <%include file="bottom_admin.mak"/>
