@@ -6,7 +6,7 @@
 .row [class*="span"]{
 	pointer-events: all;
 }
-#last_video div.fluid-width-video-wrapper{
+.video div.fluid-width-video-wrapper{
 	padding-top: 350px !important;
 }
 
@@ -23,7 +23,7 @@ body{
 #header {margin: 0 auto;max-width: 1280px;width: 100%;overflow: hidden; background: #efefef; padding: 0px}
 #main{position: relative; padding-bottom:20px; max-width: 1280px; margin: 0 auto; background: #efefef;}
 div#inner-wrapper {padding-bottom: 20px;position: relative; z-index: 3; margin: 0 auto; width: 98%; max-width: 1180px;}
-#wrapper {min-height:100%; height: auto !important; height: 100%; background: url('../images/background.png') fixed; margin: 0 auto -60px;}
+#wrapper {min-height:100%; height: auto !important; height: 100%; background: url('../images/background.png') fixed; margin: 0 auto -60px; overflow: hidden;}
 #header, #main {border: thin solid black; border-top: none;}
 #header {border-bottom: none;}
 #header, #main{width: 99% !important;}

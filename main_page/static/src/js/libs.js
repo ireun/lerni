@@ -21,7 +21,7 @@ raptor = {raptor: "/static/libs/raptor/default.min.js"}
 raptor2 = {ratpor2: "/static/libs/raptor/tags.min.js"}
 raptor3 = {ratpor3: "/static/libs/raptor/raptor.min.js"}
 reveal = {reveal: "/static/libs/reveal/reveal.min.js"}
-
+gridster = {gridster: "/static/libs/gridster/jquery.gridster.min.js"}
 
 jquery = {jquery:"//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"}
 jquery_cookie = "//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.3.1/jquery.cookie.min.js"

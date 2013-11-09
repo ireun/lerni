@@ -43,6 +43,7 @@ from ..models import (
 
     Tweets,
     TweetsMain,
+    TweetsCategories,
     Videos,
     VideosMain,
     Banners,
@@ -73,7 +74,7 @@ from ..models import (
     SupportTickets,
     SupportQuestions,
     Pages,
-    SubPages,
+    Widgets,
     Competitors,
     CompetitorsCompetitions,
     CompetitorsTutors,
@@ -110,7 +111,6 @@ def main(argv=sys.argv):
 
     with transaction.manager:
         DBSession.add_all([
-        TweetsMain(1,1),TweetsMain(2,1),TweetsMain(3,1),TweetsMain(4,2),TweetsMain(5,2),TweetsMain(6,2),
         Videos(2, 2, "68137365"),
         VideosMain(1),
         AppCodes(63, "some_text", u"some_text", u"some_text"),
@@ -139,11 +139,28 @@ def main(argv=sys.argv):
         Terms(1,datetime.date(2014,2,2),datetime.date(2014,6,28)),
         Schedules(datetime.date(2013,9,3),datetime.date(2014,2,1))])
         #Lessons(1, teacher_subject_id, group_id, part_1, part_2, day, order, room)
-        #import_pages()
+        import_pages()
         import_competitors()
         import_support()
         import_lucky_numbers()
         import_schedules()
+
+def import_pages():
+    f = open('main_page/data/pages.yaml')
+    dataMap = yaml.safe_load(f)
+    f.close()
+    w=1
+    for x in dataMap['pages']:
+        session = DBSession()
+        page = Pages(x['url_name'],x['name'])
+        session.add(page)
+        transaction.commit()
+        for y in x['widgets']:
+            session = DBSession()
+            widget = Widgets(w, y['column'],y['row'],y['size_x'],y['size_y'],y['data'])
+            session.add(widget)
+            transaction.commit()
+        w+=1
 
 def import_schedules():
     f = open('main_page/data/schedule.yaml')
@@ -238,9 +255,26 @@ def import_tweets():
     f = open('main_page/data/tweets.yaml')
     dataMap = yaml.safe_load(f)
     f.close()
+    w=1
+    categories=[]
     with transaction.manager:
         for x in dataMap['tweets']:
-            DBSession.add_all([ Tweets(x['user_id'], x['text'], x['link'], x['link_name']) ])
+            session = DBSession()
+            if not x['category'] in categories:
+                tweet_category = TweetsCategories(x['category'])
+                session.add(tweet_category)
+                session.flush()
+                categories.append(x['category'])
+            else:
+                tweet_category = DBSession.query(TweetsCategories).filter_by(name=x['category']).first()
+            tweet = Tweets(x['user_id'], x['text'], x['link'], x['link_name'])
+            session.add(tweet)
+            if x['main']:
+                tweet_main = TweetsMain(w,tweet_category.id)
+                session.add(tweet_main)
+            transaction.commit()
+            w+=1
+
 
 def import_lucky_numbers():
     f = open('main_page/data/lucky.yaml')

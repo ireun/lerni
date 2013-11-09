@@ -18,7 +18,7 @@
                   <link rel="apple-touch-icon-precomposed" href="/assets/ico/apple-touch-icon-57-precomposed.png">
                                  <link rel="shortcut icon" href="/assets/ico/favicon.png">
   <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/normalize/2.1.0/normalize.css" />
-  <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
   <script src="//cdnjs.cloudflare.com/ajax/libs/headjs/0.99/head.min.js"></script>
   <script src="/static/js/libs.min.js"></script>
   <script src="/static/js/main.min.js"></script>

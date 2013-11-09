@@ -26,7 +26,8 @@ def entry(request):
    page['share_title']="LOOL"
    page['leaves']=True
    page['snow']=True
-   soup = BeautifulSoup(entry.last_version.text);[s.extract() for s in soup(['script','iframe','img','object','embed','param'])];
+   soup = BeautifulSoup(entry.last_version.text)
+   [s.extract() for s in soup(['script','iframe','img','object','embed','param'])];
    page['content'] = parser.format(unicode(soup), somevar='somevalue')
    if 'pdf' in request.params:
         css=["entries.css","content.css"]

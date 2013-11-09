@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
-
 from base import *
+
+
 @view_config(route_name='admin')
 def my_view(request):
     return HTTPFound(location = request.route_url('admin_overview'))
+
 
 @view_config(route_name='admin_overview', renderer='admin_overview.mak')
 def my_view2(request):
@@ -14,6 +16,7 @@ def my_view2(request):
     page['menu_top_list']=menu_top(request)
     page['name']=username(logged_in)
     return page
+
 
 @view_config(route_name='admin_articles', renderer='admin_articles.mak')
 def admin_articles(request):
@@ -27,6 +30,7 @@ def admin_articles(request):
     page['competitors']=[]
     return page
 
+
 @view_config(route_name='admin_gallery', renderer='admin_gallery.mak')
 def admin_gallery(request):
     page={'editor':0, 'breadcrumbs':[["/admin",u"Panel Administratora"],["",u"Overview"]], 'allerts':[]}
@@ -36,6 +40,7 @@ def admin_gallery(request):
     page['menu_top_list']=menu_top(request)
     page['name']=username(logged_in)
     return page
+
 
 @view_config(route_name='admin_lucky_number', renderer='admin_lucky_number.mak')
 def lucky_number(request):
@@ -61,6 +66,17 @@ def admin_users(request):
     page['table_name']="table_users"
     return page
 
+@view_config(route_name='admin_layouts', renderer='admin_layout_edit.mak')
+def admin_layouts(request):
+    page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["",u"Użytkownicy"]], 'allerts':[]}
+    page.update(get_basic_account_info())
+    logged_in = authenticated_userid(request)
+
+    page['name']=username(logged_in)
+    page['title']=u"Użytkownicy"
+    page['title_desc']= u"Wybierz stonę, której layout chcesz edytować."
+    page['table_name']="table_layouts"
+    return page
 
 @view_config(route_name='admin_people', renderer='admin_people.mak')
 def admin_people(request):
@@ -85,7 +101,7 @@ def admin_people(request):
 
 @view_config(route_name='admin_personel', renderer='admin_people.mak')
 def admin_personel(request):
-    page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["","Personel"]], 'allerts':[], 'tables':[]}
+    page={'editor':0, 'allerts': [], 'tables': []}
     page.update(get_basic_account_info())
     logged_in = authenticated_userid(request)
 

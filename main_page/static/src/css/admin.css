@@ -261,6 +261,7 @@ margin-right: -15px;
 #wrapper{
     min-height: 100%;
     background: #FFFFFE;
+    overflow: hidden;
 }
 #sidebar #nav > ul > li {
 	display: block;
@@ -323,6 +324,7 @@ margin-right: -15px;
 	display: block;
 	margin: 0;
 	background-color: #5e5e5e;
+    padding: 0;
 }
 #sidebar #nav > ul > li > ul > li > a:hover,
 #sidebar #nav > ul > li > ul > li.active > a {
@@ -368,6 +370,7 @@ margin-right: -15px;
 	width: 220px;
 	background-color: #555;
 	color: #fff;
+    margin-top: -20px;
 }
 #sidebar:before {
 	position: fixed;

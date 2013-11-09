@@ -101,6 +101,8 @@ def main(global_config, **settings):
     config.add_route('admin_log_timetables', '/admin/log/timetables')
     config.add_route('admin_log_timetables_edit', '/admin/log/timetables/edit')
 
+    config.add_route('admin_layouts', '/admin/layouts')
+
     config.add_route('admin_substitutions', '/admin/substitutions')
     config.add_route('admin_substitutions_add', '/admin/substitutions/add')
     config.add_route('admin_substitutions_view', '/admin/substitutions_view/{id}')
@@ -119,7 +121,6 @@ def main(global_config, **settings):
 
     config.add_route('support', '/support')
     config.add_route('support_services', '/support/services')
-    config.add_route('support_stats', '/support/stats')
     config.add_route('support_ask', '/support/ask')
     config.add_route('support_ask_ticket', '/support/ticket-{id}')
     config.add_route('support_faq', '/support/faq')

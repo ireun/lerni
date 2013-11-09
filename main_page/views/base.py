@@ -22,8 +22,8 @@ from main_page.models import (
     Substitutions,
     People,
     AALogin,
-    Wallet,   
-	 
+    Wallet,
+
     Folders,
     FoldersVersions,
     FoldersCSS,
@@ -36,8 +36,10 @@ from main_page.models import (
     EntriesLikes,
     EntriesTags,
     Tags,
+
     Tweets,
     TweetsMain,
+    TweetsCategories,
     Videos,
     VideosMain,
     Banners,
@@ -45,9 +47,7 @@ from main_page.models import (
     SetsItems,
     EasyLinks,
 
-
     Teachers,
-    Students,
     Absent,
     Replace,
     Duty,
@@ -57,25 +57,25 @@ from main_page.models import (
     Schedules,
     LuckyNumbers,
     SchoolYears,
+    Terms,
     DivisionsCategories,
     Divisions,
     Groups,
     Lessons,
     LessonsGroups,
     Association,
+    AppCodes,
     SupportSections,
     SupportSubSections,
     SupportTickets,
     SupportQuestions,
-    AppCodes,
     Pages,
-    SubPages,
+    Widgets,
     Competitors,
     CompetitorsCompetitions,
     CompetitorsTutors,
     CompetitorsTypes,
     CompetitorsGroups,
-    Files
     )
     
 #import re
@@ -123,6 +123,8 @@ import tempfile
 from contextlib import contextmanager
 import string
 valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
+import bbcode
+
 
 @contextmanager
 def tempinput(data):
@@ -140,12 +142,12 @@ def response_pdf(request,html,filename):
     response = request.response
     with tempinput(html) as tempfilename:
         with tempinput("") as output_file:
-            wk=WKhtmlToPdf(tempfilename,output_file,dpi="300",screen_resolution=[1280, 1024])
-            response.body_file=pdfkit.from_file('test.html', False)
+            wk = WKhtmlToPdf(tempfilename,output_file,dpi="300",screen_resolution=[1280, 1024])
+            response.body_file = pdfkit.from_file('test.html', False)
             response.content_type = 'application/pdf'
-            filename=(filename).replace(" ","_")
-            filename=pl_to_ascii(filename)
-            filename=''.join(c for c in filename if c in valid_chars).strip(".")
+            filename = (filename).replace(" ","_")
+            filename = pl_to_ascii(filename)
+            filename = ''.join(c for c in filename if c in valid_chars).strip(".")
             response.headerlist.append(("Content-Disposition", "attachment; filename='"+str(filename)+".pdf'"))
             return response
 def menu_left(request):
@@ -176,45 +178,64 @@ def new_pin():
 	return ''.join(choice(digits) for i in xrange(4))
 
 def send_mail(request,subject,recipients,body,fingerprint=False):
-	if fingerprint:
-		body=str(gpg.encrypt(body, fingerprint, always_trust=True))
-	mailer = request.registry['mailer']  
-	message = Message(subject=subject,
-	                  sender="mailer.staszic@gmail.com",
-	                  recipients=recipients,
-	                  body=body)
-	mailer.send_immediately(message)
-	
-import bbcode
+    if fingerprint:
+        body=str(gpg.encrypt(body, fingerprint, always_trust=True))
+    mailer = request.registry['mailer']
+    message = Message(subject=subject,
+                      sender="mailer.staszic@gmail.com",
+                      recipients=recipients,
+                      body=body)
+    mailer.send_immediately(message)
+
 
 parser = bbcode.Parser(normalize_newlines=False, install_defaults=False, escape_html=False, replace_links=False, replace_cosmetic=False)
 parser.add_simple_formatter('hr', '<hr />', standalone=True)
 parser.add_simple_formatter('p', '<p>%(value)s</p>')
 parser.add_simple_formatter('diagram', '<div class="diagram">%(value)s</div>')
-parser.add_simple_formatter('date','<abbr class="timeago" title="%(value)s">%(value)s</abbr>')
+parser.add_simple_formatter('date', '<abbr class="timeago" title="%(value)s">%(value)s</abbr>')
+parser.add_simple_formatter('vimeo', '<iframe src="http://player.vimeo.com/video/%(value)s" height="315"\
+                            frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>')
+def last_video(tag_name, value, options, parent, context):
+    last_video=DBSession.query(VideosMain).order_by('-id').first().video
+    if last_video.hosting_id == 1:
+        return ""
+    elif last_video.hosting_id == 2:
+        return '<iframe src="http://player.vimeo.com/video/'+last_video.link+'" height="315"\
+                frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>'
+parser.add_formatter("last_video", last_video)
+
+def tweets(tag_name, value, options, parent, context):
+    to_return=""
+    c = DBSession.query(TweetsCategories).filter_by(name=value).first()
+    for position in DBSession.query(TweetsMain).order_by('-id').filter_by(category=c).limit(8):
+        to_return+="<div class='article'>"
+        to_return+="<div class='author'>"+position.tweet.user.full_name+"</div>"
+        to_return+="<div class='timeago' title='"+str(position.tweet.date)+"'></div> <br>"
+        to_return+="<div class='content'>"+position.tweet.text
+        if position.tweet.link != None:
+            to_return+="<a href='"+position.tweet.link+"'>"+position.tweet.link_name+"</a>"
+        to_return+="</div></div>"
+    return to_return
+parser.add_formatter("tweets", tweets)
+
 
 
 # A custom render function.
 def render_color(tag_name, value, options, parent, context):
     return '<span style="color:%s;">%s</span>' % (tag_name, value)
-
 # Installing advanced formatters.
 for color in ('red', 'blue', 'green', 'yellow', 'black', 'white'):
     parser.add_formatter(color, render_color)
 
 
 def get_basic_account_info():
-    page={}
-    page['balance_history'] = ",".join(["0","0","0","0","0","0","0","0","0"])
-    page['balance']=0
-    page['likes_history'] = ",".join(["0","0","0","0","0","0","0","0","0"])
-    page['likes']=0
-    page['subscribers_history'] = ",".join(["0","0","0","0","0","0","0","0","0"])
-    page['subscribers']=0
-    page['preparation_history'] = ",".join(["100","100","100","100","100","100","100","100","100"])
-    page['preparation']=100
+    page = {}
+    page['balance_history'] = ",".join(["0", "0", "0", "0", "0", "0", "0", "0", "0"])
+    page['balance'] = 0
+    page['likes_history'] = ",".join(["0", "0", "0", "0", "0", "0", "0", "0", "0"])
+    page['likes'] = 0
+    page['subscribers_history'] = ",".join(["0", "0", "0", "0", "0", "0", "0", "0", "0"])
+    page['subscribers'] = 0
+    page['preparation_history'] = ",".join(["100", "100", "100", "100", "100", "100", "100", "100", "100"])
+    page['preparation'] = 100
     return page
-
-
-
-

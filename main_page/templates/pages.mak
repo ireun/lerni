@@ -1,16 +1,18 @@
-<%include file="top.mak"/>
-    <div id="main_page">
-        <div id="left"> 
-            <div id="nav">
-                <ul>
-                    % for row in menu_left_list:
-                    <li><a href="${row[0]}" id="homenav">${row[1]}</a></li>
-				    % endfor
-                </ul>
-            </div>
-        </div>
-        <div id="center" style="width:820px;" data-mercury="full">
-            ${str(context.write(data))[0:0]}
-        </div>
-    </div>
-<%include file="bottom.mak"/>
+<%include file="top_new.mak"/>
+<%include file="snippets/header.mak"/>
+<div id="main" class="container">
+	<div id="inner-wrapper" class="container">
+        %for row in rows:
+        %if row != []:
+		<div class="row">
+            %for widget in row:
+			<div id="${widget[0]}" class="col-md-${widget[1]}" >
+                ${widget[2] | n}
+			</div>
+            %endfor
+    	</div>
+        %endif
+        %endfor
+  </div>
+</div>
+<%include file="bottom_new.mak"/>

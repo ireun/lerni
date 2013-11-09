@@ -14,7 +14,7 @@
                   <link rel="apple-touch-icon-precomposed" href="/assets/ico/apple-touch-icon-57-precomposed.png">
                                  <link rel="shortcut icon" href="/assets/ico/favicon.png">
   <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/normalize/2.1.0/normalize.css" />
-  <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
   <script src="//cdnjs.cloudflare.com/ajax/libs/headjs/0.99/head.min.js"></script>
   <script src="/static/js/libs.min.js"></script>
   <script src="/static/js/admin.min.js"></script>
@@ -24,6 +24,7 @@
   <link href="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/css/base/jquery.ui.all.min.css"  rel="stylesheet">
   <link href="/static/libs/jtable/jtable_metro_base.min.css"  rel="stylesheet">
   <link href="/static/libs/jtable/blue/jtable.min.css"  rel="stylesheet">
+  <link href="/static/libs/gridster/jquery.gridster.min.css" rel="stylesheet">
   <link href="//cdnjs.cloudflare.com/ajax/libs/select2/3.4.1/select2.min.css"  rel="stylesheet">
 </head>
 <body>
@@ -170,7 +171,7 @@
                   </a>
                   <ul id="submenu7" style="height: 0px;">
                     <li class="">
-                      <a href="widget-default.html"> <span class="icon icon-angle-right"></span>Strona główna</a>
+                      <a href="/admin/layouts"> <span class="icon icon-angle-right"></span>Layout</a>
                     </li>
                     <li class="">
                       <a href="widget-default.html"> <span class="icon icon-angle-right"></span>Galeria</a>

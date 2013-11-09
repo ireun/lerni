@@ -274,12 +274,25 @@ class TweetsMain(Base):
     id = Column(Integer, primary_key=True)
     tweet_id = Column(Integer, ForeignKey('tweets.id'))
     tweet = relationship("Tweets")
-    category_id = Column(Integer) #1-news, 2-successes
-    confirm1 = Column(Integer, ForeignKey('people.id'))
-    confirm2 = Column(Integer, ForeignKey('people.id'))
+    category_id = Column(Integer, ForeignKey('tweets_categories.id'))
+    category = relationship("TweetsCategories")
+    #confirmed = Column(Boolean)
+    #confirmation_id
+    confirm = Column(Integer, ForeignKey('people.id'))
     def __init__(self, tweet_id, category_id):
         self.tweet_id = tweet_id
         self.category_id = category_id
+
+class TweetsCategories(Base):
+    __tablename__ = 'tweets_categories'
+    id = Column(Integer, primary_key=True)
+    name = Column(Text)
+    maintener_id = Column(Integer, ForeignKey('people.id'))
+    maintener = relationship("People")
+    def __init__(self, name, maintener_id=None):
+        self.name = name
+        self.maintener_id = maintener_id
+
 
 class Videos(Base):
     __tablename__ = "videos"
