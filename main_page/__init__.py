@@ -120,8 +120,7 @@ def main(global_config, **settings):
     config.add_route('phone_app', '/account/phone')
 
     config.add_route('support', '/support')
-    config.add_route('support_services', '/support/services')
-    config.add_route('support_ask', '/support/ask')
+    config.add_route('support_ask', '/support/ticket-new')
     config.add_route('support_ask_ticket', '/support/ticket-{id}')
     config.add_route('support_faq', '/support/faq')
 

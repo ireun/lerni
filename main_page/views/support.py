@@ -13,12 +13,18 @@ def support(request):
         page['banners'].append([position.link,position.alternative])
     page['rows']=[[],[],[],[],[],[],[],[],[],[]]
     for position in DBSession.query(Pages).filter_by(url_name="support").first().widgets:
-        page['rows'][position.row].append(["",position.size_x,position.data])
+        soup = BeautifulSoup(position.data)
+        [s.extract() for s in soup(['script','iframe','img','object','embed','param'])];
+        data = parser.format(unicode(soup), somevar='somevalue')
+        page['rows'][position.row].append(["",position.size_x,data])
     return page
    
 @view_config(route_name='support_ask', renderer='support_ask.mak')
 def support_ask(request):
     page = {'editor':0, 'allerts':[], 'recaptcha_public':recaptcha_public}
+    page['banners']=[]
+    for position in DBSession.query(Banners).limit(6):
+        page['banners'].append([position.link,position.alternative])
     logged_in = authenticated_userid(request)
     page['logged_in']=logged_in
     if 'topic' in request.params:
@@ -57,16 +63,15 @@ def support_ask(request):
                               +request.route_url('support_ask_ticket', id = last_id, _query={'auth_code':act_hash})
                               )
             mailer.send(message)
+    page['name']=username(logged_in)
+    page['sections']=[]
     try:
-        page['menu_top_list']=[]
-        for position in DBSession.query(MenuTop):
-            page['menu_top_list'].append([position.link,position.name])
-            page['name']=""
-        if logged_in:
-            page['name']=DBSession.query(People).filter_by(login=logged_in).first().username
-        else:
-            page['allerts'].append([u"Aby zobaczyć otwarte przez siebie tickety musisz być zalogowany!","warning","topRight"])
-            page["sections"]=[]
+#
+#        if logged_in:
+#            page['name']=DBSession.query(People).filter_by(login=logged_in).first().username
+#        else:
+#            page['allerts'].append([u"Aby zobaczyć otwarte przez siebie tickety musisz być zalogowany!","warning","topRight"])
+#            page["sections"]=[]
         for position in DBSession.query(SupportSections):
             page["sections"].append([position.name,[]])
             for position2 in DBSession.query(SupportSubSections).filter_by(section_id=position.id):

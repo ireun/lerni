@@ -1,61 +1,100 @@
-<%include file="top.mak"/>
-			<div id="main_page">
-			<div id="left"> 
-				<div id="nav">
-					<ul>
-						% for row in menu_left_list:
-							<li><a href="${row[0]}" id="homenav">${row[1]}</a></li>
-						% endfor
-	    			</ul>
-			 </div>
+<%include file="top_new.mak"/>
+<%include file="snippets/header.mak"/>
+<div id="main" class="container">
+	<div id="inner-wrapper" class="container">
+    <script type="text/javascript">
+      var RecaptchaOptions = {
+          tabindex: 1,
+          theme: 'custom',
+          custom_theme_widget: 'recaptcha_widget'
+      };
+    </script>
+	<form class="grid-form">
+		<fieldset>
+			<legend>Formularz kontatktowy</legend>
+			<div data-row-span="2">
+				<div data-field-span="1">
+					<label>Temat</label>
+					<input type="text" autofocus>
+				</div>
+                <div data-field-span="1">
+                    <label>Dział</label>
+					<select>
+                        % for row in sections:
+                            % for row2 in row[1]:
+						        <option value="${row2[1]}">${row2[0]}</option>
+                            % endfor
+                        % endfor
+					</select>
+                </div>
 			</div>
-				<div id="center" style="width:820px;">
-					<div class="settings_container" style="width:800px;">
-						<div class="settings_header">Formularz kontatktowy.</div>
-							<form id="ask_form" method="post">
-								Poniżej widzisz formularz, dzięki któremu możesz zadać pytanie.</br>
-								<div class="label"><label>Temat:</label></div><input name="topic" type="text"></input></br>
-								% if not logged_in:
-								<div class="label"><label>Email:</label></div><input id="email" name="email" type="text" /></input></br>
-								<div class="label"><label>Hasło:</label></div><input id="password" name="password" type="text" /></input>
-								% endif
-								<div style="display:inline-block;position:relative;top:5px;" id="email_help"></div></br>
-								<div class="label"><label>Sekcja:</label></div>
-									<select name="section_select" id="section_select" style="width:300px">
-									<option></option>
-									% for row in sections:
-										<optgroup label="${row[0]}">
-											% for row2 in row[1]:
-											<option value="${row2[1]}">${row2[0]}</option>
-											% endfor
-										</optgroup>
-									% endfor
-									</select>
-								</br>
-								<label>Treść pytania:</label></br><textarea name="question"></textarea></br>
-								<div id="importance">
-									<input name="importance" type="text" value="40" class="dial"></br>
-								</div>
-								<div id="captcha">
-									Pokaż siłę swojego umysłu - ile to jest 2x+2=6?<input name="captcha" type="text"></input></br>
-									<input type="submit"></input>
-								</div>
-							</form>
-						<div id="ask_list">
-							<table>
-								<colgroup>
-									<col style="width:220px;"></col>
-									<col style="width:70px;"></col>
-								<colgroup>
-								<thead>
-									<tr>
-										<th scope="col">Temat ticketu</th>
-										<th scope="col">Otwórz</th>
-									</tr>
-								</thead>
-							</table>
-						</div>
-					<script type="text/javascript" src="${request.static_url('main_page:static/jquery.knob.js')}"></script>
+			<div data-row-span="1">
+				<div data-field-span="1">
+					<label>Treść pytania</label>
+					<textarea style="resize: vertical;"></textarea>
+				</div>
+            </div>
+		</fieldset>
+		<br>
+		<fieldset>
+			<legend>Dane kontaktowe</legend>
+			<div data-row-span="4">
+				<div data-field-span="1">
+					<label>Tytuł</label>
+					<label><input type="radio" name="customer-title[]"> Pan</label> &nbsp;
+					<label><input type="radio" name="customer-title[]"> Pani</label> &nbsp;
+				</div>
+				<div data-field-span="3">
+					<label>Imię i nazwisko</label>
+					<input type="text">
+				</div>
+			</div>
+			<div data-row-span="2">
+				<div data-field-span="1">
+					<label>Adres e-mail (wymagany)</label>
+					<input type="text">
+				</div>
+				<div data-field-span="1">
+					<label>Numer telefonu</label>
+                    <input type="text">
+				</div>
+			</div>
+		</fieldset>
+		<br>
+		<fieldset>
+            <div data-row-span="3">
+               <legend>Captcha</legend>
+               <div style="height: 78px; display: block; padding: 0;" data-field-span="2">
+			   <div id="recaptcha_widget" >
+					<table id="recaptcha_table" class="recaptchatable recaptcha_theme_clean"><tbody><tr height="73">
+					<td style="padding: 0px 0px 3px ! important;" class="recaptcha_image_cell" width="302"><div id="recaptcha_image"></div></td>
+					<td style="padding: 10px 7px 7px 7px;">
+					<a title="Get a new challenge" id="recaptcha_reload_btn" href="javascript:Recaptcha.reload()"><img src="http://www.google.com/recaptcha/api/img/clean/refresh.png" id="recaptcha_reload" alt="Get a new challenge" height="18" width="25"></a><br>
+					<a title="Get an audio challenge" id="recaptcha_switch_audio_btn" class="recaptcha_only_if_image" href="javascript:Recaptcha.switch_type(&#39;audio&#39;)"><img src="http://www.google.com/recaptcha/api/img/clean/audio.png" id="recaptcha_switch_audio" alt="Get an audio challenge" height="15" width="25"></a><br>
+					<a title="Get a visual challenge" id="recaptcha_switch_img_btn" class="recaptcha_only_if_audio" href="javascript:Recaptcha.switch_type(&#39;image&#39;)"><img src="http://www.google.com/recaptcha/api/img/clean/text.png" id="recaptcha_switch_img" alt="Get a visual challenge" height="15" width="25"></a>
+					<a title="Help" id="recaptcha_whatsthis_btn" href="javascript:Recaptcha.showhelp()"><img alt="Help" src="http://www.google.com/recaptcha/api/img/clean/help.png" id="recaptcha_whatsthis" height="16" width="25"></a>
+					</td>
+					<td style="padding: 18px 7px 18px 7px;"> <img src="http://www.google.com/recaptcha/api/img/clean/logo.png" id="recaptcha_logo" alt="" height="36" width="71"> </td>
+					</tr> </tbody></table>
+					<input type="text" id="recaptcha_response_field" name="recaptcha_response_field" style="display:none;">
+					<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=${recaptcha_public}"></script>
+					<noscript><iframe src="http://www.google.com/recaptcha/api/noscript?k=${recaptcha_public}" height="300" width="500" frameborder="0"></iframe><br>
+					<textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+					<input type="hidden" name="recaptcha_response_field" value="manual_challenge"></noscript>
+				</div>
+				</div>
+				<div data-field-span="1">
+					<label>Kod z obrazka</label>
+					<input type="text">
+				</div>
+			</div>
+		</fieldset>
+	</form>
+
+
+
+
+<!--
 					<script type="text/javascript" >
 						$(document).ready(function(){
 							$("#captcha :submit").attr("disabled", true);
@@ -100,6 +139,7 @@
 						});
 					</script>
 					</div>
-				</div>
-			</div>	
-<%include file="bottom.mak"/>
+					-->
+    </div>
+</div>
+<%include file="bottom_new.mak"/>

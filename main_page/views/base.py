@@ -195,6 +195,19 @@ parser.add_simple_formatter('diagram', '<div class="diagram">%(value)s</div>')
 parser.add_simple_formatter('date', '<abbr class="timeago" title="%(value)s">%(value)s</abbr>')
 parser.add_simple_formatter('vimeo', '<iframe src="http://player.vimeo.com/video/%(value)s" height="315"\
                             frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>')
+parser.add_simple_formatter('support', u'<button type="button" class="btn btn-primary">Zgłoś nowy problem.</button>'+
+                        u'''</br>
+                        <form role="form">
+                          <div class="form-group">
+                            <label for="exampleInputEmail1">Podaj id ticketu:</label>
+                            <input type="text" class="form-control" id="ticket_id" placeholder="ID ticketu">
+                          </div>
+                          <button type="submit" class="btn btn-primary">Pokaż</button>
+                        </form>''')
+
+#</br> Podaj numer ticketu i adres email.
+
+
 def last_video(tag_name, value, options, parent, context):
     last_video=DBSession.query(VideosMain).order_by('-id').first().video
     if last_video.hosting_id == 1:
