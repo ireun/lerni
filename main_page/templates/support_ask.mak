@@ -9,17 +9,17 @@
           custom_theme_widget: 'recaptcha_widget'
       };
     </script>
-	<form class="grid-form">
+	<form class="grid-form" action="/support/ticket-new" method="post">
 		<fieldset>
 			<legend>Formularz kontatktowy</legend>
 			<div data-row-span="2">
 				<div data-field-span="1">
 					<label>Temat</label>
-					<input type="text" autofocus>
+					<input type="text" autofocus name="topic">
 				</div>
                 <div data-field-span="1">
                     <label>Dział</label>
-					<select>
+					<select name="section_select">
                         % for row in sections:
                             % for row2 in row[1]:
 						        <option value="${row2[1]}">${row2[0]}</option>
@@ -31,7 +31,7 @@
 			<div data-row-span="1">
 				<div data-field-span="1">
 					<label>Treść pytania</label>
-					<textarea style="resize: vertical;"></textarea>
+					<textarea style="resize: vertical;" name="question"></textarea>
 				</div>
             </div>
 		</fieldset>
@@ -41,22 +41,22 @@
 			<div data-row-span="4">
 				<div data-field-span="1">
 					<label>Tytuł</label>
-					<label><input type="radio" name="customer-title[]"> Pan</label> &nbsp;
-					<label><input type="radio" name="customer-title[]"> Pani</label> &nbsp;
+                    <label><input type="radio" name="sex" value="male"> Pan</label> &nbsp;
+                    <label><input type="radio" name="sex" value="female"> Pani</label> &nbsp;
 				</div>
 				<div data-field-span="3">
 					<label>Imię i nazwisko</label>
-					<input type="text">
+					<input type="text" name="name">
 				</div>
 			</div>
 			<div data-row-span="2">
 				<div data-field-span="1">
 					<label>Adres e-mail (wymagany)</label>
-					<input type="text">
+					<input type="text" name="email">
 				</div>
 				<div data-field-span="1">
 					<label>Numer telefonu</label>
-                    <input type="text">
+                    <input type="text" name="phone_number">
 				</div>
 			</div>
 		</fieldset>
@@ -85,10 +85,11 @@
 				</div>
 				<div data-field-span="1">
 					<label>Kod z obrazka</label>
-					<input type="text">
+					<input type="text" name="captcha_solve">
 				</div>
 			</div>
 		</fieldset>
+        <input type="submit" value="Wyślij" name="action">
 	</form>
 
 

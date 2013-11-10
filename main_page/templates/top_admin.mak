@@ -47,13 +47,15 @@
             <li><a href="/competitions">Konkursy</a></li>
             <li><a href="/student_zone">Strefa ucznia</a></li>
             <li><a href="/support">Support</a></li>
+            %if not logged_in:
             <li><a href="/login">Login</a></li>
+            %endif
           </ul>
             %if logged_in:
             <div class="pull-right">
               <ul class="nav navbar-nav">
-                <li><a href="/admin">Panel administratora</a></li>
-                <li style="font-size: 22px;"><a href="/account" class="icon-cog"></a></li>
+                <li><a href="/logout">Logout</a></li>
+                <li style="font-size: 22px;"><a href="/admin" class="icon-cog"></a></li>
               </ul>
             </div>
             %endif

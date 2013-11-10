@@ -1,14 +1,29 @@
+head.js(jquery, autosize, function (){
+   $(document).ready(function(){ $('textarea').autosize(); });
+});
 head.js(jquery, jflickrfeed, owl, function (){
+    $(document).ready(function() {
+      $("#owlCarousel").owlCarousel({
+          navigation : false,
+          slideSpeed : 300,
+          paginationSpeed : 400,
+          items : 1,
+          itemsDesktop : false,
+          itemsDesktopSmall : false,
+          itemsTablet: false,
+          itemsMobile : false
+      });
+    });
 
     var show_allert = function(message, type, allert_location){
     var noty2 = $('.custom_container').noty({text: message, type: type, layout: allert_location})
     };
     $(document).ready(function() {
-    $('iframe[src*="about:blank"]').hide();
-    $('.thumbs').jflickrfeed({
-    limit: 4,
-    qstrings: {
-    id: '98176379@N02'
+        $('iframe[src*="about:blank"]').hide();
+        $('.thumbs').jflickrfeed({
+        limit: 4,
+        qstrings: {
+        id: '98176379@N02'
     },
     itemTemplate:
     '<div class="thumb" style="background-image: url({{image_b}});"></div>'
@@ -23,21 +38,6 @@ head.js(jquery, jflickrfeed, owl, function (){
         $('#events').css('height', $('#last-photos').height());
         $('#competitions').css('height', $('#last-photos').height());
     };
-
-
-    $(document).ready(function() {
-      $("#owlCarousel").owlCarousel({
-          navigation : false,
-          slideSpeed : 300,
-          paginationSpeed : 400,
-          items : 1,
-          itemsDesktop : false,
-          itemsDesktopSmall : false,
-          itemsTablet: false,
-          itemsMobile : false
-      });
-    });
-
 });
 head.js(time_ago, function () {
   function numpf(n, s, t) {

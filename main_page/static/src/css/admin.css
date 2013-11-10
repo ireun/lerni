@@ -81,7 +81,7 @@ width: 100%;
 .twitter-typeahead .tt-suggestion.tt-is-under-cursor {
   color: #03739c;
 }
-.tt-suggestion .row-fluid{
+.tt-suggestion .row{
     position: relative;
     top: 13px;
 }
@@ -226,7 +226,7 @@ margin-right: -15px;
     .yearpicker .bar .title{
         width: 50% !important;
     }
-    .yearpicker .bar .row-fluid{
+    .yearpicker .bar .row{
         width: 100% !important;
     }
 }

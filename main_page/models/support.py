@@ -64,17 +64,19 @@ class SupportTickets(Base):
     sub_section = relationship("SupportSubSections")
     topic = Column(Text)
     email = Column(Text)
-    password = Column(Text)
+    phone = Column(Text)
+    sex = Column(Boolean)
     importance = Column(Integer)
     confirmed = Column(Boolean)
     confirmation_code = Column(Text)
     add_date = Column(DateTime)
 
-    def __init__(self, sub_section_id, topic, email, password, importance, confirmed, confirmation_code, add_date):
+    def __init__(self, sub_section_id, topic, email, phone, sex, importance, confirmed, confirmation_code, add_date):
         self.sub_section_id = sub_section_id
         self.topic = topic
         self.email = email
-        self.password = password
+        self.phone = phone
+        self.sex = sex
         self.importance = importance
         self.confirmed = confirmed
         self.confirmation_code = confirmation_code
@@ -87,9 +89,14 @@ class SupportQuestions(Base):
     ticket_id = Column(Integer, ForeignKey('support_tickets.id'))
     ticket = relationship("SupportTickets")
     text = Column(Text)
+    name = Column(Text)
+    user_id = Column(Integer, ForeignKey('people.id'))
+    user = relationship("People")
     add_date = Column(DateTime)
 
-    def __init__(self, ticket_id, text, add_date):
+    def __init__(self, ticket_id, text, add_date, name, user_id=None):
         self.ticket_id = ticket_id
         self.text = text
         self.add_date = add_date
+        self.name = name
+        self.user_id = user_id

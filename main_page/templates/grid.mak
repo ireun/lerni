@@ -1,11 +1,5 @@
 <%include file="top_new.mak"/>
-<header id="header" class="container-wrapper">
-	<div id="owlCarousel" class="owl-carousel owl-theme hidden-phone">
-        %for x in banners:
-        <div class="item"><img src="${x[0]}" alt="${x[1]}"></div>
-        %endfor
-	</div>
-</header>
+<%include file="snippets/header.mak"/>
 <div >
 	<div id="main" class="container-wrapper">
 		%for box in boxes:

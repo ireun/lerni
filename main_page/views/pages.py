@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from base import *
 from pyramid.request import Request
+import pyramid
 @view_config(route_name='set', renderer='grid.mak') ##idiki originalne - lerni zapisze sobie original article id [locallink][/locallink]  [map][/map]
 def set(request):
     page={'editor':0, 'allerts':[]}
@@ -10,12 +11,16 @@ def set(request):
     page['banners']=[]
     for position in DBSession.query(Banners).limit(6):
         page['banners'].append([position.link,position.alternative])
+    logged_in = authenticated_userid(request)
+    page['logged_in']=logged_in
+    page['name']=username(logged_in)
     return page
 
 @view_config(route_name='easy_link') ##idiki originalne - lerni zapisze sobie original article id [locallink][/locallink]  [map][/map]
 def easy_link(request):
     for x in DBSession.query(EasyLinks).filter_by(name=request.matchdict['link']):
         subreq = Request.blank(x.path)
+        subreq.cookies = request.cookies #pass authentication data
         response = request.invoke_subrequest(subreq)
         return response
     return HTTPNotFound()

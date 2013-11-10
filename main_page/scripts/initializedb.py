@@ -231,7 +231,16 @@ def import_groups():
             w+=1
 
 def import_support():
-    pass
+    f = open('main_page/data/support.yaml')
+    dataMap = yaml.safe_load(f)
+    f.close()
+    w=1
+    with transaction.manager:
+        for x in dataMap['sections']:
+            DBSession.add_all([SupportSections(x['name'])])
+            for y in x['sections']:
+                DBSession.add_all([SupportSubSections(w,y['name'],y['short'])])
+            w+=1
 def import_easy_links():
     f = open('main_page/data/easy_links.yaml')
     dataMap = yaml.safe_load(f)
