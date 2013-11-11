@@ -11,7 +11,7 @@
             </ul>
         </div>
     </div>
-    <div class="container-fluid">
+    <div class="container">
 	    <div class="row-fluid">
             <div class="span12">
 	            <div class="page-header line1">
@@ -21,7 +21,7 @@
 	    </div>
         <div class="row-fluid">
             <div class="span12">
-                <div id="${table_name}"></div>
+                <div id="jtable">${table | n}</div>
             </div>
         </div>
 	    <!--

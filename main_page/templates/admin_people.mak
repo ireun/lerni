@@ -13,14 +13,14 @@
     </div>
     <div class="container-fluid">
         <div class="row-fluid">
-            <div class="span12">
+            <div class="col-md-12">
                 <div class="page-header line1">
                     <h4>${title}<small>${title_desc}</small></h4>
                 </div>
             </div>
         </div>
         <div class="row-fluid">
-            <div class="span12">
+            <div class="col-md-12">
                 <div class="accordion" id="accordion1">
                     %for row in tables:
                     <div class="accordion-group">

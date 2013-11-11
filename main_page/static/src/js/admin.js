@@ -20,77 +20,72 @@ head.ready("typeahead", function () {
     });
 /*remote: '../data/films/queries/%QUERY.json',*/
 });
-head.ready("jquery", function () {
-    head.js(sparkline, function () {
+head.js(jquery, sparkline, function () {
+    $(function () {
 
-$(function () {
+            // Sparkline 1
+            $(".sparkline-line").sparkline('html', {
+                disableHiddenCheck: true,
+                enableTagOptions: true,
+                type: 'line',
+                width: '60',
+                height: '35',
+                lineColor: 'red',
+                fillColor: 'pink',
+                lineWidth: 1.5,
+                spotColor: '#972525',
+                minSpotColor: '#972525',
+                maxSpotColor: '#972525',
+                spotRadius: 2
+            });
 
-		// Sparkline 1
-		$(".sparkline-line").sparkline('html', {
-			disableHiddenCheck: true,
-			enableTagOptions: true,
-		    type: 'line',
-		    width: '60',
-		    height: '35',
-		    lineColor: 'red',
-		    fillColor: 'pink',
-		    lineWidth: 1.5,
-		    spotColor: '#972525',
-		    minSpotColor: '#972525',
-		    maxSpotColor: '#972525',
-		    spotRadius: 2
-		});
+            // Sparkline 2
+            $(".sparkline-bar").sparkline('html', {
+                disableHiddenCheck: true,
+                enableTagOptions: true,
+                type: 'bar',
+                height: '35',
+                barWidth: 6,
+                barColor: 'teal'
+            });
 
-		// Sparkline 2
-		$(".sparkline-bar").sparkline('html', {
-			disableHiddenCheck: true,
-			enableTagOptions: true,
-		    type: 'bar',
-		    height: '35',
-		    barWidth: 6,
-		    barColor: 'teal'
-		});
-
-		// Sparkline 3
-		$(".sparkline-tristate").sparkline('html', {
-			disableHiddenCheck: true,
-			enableTagOptions: true,
-		    type: 'tristate',
-		    height: '35',
-		    posBarColor: 'green',
-		    negBarColor: 'red',
-		    barWidth: 6,
-		    zeroAxis: true
-		});
-		$('.sparkline-2line').sparkline('html', {
-			disableHiddenCheck: true,
-			enableTagOptions: true,
-			fillColor: false, 
-			changeRangeMin: 0, 
-			chartRangeMax: 10,
-			lineColor: 'yellow',
-			width: '60',
-		    height: '35',
-		    lineWidth: 1.5,
-		    spotRadius: 2
-		});
-	    $('.sparkline-2line').sparkline([4,1,5,7,9,9,8,7,6,6,4,7], {
-	    	disableHiddenCheck: true,
-	    	enableTagOptions: true,
-	    	composite: true, 
-	    	fillColor: false, 
-	    	lineColor: 'red', 
-	    	changeRangeMin: 0, 
-	    	chartRangeMax: 10,
-	    	lineColor: 'green',
-	    	width: '60',
-		    height: '35',
-		    lineWidth: 1.5,
-		    spotRadius: 2
-	    });
-
-});
-
+            // Sparkline 3
+            $(".sparkline-tristate").sparkline('html', {
+                disableHiddenCheck: true,
+                enableTagOptions: true,
+                type: 'tristate',
+                height: '35',
+                posBarColor: 'green',
+                negBarColor: 'red',
+                barWidth: 6,
+                zeroAxis: true
+            });
+            $('.sparkline-2line').sparkline('html', {
+                disableHiddenCheck: true,
+                enableTagOptions: true,
+                fillColor: false,
+                changeRangeMin: 0,
+                chartRangeMax: 10,
+                lineColor: 'yellow',
+                width: '60',
+                height: '35',
+                lineWidth: 1.5,
+                spotRadius: 2
+            });
+            $('.sparkline-2line').sparkline([4,1,5,7,9,9,8,7,6,6,4,7], {
+                disableHiddenCheck: true,
+                enableTagOptions: true,
+                composite: true,
+                fillColor: false,
+                lineColor: 'red',
+                changeRangeMin: 0,
+                chartRangeMax: 10,
+                lineColor: 'green',
+                width: '60',
+                height: '35',
+                lineWidth: 1.5,
+                spotRadius: 2
+            });
     });
 });
 var next_decade = function () {
@@ -180,29 +175,29 @@ var make_table = function(x){
         paging: true, //Enable paging
         pageSize: 7, //Set page size (default: 10)
         sorting: true, //Enable sorting
-        defaultSorting: 'Teacher ASC', //Set default sorting
+        defaultSorting: 'teacher ASC', //Set default sorting
         actions: {
-            listAction: '/api/jsonp/lesson-list/?timetableID=1&day='+x.substr(0,1)+'&hour='+x.substr(1),
-            deleteAction: '/api/jsonp/delete-lesson?timetableID=1&day='+x.substr(0,1)+'&hour='+x.substr(1),
-            updateAction: '/api/jsonp/update-lesson?timetableID=1&day='+x.substr(0,1)+'&hour='+x.substr(1),
-            createAction: '/api/jsonp/create-lesson?timetableID=1&day='+x.substr(0,1)+'&hour='+x.substr(1)
+            listAction: '/api?format=jsonp&method=lerni.timetables.lessons.getList&timetable_id=1&day='+x.substr(0,1)+'&hour='+x.substr(1),
+            deleteAction: '/api?format=jsonp&method=lerni.timetables.lessons.delete&timetable_id=1&day='+x.substr(0,1)+'&hour='+x.substr(1),
+            updateAction: '/api?format=jsonp&method=lerni.timetables.lessons.edit&timetable_id=1&day='+x.substr(0,1)+'&hour='+x.substr(1),
+            createAction: '/api?format=jsonp&method=lerni.timetables.lessons.add&timetable_id=1&day='+x.substr(0,1)+'&hour='+x.substr(1)
         },
         fields: {
-            LessonID: {
+            lesson_id: {
                 key: true,
                 create: false,
                 edit: false,
                 list: false
             },
-            Teacher: {
+            teacher: {
                 title: 'Nauczyciel',
-                options: "/api/jsonp/options-teacher-list"
+                options: "/api?format=jsonp&method=lerni.teachers.getList"
             },
-            Subject: {
+            subject: {
                 title: 'Przedmiot',
                 options: "/api/jsonp/options-subjects-list"
             },
-            Group: {
+            group: {
                 title: 'Grupy',
                 /*options: "/api/jsonp/options-groups-list/"+"1"*/
                 input: function (data) {
@@ -221,10 +216,10 @@ var make_table = function(x){
 
                 }
             },
-            Room: {
+            room: {
                 title: 'Sala'
             },
-            ModificationDate: {
+            modification_date: {
                 title: 'Data Modyfikacji',
                 type: 'date',
                 displayFormat: 'dd.mm.yy',
@@ -295,9 +290,17 @@ var make_table = function(x){
 
 
 
-var done=new Array()
+var done = new Array()
 head.ready("jtable", function() {
-    $('a[data-toggle="tab"]').on('show', function (e) {
+    jt=$('#jtable');
+    jt_data=jt.html()
+    if(jt_data){
+        jt.html("");
+        jt.jtable(jQuery.parseJSON(jt_data));
+        jt.jtable('load');
+    }
+
+    $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
         var id=$(e.target).attr('href').substring(4);
         console.log($.inArray(id, done)==-1);
         console.log(done);
@@ -306,48 +309,6 @@ head.ready("jtable", function() {
             make_table(id);
         }
     })
-    $('#table_timetables').jtable({
-        messages: polishMessages,
-        title: 'Plany lekcji',
-        paging: true, //Enable paging
-        pageSize: 7, //Set page size (default: 10)
-        sorting: true, //Enable sorting
-        selecting: true,
-        defaultSorting: 'Start DESC', //Set default sorting
-        actions: {
-            listAction: '/api/jsonp/timetable-list',
-            deleteAction: '/api/jsonp/delete-timetable',
-            updateAction: '/api/jsonp/update-timetable',
-            createAction: '/api/jsonp/create-timetable'
-        },
-        fields: {
-            TimetableId: {
-                key: true,
-                create: false,
-                edit: false,
-                list: false
-            },
-            Start: {
-                title: 'Początek planu lekcji',
-                type: 'date',
-                displayFormat: 'dd.mm.yy'
-            },
-            End: {
-                title: 'Koniec planu lekcji',
-                type: 'date',
-                displayFormat: 'dd.mm.yy'
-            },
-            ModificationDate: {
-                title: 'Data Modyfikacji',
-                type: 'date',
-                displayFormat: 'dd.mm.yy',
-                create: false,
-                edit: false,
-                sorting: false //This column is not sortable!
-            }
-        }
-    });
-    $('#table_timetables').jtable('load');
 
     weee='\
         <span id="add-lessons" class="jtable-toolbar-item jtable-toolbar-item-add-record" style="">\
@@ -359,48 +320,12 @@ head.ready("jtable", function() {
         }, function() {
     $(this).removeClass("jtable-toolbar-item-hover");
     });
-    $('#add-lessons').click(function(){ if ($('#table_timetables').jtable('selectedRows').first().data('record')){
-    window.location = '/admin/log/timetables/edit?id='+$('#table_timetables').jtable('selectedRows').first().data('record').TimetableId }else{
+    $('#add-lessons').click(function(){ if ($('#jtable').jtable('selectedRows').first().data('record')){
+    window.location = '/admin/log/timetables/edit?id='+$('#jtable').jtable('selectedRows').first().data('record').timetable_id }else{
         alert("Wybierz plan do którego chcesz dodać lekcje.") } });
 
 /*first_name,second_name,last_name,pesel,birthdate,phonenumber,email,password,key_data,fingerprint,wallet_id,email_confirmed,gpg_confirmed,phone_confirmed,group_id):*/
-    $('#table_users').jtable({
-        messages: polishMessages,
-        title: 'Użytkownicy',
-        paging: true, //Enable paging
-        pageSize: 10, //Set page size (default: 10)
-        sorting: true, //Enable sorting
-        selecting: true,
-        defaultSorting: 'UserID DESC', //Set default sorting
-        actions: {
-            listAction: '/api/jsonp/user-list',
-            deleteAction: '/api/jsonp/delete-user',
-            updateAction: '/api/jsonp/update-user',
-            createAction: '/api/jsonp/create-user'
-        },
-        fields: {
-            UserID: {
-                key: true,
-                create: false,
-                edit: false,
-                list: false
-            },
-            FirstName: {title: 'Imię'},
-            SecondName: {title: 'Drugie Imię'},
-            LastName: {title: 'Nazwisko'},
-            Pesel: {title: 'Pesel'},
-            PhoneNumber: {title: 'Numer telefonu'},
-            BirthDate: {
-                title: 'Data urodzenia',
-                type: 'date',
-                displayFormat: 'dd.mm.yy'
-            },
-            Email: {title: 'Email'},
-            Password: {title: 'Hasło'},
-            Group: {title: 'Grupa'}
-        }
-    });
-    $('#table_users').jtable('load');
+
 
     send_welcome_button='\
         <span id="send-welcome-button" class="jtable-toolbar-item jtable-toolbar-item-add-record" style="">\
@@ -424,18 +349,20 @@ head.ready("jtable", function() {
         title: 'Moje foldery',
         paging: true, pageSize: 10, //Enable pagin
         sorting: true, selecting: true, //
-        defaultSorting: 'FolderID DESC', //Set default sorting
+        defaultSorting: 'folder_id DESC', //Set default sorting
         actions: {
-            listAction: '/api/jsonp/folder-list', deleteAction: '/api/jsonp/delete-folder',
-            updateAction: '/api/jsonp/update-folder', createAction: '/api/jsonp/create-folder'
+            listAction: '/api?format=jsonp&method=lerni.folders.getList',
+            deleteAction: '/api?format=jsonp&method=lerni.folders.delete',
+            updateAction: '/api?format=jsonp&method=lerni.folders.edit',
+            createAction: '/api?format=jsonp&method=lerni.folders.add'
         },
         fields: {
-            FolderID: {key: true,create: false,edit: false,list: false},
-            Title: {title: 'Tytuł'},
-            Tags: {title: 'Tagi'},
-            CSS: {title: 'Własny CSS'},
-            GPG: {title: 'Podpis GPG (to do)'},
-            Published: {title: 'Opublikowany', options: {'False':'Nie', 'True':'Tak'}}
+            folder_id: {key: true,create: false,edit: false,list: false},
+            title: {title: 'Tytuł'},
+            tags: {title: 'Tagi'},
+            css: {title: 'Własny CSS'},
+            gpg: {title: 'Podpis GPG (to do)'},
+            published: {title: 'Opublikowany', options: {'False':'Nie', 'True':'Tak'}}
         }
     });
     $('#table_folders').jtable('load');

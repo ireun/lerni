@@ -12,7 +12,7 @@
             </div>
         </div>
     </div>
-    <div class="container-fluid">
+    <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <div class="page-header line1">
@@ -25,9 +25,6 @@
             <header><h4 class="title">Szczęśliwy numerek (data)</h4></header>
             <section class="body">
                 <div class="body-inner">
-                <div id="lucky_number">
-                 32
-                </div>
                 </div>
             </section>
             </div>
@@ -35,9 +32,6 @@
             <header><h4 class="title">Jutrzejszy dzień</h4></header>
             <section class="body">
                 <div class="body-inner">
-                <div id="lucky_number">
-                 32
-                </div>
                 </div>
             </section>
             </div>

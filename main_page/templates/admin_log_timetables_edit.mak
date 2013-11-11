@@ -11,26 +11,26 @@
             </ul>
         </div>
     </div>
-    <div class="container-fluid">
+    <div class="container">
 	    <div class="row-fluid">
-            <div class="span12">
+            <div class="col-md-12">
 	            <div class="page-header line1">
 	                <h4>${title}<small>${title_desc}</small></h4>
 	            </div>
 	        </div>
 	    </div>
         <div class="row-fluid">
-            <div class="span12">
-                <div class="accordion" id="accordion1">
+            <div class="col-md-12">
+                <div class="panel-group" id="accordion1">
                     %for x in lessons:
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapse${x[0]}">${x[1]}</a>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#accordion1" href="#collapse${x[0]}">${x[1]}</a>
                         </div>
                         <div id="collapse${x[0]}" class="accordion-body collapse">
                         <div class="accordion-inner" style="padding: 0;">
                             <div class="row-fluid">
-                                <div class="span12">
+                                <div class="col-md-12">
                                     <section class="body">
                                         <div class="body-inner no-padding">
                                             <div class="tabbable tabs-left">
@@ -64,7 +64,7 @@
         </div>
 	    <!--
         <div class="row-fluid">
-            <div class="span12 widget dark">
+            <div class="col-md-12 widget dark">
             <header><h4 class="title">Plany lekcji</h4>
 
             </header>

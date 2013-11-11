@@ -82,23 +82,32 @@
                   </a>
                 </li>
                 <li class="accordion-group ">
-                  <a data-toggle="collapse" data-parent="#navigation" href="#submenu2"> <span class="icon icon-user"></span>
-                    <span class="text">Ludzie</span><span class="arrow icon-caret-down"></span>
+                  <a data-toggle="collapse" data-parent="#navigation" href="#submenu2"> <span class="icon icon-paperclip "></span>
+                    <span class="text">Dekretacja</span><span class="arrow icon-caret-down"></span>
                   </a>
                   <ul id="submenu2" style="height: 0px;">
+                    <li class=""><a href="/admin/dec/tweets"> <span class="icon icon-angle-right"></span>Tweety</a></li>
+                    <li class=""><a href="/admin/dec/registrations"> <span class="icon icon-angle-right"></span>Rejestracja</a></li>
+                    <li class=""><a href="/admin/dec/petitions"> <span class="icon icon-angle-right"></span>Wnioski</a></li>
+                    <li class=""><a href="/admin/dec/competitions"> <span class="icon icon-angle-right"></span>Konkursy</a></li>
+                  </ul>
+                </li>
+                <li class="accordion-group ">
+                  <a data-toggle="collapse" data-parent="#navigation" href="#submenu3"> <span class="icon icon-user"></span>
+                    <span class="text">Ludzie</span><span class="arrow icon-caret-down"></span>
+                  </a>
+                  <ul id="submenu3" style="height: 0px;">
                     <li class=""><a href="/admin/users"> <span class="icon icon-angle-right"></span>Lista użytkowników</a></li>
                     <li class=""><a href="/admin/teachers"> <span class="icon icon-angle-right"></span>Nauczyciele</a></li>
                     <li class=""><a href="/admin/personel"> <span class="icon icon-angle-right"></span>Personel</a></li>
                     <li class=""><a href="/admin/studnets"> <span class="icon icon-angle-right"></span>Uczniowie</a></li>
                   </ul>
                 </li>
-
-                <!--
                 <li class="accordion-group ">
-                  <a data-toggle="collapse" data-parent="#navigation" href="#submenu3"> <span class="icon icon-th-list"></span>
+                  <a data-toggle="collapse" data-parent="#navigation" href="#submenu4"> <span class="icon icon-th-list"></span>
                     <span class="text">Dziennik</span><span class="arrow icon-caret-down"></span>
                   </a>
-                  <ul id="submenu3" style="height: 0px;">
+                  <ul id="submenu4" style="height: 0px;">
                     <li class=""><a href="/admin/log/years"> <span class="icon icon-angle-right"></span>Lata Szkolne</a></li>
                     <li class=""><a href="/admin/log/groups"> <span class="icon icon-angle-right"></span>Klasy</a></li>
                     <li class=""><a href="/admin/log/groups"> <span class="icon icon-angle-right"></span>Sale lekcyjne</a></li>
@@ -106,6 +115,7 @@
                     <li class=""><a href="/admin/log/extra"> <span class="icon icon-angle-right"></span>Zajęcia pozalekcyjne</a></li>
                   </ul>
                 </li>
+                  <!--
                 <li class="accordion-group ">
                   <a data-toggle="collapse" data-parent="#navigation" href="#submenu4"> <span class="icon icon-cogs"></span>
                     <span class="text">Rekrutacja</span> <span class="arrow icon-caret-down"></span>

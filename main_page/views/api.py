@@ -68,204 +68,299 @@ def jsnop_system_info(request):
 ##########
 # Users ##
 ##########
-@view_config(route_name='user_list', renderer='jsonp')
-def users_list(request):
-    page={"Result":"OK","Records":[]}
-    startIndex=request.params['jtStartIndex']
-    sorting=request.params['jtSorting'].split(" ")
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp','method=lerni.users.getList'])
+def api_jsonp_lerni_users_getlist(request):
+    page = {"Result":"OK","Records":[]}
+    start_index = request.params['jtStartIndex']
+    page_size = request.params['jtPageSize']
+    sorting = request.params['jtSorting'].split(" ")
     print sorting
-    query=DBSession.query(People)
+    query = DBSession.query(People).offset(int(start_index)).limit(int(page_size))
     for position in query:
-        page['Records'].append({"UserID":position.id,"FirstName":position.first_name,"SecondName":position.second_name,
-                                "LastName":position.last_name,"Pesel":position.pesel,"BirthDate":str(position.birthdate.date()),
-                                "Email":position.email,"PhoneNumber":position.phonenumber,
-                                "Password":"do_not_change","Group":1})
-    page['TotalRecordCount']=query.count()
+        page['Records'].append({"user_id": position.id,
+                                "first_name": position.first_name,
+                                "second_name": position.second_name,
+                                "last_name": position.last_name,
+                                "pesel": position.pesel,
+                                "birth_date":str(position.birth_date.date()),
+                                "email": position.email,
+                                "phone_number":position.phone_number,
+                                "password":"do_not_change",
+                                "Group":1})
+    page['TotalRecordCount'] = DBSession.query(People).count()
     return page
 
-@view_config(route_name='delete_user', renderer='jsonp')
-def delete_user(request):
-    if 'UserID' in request.params:
-        try:
-            session = DBSession()
-            user = DBSession.query(People).filter_by(id=request.params['UserID']).first()
-            if not user.email_confirmed:
-                session.delete(user)
-                transaction.commit()
-                return {"Result":"OK"}
-            else:
-                return {"Result":"ERROR","Message":"Nie można usunąć użytkownika, który potwierdził swój adres email."}
-        except DBAPIError:
-            return {"Result":"ERROR","Message":"Coś poszło nie tak :/"}
-    return {"Result":"Fail"}
 
-@view_config(route_name='update_user', renderer='jsonp')
-def update_user(request):
-    if set(["UserID","FirstName","SecondName","LastName","Pesel",
-            "BirthDate","Email","Password","Group"]) <= set(request.params):
-        try:
-            session = DBSession()
-            user = DBSession.query(People).filter_by(id=request.params['UserID']).first()
-            user.first_name=request.params["FirstName"]
-            user.second_name=request.params["FirstName"]
-            user.last_name=request.params["LastName"]
-            user.pesel=request.params["Pesel"]
-            user.birthdate=datetime.datetime(*(time.strptime(request.params['BirthDate'], "%d.%m.%Y")[0:6]))
-            user.phonenumber=request.params["PhoneNumber"]
-            user.email=request.params["Email"]
-            if request.params["Password"]!="do_not_change":
-                user.password=hashlib.sha512(unicode(request.params["Password"]+str(user.registration_date).encode('utf-8'))).hexdigest()
-            user.group_id=request.params["Group"]
-            transaction.commit()
-            return {"Result":"OK"}
-        except DBAPIError:
-            return {"Result":"ERROR","Message":"Coś poszło nie tak :/"}
-    return {"Result":"ERROR","Message":"Not enought data."}
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp','method=lerni.users.delete','user_id'])
+def api_jsonp_lerni_users_delete(request):
+    session = DBSession()
+    user = DBSession.query(People).filter_by(id=request.params['user_id']).first()
+    if not user:
+        return {"Result":"ERROR","Message":"Coś poszło nie tak :/"}
+    elif not user.email_confirmed:
+        session.delete(user)
+        transaction.commit()
+        return {"Result":"OK"}
+    else:
+        return {"Result":"ERROR","Message":"Nie można usunąć użytkownika, który potwierdził swój adres email."}
 
-@view_config(route_name='create_user', renderer='jsonp')
-def create_user(request):
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp','method=lerni.users.edit',
+             "user_id", "first_name", "second_name", "last_name", "pesel", "birth_date", "email", "password", "Group"])
+def api_jsonp_lerni_users_edit(request):
+    session = DBSession()
+    user = DBSession.query(People).filter_by(id=request.params['user_id']).first()
+    if not user:
+        return {"Result":"ERROR","Message":"Coś poszło nie tak :/"}
+    user.first_name = request.params["first_name"]
+    user.second_name = request.params["second_name"]
+    user.last_name = request.params["last_name"]
+    user.pesel = request.params["pesel"]
+    user.birth_date = datetime.datetime(*(time.strptime(request.params['birth_date'], "%d.%m.%Y")[0:6]))
+    user.phone_number = request.params["phone_number"]
+    user.email = request.params["email"]
+    if request.params["password"] != "do_not_change":
+        user.password = hashlib.sha512(unicode(request.params["password"]+
+                                               str(user.registration_date).encode('utf-8'))).hexdigest()
+    user.group_id = request.params["Group"]
+    transaction.commit()
+    return {"Result":"OK"}
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp','method=lerni.users.add',
+            "first_name", "second_name", "last_name", "pesel", "birth_date", "email", "password", "Group"])
+def api_jsonp_lerni_users_add(request):
     page={"Result":"OK","Record":[]}
-    if set(["FirstName","SecondName","LastName","Pesel","BirthDate","Email","Password","Group"]) <= set(request.params):
-        try:
-            session = DBSession()
-            wallet = Wallet(0)
-            session.add(wallet)
-            session.flush()
-            session.refresh(wallet)
-            user = People(request.params["FirstName"], request.params["SecondName"], request.params["LastName"],
-                          request.params["Pesel"],
-                          datetime.datetime(*(time.strptime(request.params['BirthDate'], "%d.%m.%Y")[0:6])),
-                          request.params["PhoneNumber"],request.params["Email"],request.params["Password"],
-                          "","",wallet.id,0,0,0,request.params["Group"])
-            session.add(user)
-            page['Record'].append({"UserID":user.id,"FirstName":user.first_name,
-                                    "SecondName":user.second_name,"LastName":user.last_name,
-                                    "Pesel":user.pesel,"BirthDate":str(user.birthdate.date()),
-                                    "Email":user.email,"PhoneNumber":user.phonenumber,
-                                    "Password":"do_not_change","Group":1})
-            transaction.commit()
-        except DBAPIError:
-            return {"Result":"ERROR","Message":"Form is not valid! Please correct it and try again."}
-        except ValueError:
-            return {"Result":"ERROR","Message":"Nieprawidłowa data urodzenia :/"}
+    try:
+        session = DBSession()
+        wallet = Wallet(0)
+        session.add(wallet)
+        session.flush()
+        session.refresh(wallet)
+        user = People(request.params["first_name"], request.params["second_name"], request.params["last_name"],
+                      request.params["pesel"],
+                      datetime.datetime(*(time.strptime(request.params['birth_date'], "%d.%m.%Y")[0:6])),
+                      request.params["phone_number"],request.params["email"],request.params["password"],
+                      "","",wallet.id,0,0,0,request.params["Group"])
+        session.add(user)
+        page['Record'].append({"user_id":user.id,"first_name":user.first_name,
+                                "second_name":user.second_name,"last_name":user.last_name,
+                                "pesel":user.pesel,"birth_date":str(user.birth_date.date()),
+                                "email":user.email,"phone_number":user.phone_number,
+                                "password":"do_not_change","Group":1})
+        transaction.commit()
+    except DBAPIError:
+        return {"Result":"ERROR","Message":"Form is not valid! Please correct it and try again."}
+    except ValueError:
+        return {"Result":"ERROR","Message":"Nieprawidłowa data urodzenia :/"}
     return page
+
 ############
 # Lessons ##
 ############
-@view_config(route_name='lesson_list', renderer='jsonp')
-def lesson_list(request):
-    page={"Result":"OK","Records":[]}
-    startIndex=request.params['jtStartIndex']
-    sorting=request.params['jtSorting'].split(" ")
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.timetables.lessons.getList',
+            'timetable_id', 'day', 'hour', 'jtStartIndex','jtPageSize', 'jtSorting'])
+def jsonp_lessons_list(request):
+    page = {"Result":"OK","Records":[]}
+    start_index = request.params['jtStartIndex']
+    page_size = request.params['jtPageSize']
+    sorting = request.params['jtSorting'].split(" ")
+    schedule_id = request.params['timetable_id']
+    day = request.params['day']
+    hour = request.params['hour']
     print sorting
-    query=DBSession.query(Lessons)
-    for position in query:
-        page['Records'].append({"LessonID":position.id,"Teacher":position.teacher_id,"Subject":position.subject_id,
-                                "Room":position.room,"ModificationDate":str(position.updated.date())})
-    page['TotalRecordCount']=query.count()
-    return page
-@view_config(route_name='delete_lesson', renderer='jsonp')
-def delete_lesson(request):
-    if 'LessonID' in request.params:
-        session = DBSession()
-        lesson = DBSession.query(Lessons).filter_by(id=request.params['LessonID']).first()
-        session.delete(lesson)
-        transaction.commit()
-        return {"Result":"OK"}
-    return {"Result":"Fail"}
-@view_config(route_name='update_lesson', renderer='jsonp')
-def update_lesson(request):
-    if set(["LessonID","timetableID","Teacher","Group","Subject",
-            "day","hour","Room"]) <= set(request.params):
-        try:
-            session = DBSession()
-            lesson = DBSession.query(Lessons).filter_by(id=request.params['LessonID']).first()
-            lesson.schedule_id=request.params["timetableID"]
-            lesson.teacher_id=request.params["Teacher"]
-            lesson.subject_id=request.params["Subject"]
-            lesson.day=request.params["day"]
-            lesson.order=request.params["hour"]
-            lesson.room=request.params["Room"]
-            transaction.commit()
-            return {"Result":"OK"}
-        except DBAPIError:
-            return {"Result":"ERROR","Message":"Coś poszło nie tak :/"}
-    return {"Result":"ERROR","Message":"Not enought data."}
-@view_config(route_name='create_lesson', renderer='jsonp')
-def create_lesson(request):
-    page={"Result":"OK"}
-    if "Teacher" in request.params and "Subject" in request.params:
-        #try:
-        session = DBSession()
-        lesson = Lessons(request.params["timetableID"], request.params["Teacher"],
-                         request.params["Subject"],request.params["day"],request.params["hour"],request.params["Room"])
-        session.add(lesson)
-        #except LOL:
-         #   return {"Result":"ERROR","Message":"Form is not valid! Please correct it and try again."}
-        page["Record"]={"LessonID":lesson.id ,"Teacher":2,"Subject":7,"Group":1,"Room":112}
-        transaction.commit()
+    query = DBSession.query(Lessons).filter_by(schedule_id=schedule_id).filter_by(day=day).filter_by(order=hour).\
+        offset(int(start_index)).limit(int(page_size))
+    for lesson in query:
+        groups = []
+        for lesson_group in DBSession.query(LessonsGroups).filter_by(lesson=lesson):
+            groups.append(lesson_group.group.name)
+        page['Records'].append({"lesson_id": lesson.id,
+                                "teacher": lesson.teacher_id,
+                                "subject": lesson.subject_id,
+                                "group": "; ".join(groups),
+                                "room": lesson.room,
+                                "modification_date": str(lesson.updated.date())})
+    page['TotalRecordCount'] = DBSession.query(Lessons).filter_by(schedule_id=schedule_id).filter_by(day=day).\
+        filter_by(order=hour).count()
     return page
 
-    return {"Result":"ERROR","Message":"Form is not valid! Please correct it and try again."}
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+             'method=lerni.timetables.lessons.delete', 'lesson_id'])
+def jsonp_lessons_delete(request):
+    session = DBSession()
+    lesson = DBSession.query(Lessons).filter_by(id=request.params['lesson_id']).first()
+    if not lesson:
+        return {"Result":"ERROR","Message":"Coś poszło nie tak :/"}
+    session.delete(lesson)
+    transaction.commit()
+    return {"Result":"OK"}
+
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.timetables.lessons.edit', 'timetable_id', 'day', 'hour'])
+def jsonp_lessons_update(request):
+    session = DBSession()
+    lesson = DBSession.query(Lessons).filter_by(id=request.params['lesson_id']).first()
+    if not lesson:
+        return {"Result":"ERROR","Message":"Coś poszło nie tak :/"}
+    lesson.schedule_id=request.params["timetable_id"]
+    lesson.teacher_id=request.params["teacher"]
+    lesson.subject_id=request.params["subject"]
+    lesson.day=request.params["day"]
+    lesson.order=request.params["hour"]
+    lesson.room=request.params["room"]
+    transaction.commit()
+    return {"Result":"OK"}
+
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.timetables.lessons.edit', 'timetable_id', 'teacher', 'subject', 'day', 'hour', 'room'])
+def jsonp_lessons_create(request):
+    page={"Result":"OK"}
+    session = DBSession()
+    lesson = Lessons(request.params["timetable_id"],
+                     request.params["teacher"],
+                     request.params["subject"],
+                     request.params["day"],
+                     request.params["hour"],
+                     request.params["room"])
+    session.add(lesson)
+    page["Record"]={"lesson_id": lesson.id,
+                    "teacher": lesson.teacher_id,
+                    "subject": lesson.subject_id,
+                    "group": "lesson.groups", #fuck
+                    "room": lesson.room}
+    transaction.commit()
+    return page
 ###############
 # Timetables ##
 ###############
-@view_config(route_name='timetable_list', renderer='jsonp')
-def timetable(request):
-    page={"Result":"OK","Records":[]}
-    startIndex=request.params['jtStartIndex']
-    sorting=request.params['jtSorting'].split(" ")
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.timetables.getList', 'jtStartIndex','jtPageSize', 'jtSorting'])
+def jsonp_timetables_list(request):
+    page = {"Result":"OK","Records":[]}
+    start_index = request.params['jtStartIndex']
+    page_size = request.params['jtPageSize']
+    sorting = request.params['jtSorting'].split(" ")
     print sorting
-    query=DBSession.query(Schedules)
+    query = DBSession.query(Schedules).offset(int(start_index)).limit(int(page_size))
     for position in query:
-        page['Records'].append({"TimetableId":position.id,"Start":str(position.start),"End":str(position.end),"ModificationDate":str(position.updated.date())})
-    page['TotalRecordCount']=query.count()
+        page['Records'].append({"timetable_id": position.id,
+                                "start": str(position.start),
+                                "end": str(position.end),
+                                "modification_date": str(position.updated.date())
+                                })
+    page['TotalRecordCount'] = DBSession.query(Schedules).count()
     return page
 
-@view_config(route_name='delete_timetable', renderer='jsonp')
-def delete_timetable(request):
-    if 'TimetableId' in request.params:
-        session = DBSession()
-        schedule = DBSession.query(Schedules).filter_by(id=request.params['TimetableId']).first()
-        session.delete(schedule)
-        transaction.commit()
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.timetables.delete', 'timetable_id'])
+def jsonp_timetables_delete(request):
+    session = DBSession()
+    schedule = DBSession.query(Schedules).filter_by(id=request.params['timetable_id']).first()
+    session.delete(schedule)
+    transaction.commit()
+
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.timetables.edit', 'timetable_id', 'start', 'end'])
+def jsonp_timetables_edit(request):
+    session = DBSession()
+    schedule = DBSession.query(Schedules).filter_by(id=request.params['timetable_id']).first()
+    schedule.start=datetime.datetime(*(time.strptime(request.params['start'], "%d.%m.%Y")[0:6]))
+    schedule.end=datetime.datetime(*(time.strptime(request.params['end'], "%d.%m.%Y")[0:6]))
+    transaction.commit()
     return {"Result":"OK"}
 
-@view_config(route_name='update_timetable', renderer='jsonp')
-def update_timetable(request):
-    if "Start" in request.params and "End" in request.params and 'TimetableId' in request.params:
-        session = DBSession()
-        schedule = DBSession.query(Schedules).filter_by(id=request.params['TimetableId']).first()
-        schedule.start=datetime.datetime(*(time.strptime(request.params['Start'], "%d.%m.%Y")[0:6]))
-        schedule.end=datetime.datetime(*(time.strptime(request.params['End'], "%d.%m.%Y")[0:6]))
-        transaction.commit()
-        return {"Result":"OK"}
-    return {"Result":"ERROR","Message":"Coś poszło nie tak :/"}
-
-@view_config(route_name='create_timetable', renderer='jsonp')
-def create_timetable(request):
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.timetables.add', 'start', 'end'])
+def jsonp_timetables_create(request):
     page={"Result":"OK"}
-    if "Start" in request.params and "End" in request.params:
-        #try:
-        session = DBSession()
-        start=datetime.datetime(*(time.strptime(request.params['Start'], "%d.%m.%Y")[0:6]))
-        end=datetime.datetime(*(time.strptime(request.params['End'], "%d.%m.%Y")[0:6]))
-        schedule = Schedules(start,end)
-        session.add(schedule)
+    session = DBSession()
+    start=datetime.datetime(*(time.strptime(request.params['start'], "%d.%m.%Y")[0:6]))
+    end=datetime.datetime(*(time.strptime(request.params['end'], "%d.%m.%Y")[0:6]))
+    schedule = Schedules(start,end)
+    session.add(schedule)
+    page["Record"]={"timetable_id": schedule.id,
+                    "start": str(schedule.start),
+                    "end": str(schedule.end),
+                    "modification_date":str(schedule.updated.date())
+                    }
+    transaction.commit()
+    return page
+#################
+# School years ##
+#################
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.years.getList', 'jtStartIndex','jtPageSize', 'jtSorting'])
+def jsonp_years_list(request):
+    page = {"Result":"OK","Records":[]}
+    start_index = request.params['jtStartIndex']
+    page_size = request.params['jtPageSize']
+    sorting = request.params['jtSorting'].split(" ")
+    print sorting
+    query = DBSession.query(SchoolYears).offset(int(start_index)).limit(int(page_size))
+    for position in query:
+        page['Records'].append({"year_id": position.id,
+                                "start": str(position.start),
+                                "end": str(position.end),
+                                "modification_date": str(position.modification_date).split(" ")[0]
+                                })
+    page['TotalRecordCount'] = DBSession.query(Schedules).count()
+    return page
 
-        #except LOL:
-         #   return {"Result":"ERROR","Message":"Form is not valid! Please correct it and try again."}
-        page["Record"]={"TimetableId":schedule.id,"Start":str(schedule.start),"End":str(schedule.end),"ModificationDate":str(schedule.updated.date())}
-        transaction.commit()
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.years.delete', 'year_id'])
+def jsonp_years_delete(request):
+    session = DBSession()
+    year = DBSession.query(SchoolYears).filter_by(id=request.params['year_id']).first()
+    session.delete(year)
+    transaction.commit()
+    return {"Result":"OK"}
+
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.years.edit', 'year_id', 'start', 'end'])
+def jsonp_years_edit(request):
+    session = DBSession()
+    year = DBSession.query(SchoolYears).filter_by(id=request.params['year_id']).first()
+    year.start=datetime.datetime(*(time.strptime(request.params['start'], "%d.%m.%Y")[0:6]))
+    year.end=datetime.datetime(*(time.strptime(request.params['end'], "%d.%m.%Y")[0:6]))
+    year.modification_date = datetime.datetime.now()
+    transaction.commit()
+    return {"Result":"OK"}
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.years.add', 'start', 'end'])
+def jsonp_years_create(request):
+    page={"Result":"OK"}
+    session = DBSession()
+    start=datetime.datetime(*(time.strptime(request.params['start'], "%d.%m.%Y")[0:6]))
+    end=datetime.datetime(*(time.strptime(request.params['end'], "%d.%m.%Y")[0:6]))
+    schedule = SchoolYears(start,end)
+    session.add(schedule)
+    session.flush()
+    page["Record"]={"year_id": schedule.id,
+                    "start": str(schedule.start),
+                    "end": str(schedule.end),
+                    "modification_date":str(schedule.modification_date).split(" ")[0]
+                    }
+    transaction.commit()
     return page
 
 
 
-@view_config(route_name='options_teacher_list', renderer='jsonp')
-def options_teacher_list(request):
+#########
+# Other #
+#########
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp','method=lerni.teachers.getList'])
+def api_jsonp_lerni_teachers_getlist(request):
     page={"Result":"OK","Options":[]}
     for position in DBSession.query(Teachers):
-        page['Options'].append({"DisplayText":position.user.full_name,"Value":position.user.id})
+        page['Options'].append({"DisplayText":position.user.full_name,"Value":position.id})
     return page
 
 @view_config(route_name='options_subjects_list', renderer='jsonp')
@@ -283,95 +378,100 @@ def options_groups_list(request):
     return page
 
 
-##########
+############
 # Folders ##
-##########
-@view_config(route_name='folder_list', renderer='jsonp')
-def folder_list(request):
-    logged_in = authenticated_userid(request)
+############
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.folders.getList', 'jtStartIndex','jtPageSize', 'jtSorting'])
+def jsonp_folders_get_list(request):
+    logged_in = authenticated_user_id(request)
     if not logged_in:
         return {"Result":"ERROR","Message":"User not logged in."}
-    page={"Result":"OK","Records":[]}
-    startIndex=request.params['jtStartIndex']
-    sorting=request.params['jtSorting'].split(" ")
+    page = {"Result":"OK","Records":[]}
+    start_index = request.params['jtStartIndex']
+    sorting = request.params['jtSorting'].split(" ")
+    page_size = request.params['jtPageSize']
     user = DBSession.query(People).filter_by(email=logged_in).first()
-    query=DBSession.query(Folders).filter_by(user_id=user.id).filter_by(deleted=False)
+    query = DBSession.query(Folders).filter_by(user=user).filter_by(deleted=False)\
+        .offset(int(start_index)).limit(int(page_size))
     for position in query:
         folder_data = DBSession.query(FoldersVersions).filter_by(folder_id=position.id).order_by('-id').first()
         try:
-            page['Records'].append({"FolderID":position.id,"Title":folder_data.title,
-                                    "Tags":folder_data.tags,"CSS":folder_data.css_id,
-                                    "GPG":position.sign,"Published":str(position.state)})
+            page['Records'].append({"folder_id":position.id,
+                                    "title":folder_data.title,
+                                    "tags":folder_data.tags,
+                                    "css":folder_data.css_id,
+                                    "gpg":position.sign,
+                                    "published":str(position.state)
+                                    })
         except DBAPIError:
             return {"Result":"ERROR","Message":"Coś jest nie tak :/"}
-    page['TotalRecordCount']=query.count()
+    page['TotalRecordCount'] = DBSession.query(Folders).filter_by(user=user).filter_by(deleted=False)\
+        .offset(int(start_index)).limit(int(page_size)).count()
     return page
 
-@view_config(route_name='delete_folder', renderer='jsonp')
-def delete_folder(request):
-    logged_in = authenticated_userid(request)
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.folders.delete',
+                                                                'folder_id'])
+def jsonp_folders_delete(request):
+    logged_in = authenticated_user_id(request)
     if not logged_in:
         return {"Result":"ERROR","Message":"User not logged in."}
-    if 'FolderID' in request.params:
-        try:
-            session = DBSession()
-            user = DBSession.query(People).filter_by(email=logged_in).first()
-            folder = DBSession.query(Folders).filter_by(id=request.params['FolderID']).first()
-            if folder.user.id == user.id:
-                folder.deleted = True
-                transaction.commit()
-                return {"Result":"OK"}
-            else:
-                return {"Result":"ERROR","Message":"Ten folder nie należy do Ciebie. Nie możesz go usunąć."}
-        except DBAPIError:
-            return {"Result":"ERROR","Message":"Coś poszło nie tak :/"}
-    return {"Result":"Fail"}
+    session = DBSession()
+    user = DBSession.query(People).filter_by(email=logged_in).first()
+    folder = DBSession.query(Folders).filter_by(id=request.params['folder_id']).first()
+    if not folder:
+        return {"Result":"ERROR","Message":"Coś poszło nie tak :/"}
+    elif folder.user.id == user.id:
+        folder.deleted = True
+        transaction.commit()
+        return {"Result":"OK"}
+    else:
+        return {"Result":"ERROR","Message":"Ten folder nie należy do Ciebie. Nie możesz go usunąć."}
 
-@view_config(route_name='update_folder', renderer='jsonp')
-def update_folder(request):
-    logged_in = authenticated_userid(request)
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.folders.edit',
+                                                                "folder_id","title","tags","css","gpg","published"])
+def jsonp_folders_edit(request):
+    logged_in = authenticated_user_id(request)
     if not logged_in:
         return {"Result":"ERROR","Message":"User not logged in."}
-    if set(["Title","Tags","CSS","GPG","Published"]) <= set(request.params):
-        try:
-            session = DBSession()
-            folder = DBSession.query(Folders).filter_by(id=request.params['FolderID']).first()
-            folder_data = FoldersVersions(folder.id, request.params["Title"], request.params["Tags"],
-                                          request.params["CSS"])
-            folder.state={'True':True,'False':False}[request.params["Published"]]
-            folder.sign=request.params["GPG"]
-            session.add(folder_data)
-            transaction.commit()
-            return {"Result":"OK"}
-        except DBAPIError:
-            return {"Result":"ERROR","Message":"Coś poszło nie tak :/"}
-    return {"Result":"ERROR","Message":"Not enought data."}
+    session = DBSession()
+    folder = DBSession.query(Folders).filter_by(id=request.params['folder_id']).first()
+    if not folder:
+        return {"Result":"ERROR","Message":"Coś poszło nie tak :/"}
+    folder_data = FoldersVersions(folder.id, request.params["title"], request.params["tags"],
+                                  request.params["css"])
+    folder.state={'True':True,'False':False}[request.params["published"]]
+    folder.sign=request.params["gpg"]
+    session.add(folder_data)
+    transaction.commit()
+    return {"Result":"OK"}
 
-@view_config(route_name='create_folder', renderer='jsonp')
-def create_folder(request):
-    logged_in = authenticated_userid(request)
-    if not logged_in:
-        return {"Result":"ERROR","Message":"User not logged in."}
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.folders.add',
+                                                                "title","tags","css","gpg","published"])
+def jsonp_folders_add(request):
     page={"Result":"OK","Record":[]}
-    if set(["Title","Tags","CSS","GPG","Published"]) <= set(request.params):
-        try:
-            session = DBSession()
-            user = DBSession.query(People).filter_by(email=logged_in).first()
-            folder = Folders(user.id)
-            session.add(folder)
-            session.flush()
-            session.refresh(folder)
-            folder_data = FoldersVersions(folder.id, request.params["Title"], request.params["Tags"],
-                                          request.params["CSS"])
-            folder.state={'True':True,'False':False}[request.params["Published"]]
-            folder.sign=request.params["GPG"]
-            session.add(folder_data)
-            page['Record'].append({"FolderID":folder_data.id,"Title":folder_data.title,
-                                    "Tags":folder_data.tags,"CSS":folder_data.css_id,
-                                    "GPG":folder.sign})
-            transaction.commit()
-        except DBAPIError:
-            return {"Result":"ERROR","Message":"Coś poszło nie tak :/"}
+    logged_in = authenticated_user_id(request)
+    if not logged_in:
+        return {"Result":"ERROR","Message":"User not logged in."}
+    session = DBSession()
+    user = DBSession.query(People).filter_by(email=logged_in).first()
+    folder = Folders(user.id)
+    if not folder:
+        return {"Result":"ERROR","Message":"Coś poszło nie tak :/"}
+    session.add(folder)
+    session.flush()
+    session.refresh(folder)
+    folder_data = FoldersVersions(folder.id, request.params["title"], request.params["tags"],
+                                  request.params["css"])
+    folder.state={'True':True,'False':False}[request.params["published"]]
+    folder.sign = request.params["gpg"]
+    session.add(folder_data)
+    page['Record'].append({"folder_id": folder_data.id,
+                           "title": folder_data.title,
+                            "tags": folder_data.tags,
+                            "css": folder_data.css_id,
+                            "gpg": folder.sign})
+    transaction.commit()
     return page
 
 @view_config(route_name='options_folders_list', renderer='jsonp')
@@ -386,7 +486,7 @@ def options_folders_list(request):
 ############
 @view_config(route_name='entry_list', renderer='jsonp')
 def entry_list(request):
-    logged_in = authenticated_userid(request)
+    logged_in = authenticated_user_id(request)
     if not logged_in:
         return {"Result":"ERROR","Message":"User not logged in."}
     page={"Result":"OK","Records":[]}
@@ -406,7 +506,7 @@ def entry_list(request):
 
 @view_config(route_name='delete_entry', renderer='jsonp')
 def delete_entry(request):
-    logged_in = authenticated_userid(request)
+    logged_in = authenticated_user_id(request)
     if not logged_in:
         return {"Result":"ERROR","Message":"User not logged in."}
     if 'FolderID' in request.params:
@@ -426,7 +526,7 @@ def delete_entry(request):
 
 @view_config(route_name='update_entry', renderer='jsonp')
 def update_entry(request):
-    logged_in = authenticated_userid(request)
+    logged_in = authenticated_user_id(request)
     if not logged_in:
         return {"Result":"ERROR","Message":"User not logged in."}
     if set(["Title","Tags","CSS","GPG","Published"]) <= set(request.params):
@@ -446,7 +546,7 @@ def update_entry(request):
 
 @view_config(route_name='create_entry', renderer='jsonp')
 def create_entry(request):
-    logged_in = authenticated_userid(request)
+    logged_in = authenticated_user_id(request)
     if not logged_in:
         return {"Result":"ERROR","Message":"User not logged in."}
     page={"Result":"OK","Record":[]}

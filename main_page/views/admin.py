@@ -1,6 +1,26 @@
 # -*- coding: utf-8 -*-
 from base import *
 
+polishMessages=u'''
+{"serverCommunicationError": "Próba połączenia z serwerem zakończona niepowodzeniem.",
+"loadingMessage": "Ładowanie...",
+"noDataAvailable": "Brak danych do wyświetlenia",
+"addNewRecord": "Dodaj nowy rekord",
+"editRecord": "Edytuj",
+"areYouSure": "Czy jesteś pewien?",
+"deleteConfirmation": "Czy jesteś pewien, że chcesz usunąć wybrany rekord?",
+"save": "Zapisz",
+"saving": "Zapisywanie",
+"cancel": "Anuluj",
+"deleteText": "Usuń",
+"deleting": "Usuwanie",
+"error": "Błąd",
+"close": "Zamknij",
+"cannotLoadOptionsFor": "{0} cannotLoadOptionsFor!",
+"pagingInfo": "Rekordy od {0} do {1} / {2}",
+"canNotDeletedRecords": "Nie można usunąć {1} kayıttan {0}",
+"deleteProggress": "{1} usuwanie {0} adedi silindi, devam ediliyor..."}
+'''
 
 @view_config(route_name='admin')
 def my_view(request):
@@ -53,7 +73,7 @@ def lucky_number(request):
     return page
 
 
-@view_config(route_name='admin_users', renderer='admin_log_timetables.mak')
+@view_config(route_name='admin_users', renderer='admin_jtable.mak')
 def admin_users(request):
     page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["",u"Użytkownicy"]], 'allerts':[]}
     page.update(get_basic_account_info())
@@ -63,7 +83,28 @@ def admin_users(request):
     page['title']=u"Użytkownicy"
     page['title_desc']= u"Poniżej możesz dodać nowych albo edyotwać istniejąch użytkowników. " \
                         u"Jeśli to możliwe spróbuj jednak zasugerować im aby dokonali zmian samodzielnie."
-    page['table_name']="table_users"
+    page['table'] = u'{"messages": '+polishMessages+', '+\
+                           u'"title": "Użytkownicy", '+\
+                           u'"paging": true, '+\
+                           u'"pageSize": 10, '+\
+                           u'"sorting": true, '+\
+                           u'"selecting": true, '+\
+                           u'"defaultSorting": "user_id DESC", '+\
+                           u'"actions": {'+\
+                                        u'"listAction": "/api?format=jsonp&method=lerni.users.getList", ' +\
+                                        u'"deleteAction": "/api?format=jsonp&method=lerni.users.delete", ' +\
+                                        u'"updateAction": "/api?format=jsonp&method=lerni.users.edit", ' +\
+                                        u'"createAction": "/api?format=jsonp&method=lerni.users.add"}, ' +\
+                           u'"fields": {"user_id":{ "key": true, "create": false, "edit": false, "list": false},'+\
+                           u'"first_name": {"title": "Imię"},'+\
+                           u'"second_name": {"title": "Drugie Imię"},'+\
+                           u'"last_name": {"title": "Nazwisko"},'+\
+                           u'"pesel": {"title": "Pesel"},'+\
+                           u'"phone_number": {"title": "Numer telefonu"},'+\
+                           u'"birth_date": {"title": "Data urodzenia", "type": "date", "displayFormat": "dd.mm.yy"},'+\
+                           u'"email": {"title": "Email"},'+\
+                           u'"password": {"title": "Hasło"},'+\
+                           u'"group": {"title": "Grupa"} } }'
     return page
 
 @view_config(route_name='admin_layouts', renderer='admin_layout_edit.mak')
@@ -121,28 +162,31 @@ def admin_personel(request):
     page['tables'].append(["3",u"Byli",table_head, ex_teachers])
     return page
 
-#@view_config(route_name='admin_log_timetables', renderer='admin_log_timetables.mak')
-#def admin_log_timetables(request):
-#    page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["","Lata szkolne"]], 'allerts':[], 'tables':[]}
-#    page.update(get_basic_account_info())
-#    logged_in = authenticated_userid(request)
-#
-#    page['name']=username(logged_in)
-#    page['title']=u"Plan lekcji"
-#    page['title_desc']=u"Poniżej możesz dodać nowy albo edyować instniejący plan lekcji."
-#    page['table_name']="table_timetables"
-#    return page
-
-@view_config(route_name='admin_log_years', renderer='admin_log_timetables.mak')
+@view_config(route_name='admin_log_years', renderer='admin_jtable.mak')
 def admin_log_years(request):
     page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["","Lata szkolne"]], 'allerts':[], 'tables':[]}
     page.update(get_basic_account_info())
     logged_in = authenticated_userid(request)
-
-    page['name']=username(logged_in)
-    page['title']=u"Lata szkolne"
-    page['title_desc']=u"Aby dodać nowy rok szkolny skorzystaj z formularza poniżej."
-    page['table_name']="table_years"
+    page['name'] = username(logged_in)
+    page['title'] = u"Lata szkolne"
+    page['title_desc'] = u"Aby dodać nowy rok szkolny skorzystaj z formularza poniżej."
+    page['table'] = u'{"messages": '+polishMessages+', '+\
+                           u'"title": "Lata szkolne", '+\
+                           u'"paging": true, '+\
+                           u'"pageSize": 10, '+\
+                           u'"sorting": true, '+\
+                           u'"selecting": true, '+\
+                           u'"defaultSorting": "start DESC", '+\
+                           u'"actions": {'+\
+                                        u'"listAction": "/api?format=jsonp&method=lerni.years.getList", ' +\
+                                        u'"deleteAction": "/api?format=jsonp&method=lerni.years.delete", ' +\
+                                        u'"updateAction": "/api?format=jsonp&method=lerni.years.edit", ' +\
+                                        u'"createAction": "/api?format=jsonp&method=lerni.years.add"}, ' +\
+                           u'"fields": {"year_id":{ "key": true, "create": false, "edit": false, "list": false},'+\
+                           u'"start": {"title": "Początek roku szkolnego", "type": "date", "displayFormat": "dd.mm.yy"},'+\
+                           u'"end": {"title": "Koniec roku szkolnego", "type": "date", "displayFormat": "dd.mm.yy"},'+\
+                           u'"modification_date": { "title": "Data Modyfikacji", "type": "date", '+\
+                           u'"displayFormat": "dd.mm.yy", "create": "false", "edit": false, "sorting": false } } }'
     return page
 
 @view_config(route_name='admin_log_years_groups', renderer='admin_log_groups.mak')
@@ -175,16 +219,31 @@ def admin_log_groups_students(request):
     #for position in DBSession.query(Divisions):	page['students_all'].append(['',position.category.short,position.name])
     return page
 
-@view_config(route_name='admin_log_timetables', renderer='admin_log_timetables.mak')
+@view_config(route_name='admin_log_timetables', renderer='admin_jtable.mak')
 def admin_log_timetables(request):
     page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["","Lata szkolne"]], 'allerts':[], 'tables':[]}
     page.update(get_basic_account_info())
     logged_in = authenticated_userid(request)
-
     page['name']=username(logged_in)
     page['title']=u"Plan lekcji"
     page['title_desc']=u"Poniżej możesz dodać nowy albo edyować instniejący plan lekcji."
-    page['table_name']="table_timetables"
+    page['table'] = u'{"messages": '+polishMessages+', '+\
+                           u'"title": "Plany lekcji", '+\
+                           u'"paging": true, '+\
+                           u'"pageSize": 10, '+\
+                           u'"sorting": true, '+\
+                           u'"selecting": true, '+\
+                           u'"defaultSorting": "start DESC", '+\
+                           u'"actions": {'+\
+                                        u'"listAction": "/api?format=jsonp&method=lerni.timetables.getList", ' +\
+                                        u'"deleteAction": "/api?format=jsonp&method=lerni.timetables.delete", ' +\
+                                        u'"updateAction": "/api?format=jsonp&method=lerni.timetables.edit", ' +\
+                                        u'"createAction": "/api?format=jsonp&method=lerni.timetables.add"}, ' +\
+                           u'"fields": {"timetable_id":{ "key": true, "create": false, "edit": false, "list": false},'+\
+                           u'"start": {"title": "Początek planu lekcji", "type": "date", "displayFormat": "dd.mm.yy"},'+\
+                           u'"end": {"title": "Koniec planu lekcji", "type": "date", "displayFormat": "dd.mm.yy"},'+\
+                           u'"modification_date": { "title": "Data Modyfikacji", "type": "date", '+\
+                           u'"displayFormat": "dd.mm.yy", "create": "false", "edit": false, "sorting": false } } }'
     return page
 
 @view_config(route_name='admin_log_timetables_edit', renderer='admin_log_timetables_edit.mak')

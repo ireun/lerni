@@ -39,6 +39,8 @@ def main(global_config, **settings):
 
     config.add_route('zastepstwa', '/zastepstwa')
     config.add_renderer('jsonp', JSONP(param_name='callback'))
+
+    config.add_route('api', '/api')
     config.add_route('jsonp_post_comments', '/api/jsonp/post_comments')
     config.add_route('jsonp_year_add', '/api/jsonp/year/add') #articles zrobic podobnie#
     config.add_route('jsonp_year', '/api/jsonp/year/{year}')
@@ -46,28 +48,10 @@ def main(global_config, **settings):
     config.add_route('jsonp_groups', '/api/jsonp/groups')
     config.add_route('jsonp_mobile_login', '/api/jsonp/mobile_login')
 
-    config.add_route('user_list','/api/jsonp/user-list')
-    config.add_route('delete_user','/api/jsonp/delete-user')
-    config.add_route('update_user','/api/jsonp/update-user')
-    config.add_route('create_user','/api/jsonp/create-user')
-
-    config.add_route('timetable_list','/api/jsonp/timetable-list')
-    config.add_route('delete_timetable','/api/jsonp/delete-timetable')
-    config.add_route('update_timetable','/api/jsonp/update-timetable')
-    config.add_route('create_timetable','/api/jsonp/create-timetable')
-
-    config.add_route('lesson_list','/api/jsonp/lesson-list')
-    config.add_route('delete_lesson','/api/jsonp/delete-lesson')
-    config.add_route('update_lesson','/api/jsonp/update-lesson')
-    config.add_route('create_lesson','/api/jsonp/create-lesson')
     config.add_route('options_teacher_list','/api/jsonp/options-teacher-list')
     config.add_route('options_subjects_list','/api/jsonp/options-subjects-list')
     config.add_route('options_groups_list','/api/jsonp/options-groups-list/{term_id}')
 
-    config.add_route('folder_list','/api/jsonp/folder-list')
-    config.add_route('delete_folder','/api/jsonp/delete-folder')
-    config.add_route('update_folder','/api/jsonp/update-folder')
-    config.add_route('create_folder','/api/jsonp/create-folder')
     config.add_route('options_folders_list','/api/jsonp/options-folders-list')
     config.add_route('options_folders_css_list','/api/jsonp/options-folders-css-list')
     config.add_route('entry_list','/api/jsonp/entry-list')
@@ -89,6 +73,9 @@ def main(global_config, **settings):
     config.add_route('admin_overview', '/admin/overview')
     config.add_route('admin_articles', '/admin/articles')
     config.add_route('admin_articles_add', '/admin/articles/add')
+
+    config.add_route('admin_decretation_tweets', '/admin/dec/tweets')
+
     config.add_route('admin_users', '/admin/users')
     config.add_route('admin_people', '/admin/teachers')
     config.add_route('admin_personel', '/admin/personel')

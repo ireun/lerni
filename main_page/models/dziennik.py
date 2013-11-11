@@ -7,10 +7,12 @@ class SchoolYears(Base):
     add_date = Column(Date)
     start = Column(Date)
     end = Column(Date)
+    modification_date = Column(Date)
     def __init__(self, start, end): 	# Rok szkolny - start.year/end.year
         self.add_date = datetime.datetime.now()
         self.start = start
         self.end = end
+        self.modification_date = datetime.datetime.now()
         
 class Terms(Base):
     __tablename__ = 'log_terms'						# Semestr 1 / Semestr 2
