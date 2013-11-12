@@ -189,6 +189,60 @@ def admin_log_years(request):
                            u'"displayFormat": "dd.mm.yy", "create": "false", "edit": false, "sorting": false } } }'
     return page
 
+@view_config(route_name='admin_log_subjects', renderer='admin_jtable.mak')
+def admin_log_subjects(request):
+    page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["","Przedmioty"]], 'allerts':[], 'tables':[]}
+    page.update(get_basic_account_info())
+    logged_in = authenticated_userid(request)
+    page['name'] = username(logged_in)
+    page['title'] = u"Przedmioty"
+    page['title_desc'] = u"Utwórz listę przedmiotów nauczanych w twojej szkole."
+    page['table'] = u'{"messages": '+polishMessages+', '+\
+                           u'"title": "Przedmioty", '+\
+                           u'"paging": true, '+\
+                           u'"pageSize": 10, '+\
+                           u'"sorting": true, '+\
+                           u'"selecting": true, '+\
+                           u'"defaultSorting": "name ASC", '+\
+                           u'"actions": {'+\
+                                        u'"listAction": "/api?format=jsonp&method=lerni.subjects.getList", ' +\
+                                        u'"deleteAction": "/api?format=jsonp&method=lerni.subjects.delete", ' +\
+                                        u'"updateAction": "/api?format=jsonp&method=lerni.subjects.edit", ' +\
+                                        u'"createAction": "/api?format=jsonp&method=lerni.subjects.add"}, ' +\
+                           u'"fields": {"subject_id":{ "key": true, "create": false, "edit": false, "list": false},'+\
+                           u'"name": {"title": "Pełna nazwa"},'+\
+                           u'"short": {"title": "Skrócona nazwa"},'+\
+                           u'"modification_date": { "title": "Data Modyfikacji", "type": "date", '+\
+                           u'"displayFormat": "dd.mm.yy", "create": "false", "edit": false, "sorting": false } } }'
+    return page
+
+@view_config(route_name='admin_log_divisions_categories', renderer='admin_jtable.mak')
+def admin_log_divisions_categories(request):
+    page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["","Kategorie klas"]], 'allerts':[], 'tables':[]}
+    page.update(get_basic_account_info())
+    logged_in = authenticated_userid(request)
+    page['name'] = username(logged_in)
+    page['title'] = u"Kategorie klas"
+    page['title_desc'] = u"Utwórz listę kategorii klas w twojej szkole."
+    page['table'] = u'{"messages": '+polishMessages+', '+\
+                           u'"title": "Kategorie klas", '+\
+                           u'"paging": true, '+\
+                           u'"pageSize": 10, '+\
+                           u'"sorting": true, '+\
+                           u'"selecting": true, '+\
+                           u'"defaultSorting": "name ASC", '+\
+                           u'"actions": {'+\
+                                        u'"listAction": "/api?format=jsonp&method=lerni.divisions.categories.getList", ' +\
+                                        u'"deleteAction": "/api?format=jsonp&method=lerni.divisions.categories.delete", ' +\
+                                        u'"updateAction": "/api?format=jsonp&method=lerni.divisions.categories.edit", ' +\
+                                        u'"createAction": "/api?format=jsonp&method=lerni.divisions.categories.add"}, ' +\
+                           u'"fields": {"subject_id":{ "key": true, "create": false, "edit": false, "list": false},'+\
+                           u'"name": {"title": "Pełna nazwa"},'+\
+                           u'"short": {"title": "Skrócona nazwa"},'+\
+                           u'"modification_date": { "title": "Data Modyfikacji", "type": "date", '+\
+                           u'"displayFormat": "dd.mm.yy", "create": "false", "edit": false, "sorting": false } } }'
+    return page
+
 @view_config(route_name='admin_log_years_groups', renderer='admin_log_groups.mak')
 def admin_log_groups(request):
     page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["","Lata szkolne"],["","2012"]], 'allerts':[], 'tables':[]}

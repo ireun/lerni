@@ -290,6 +290,128 @@ def jsonp_timetables_create(request):
                     }
     transaction.commit()
     return page
+#############
+# Subjects ##
+#############
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.subjects.getList', 'jtStartIndex','jtPageSize', 'jtSorting'])
+def jsonp_subjects_list(request):
+    page = {"Result":"OK","Records":[]}
+    start_index = request.params['jtStartIndex']
+    page_size = request.params['jtPageSize']
+    sorting = request.params['jtSorting'].split(" ")
+    print sorting
+    query = DBSession.query(Subjects).offset(int(start_index)).limit(int(page_size))
+    for position in query:
+        page['Records'].append({"subject_id": position.id,
+                                "name": unicode(position.name),
+                                "short": unicode(position.short),
+                                "modification_date": unicode(position.modification_date).split(" ")[0]
+                                })
+    page['TotalRecordCount'] = DBSession.query(Subjects).count()
+    return page
+
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.subjects.delete', 'subject_id'])
+def jsonp_subjects_delete(request):
+    session = DBSession()
+    year = DBSession.query(Subjects).filter_by(id=request.params['subject_id']).first()
+    session.delete(year)
+    transaction.commit()
+    return {"Result":"OK"}
+
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.subjects.edit', 'year_id', 'short', 'name'])
+def jsonp_subjects_edit(request):
+    session = DBSession()
+    subject = DBSession.query(Subjects).filter_by(id=request.params['year_id']).first()
+    subject.name = request.params['name']
+    subject.short = request.params['short']
+    subject.modification_date = datetime.datetime.now()
+    transaction.commit()
+    return {"Result":"OK"}
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.years.add', 'start', 'end'])
+def jsonp_years_create(request):
+    page={"Result":"OK"}
+    session = DBSession()
+    name = request.params['name']
+    short = request.params['short']
+    subject = SchoolYears(name, short)
+    session.add(subject)
+    session.flush()
+    page["Record"]={"subject_id": subject.id,
+                    "name": str(subject.start),
+                    "short": str(subject.end),
+                    "modification_date":str(subject.modification_date).split(" ")[0]
+                    }
+    transaction.commit()
+    return page
+
+#############
+# Subjects ##
+#############
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.divisions.categories.getList', 'jtStartIndex','jtPageSize', 'jtSorting'])
+def jsonp_divisions_categories_list(request):
+    page = {"Result":"OK","Records":[]}
+    start_index = request.params['jtStartIndex']
+    page_size = request.params['jtPageSize']
+    sorting = request.params['jtSorting'].split(" ")
+    print sorting
+    query = DBSession.query(DivisionsCategories).offset(int(start_index)).limit(int(page_size))
+    for position in query:
+        page['Records'].append({"division_category_id": position.id,
+                                "name": unicode(position.name),
+                                "short": unicode(position.short),
+                                "modification_date": unicode(position.modification_date).split(" ")[0]
+                                })
+    page['TotalRecordCount'] = DBSession.query(DivisionsCategories).count()
+    return page
+
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.divisions.categories.delete', 'subject_id'])
+def jsonp_divisions_categories_delete(request):
+    session = DBSession()
+    year = DBSession.query(DivisionsCategories).filter_by(id=request.params['subject_id']).first()
+    session.delete(year)
+    transaction.commit()
+    return {"Result":"OK"}
+
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.divisions.categories.edit', 'year_id', 'name', 'short'])
+def jsonp_divisions_categories_edit(request):
+    session = DBSession()
+    subject = DBSession.query(DivisionsCategories).filter_by(id=request.params['year_id']).first()
+    subject.name = request.params['name']
+    subject.short = request.params['short']
+    subject.modification_date = datetime.datetime.now()
+    transaction.commit()
+    return {"Result":"OK"}
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.divisions.categories.add', 'name', 'short'])
+def jsonp_divisions_categories_create(request):
+    page={"Result":"OK"}
+    session = DBSession()
+    name = request.params['name']
+    short = request.params['short']
+    d_category = DivisionsCategories(name, short)
+    session.add(d_category)
+    session.flush()
+    page["Record"]={"subject_id": d_category.id,
+                    "name": unicode(d_category.name),
+                    "short": unicode(d_category.short),
+                    "modification_date":str(d_category.modification_date).split(" ")[0]
+                    }
+    transaction.commit()
+    return page
+
 #################
 # School years ##
 #################

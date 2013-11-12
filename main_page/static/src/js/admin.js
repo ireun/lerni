@@ -310,6 +310,31 @@ head.ready("jtable", function() {
         }
     })
 
+
+
+
+var add_jtable_button = function(table, button_id){
+    weee='\
+        <span id="'+button_id+'" class="jtable-toolbar-item jtable-toolbar-item-add-record" style="">\
+        <span class="jtable-toolbar-item-icon"></span>\
+        <span class="jtable-toolbar-item-text"> Dodaj lekcje</span></span>';
+    button=$("#"+button_id)
+    $('.jtable-toolbar').append(weee)
+    button.hover(function() {
+    $(this).addClass("jtable-toolbar-item-hover");
+        }, function() {
+    $(this).removeClass("jtable-toolbar-item-hover");
+    });
+    $(button).click(function(){
+        if ((table).jtable('selectedRows').first().data('record')){
+            window.location = '/admin/log/timetables/edit?id='+
+                $(table).jtable('selectedRows').first().data('record').timetable_id;
+        }else{
+            alert("Wybierz plan do którego chcesz dodać lekcje.");
+        }
+    });
+};
+/* Add lesson button in timetable view */
     weee='\
         <span id="add-lessons" class="jtable-toolbar-item jtable-toolbar-item-add-record" style="">\
         <span class="jtable-toolbar-item-icon"></span>\

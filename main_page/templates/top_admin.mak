@@ -108,9 +108,10 @@
                     <span class="text">Dziennik</span><span class="arrow icon-caret-down"></span>
                   </a>
                   <ul id="submenu4" style="height: 0px;">
+                    <li class=""><a href="/admin/log/subjects"> <span class="icon icon-angle-right"></span>Przedmioty</a></li>
+                    <li class=""><a href="/admin/log/divisions_categories"> <span class="icon icon-angle-right"></span>Kategorie klas</a></li>
                     <li class=""><a href="/admin/log/years"> <span class="icon icon-angle-right"></span>Lata Szkolne</a></li>
-                    <li class=""><a href="/admin/log/groups"> <span class="icon icon-angle-right"></span>Klasy</a></li>
-                    <li class=""><a href="/admin/log/groups"> <span class="icon icon-angle-right"></span>Sale lekcyjne</a></li>
+                    <li class=""><a href="/admin/log/rooms"> <span class="icon icon-angle-right"></span>Sale lekcyjne</a></li>
                     <li class=""><a href="/admin/log/timetables"> <span class="icon icon-angle-right"></span>Plan lekcji</a></li>
                     <li class=""><a href="/admin/log/extra"> <span class="icon icon-angle-right"></span>Zajęcia pozalekcyjne</a></li>
                   </ul>

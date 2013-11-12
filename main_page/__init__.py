@@ -82,7 +82,10 @@ def main(global_config, **settings):
     config.add_route('admin_support', '/admin/support')
     config.add_route('admin_students', '/admin/students')
     config.add_route('admin_others', '/admin/others')
+
+    config.add_route('admin_log_subjects', '/admin/log/subjects')
     config.add_route('admin_log_years', '/admin/log/years')
+    config.add_route('admin_log_divisions_categories', '/admin/log/divisions_categories')
     config.add_route('admin_log_years_groups', '/admin/log/years/groups/{year}')
     config.add_route('admin_log_years_groups_students', '/admin/log/years/groups/{year}/{group}')
     config.add_route('admin_log_timetables', '/admin/log/timetables')
