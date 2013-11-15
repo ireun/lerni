@@ -20,7 +20,7 @@ def anki_sync_host_key(request):
     print data
     return {'key': 'my_anki_key'}
 
-@view_config(route_name='anki_sync_download', renderer='jsonp')
+@view_config(route_name='sync_download', renderer='jsonp')
 def anki_sync_download(request):
     l = json.loads
     d = json.dumps
