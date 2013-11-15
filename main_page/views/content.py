@@ -112,22 +112,36 @@ def about(request):
 
 @view_config(route_name='lucky', renderer='sis/lucky.mak', permission='view')
 def lucky(request):
-   page={'editor':0, 'allerts':[]} #referrer #
-   logged_in = authenticated_userid(request)
-   try: user = DBSession.query(People).filter_by(email=logged_in).first()
-   except DBAPIError: return Response("Mysql connection error", content_type='text/plain', status_int=500)
-   lucky_number=DBSession.query(LuckyNumbers).filter_by(date=datetime.datetime.now().date()+datetime.timedelta(1)).first()
-   try:
-      page['lucky_number']=lucky_number.number
-      page['lucky_number_date']=lucky_number.date
-   except AttributeError:
-       page['lucky_number']="??"
-       page['lucky_number_date']=""
-   week=get_week(datetime.datetime.now().date()+datetime.timedelta(1))
-   page['numbers']=[]
-   for x in DBSession.query(LuckyNumbers).filter(LuckyNumbers.date.between(week[0], week[1])):
-       page['numbers'].append([x.date, x.number])
-   return page
+    page={'editor':0, 'allerts':[]} #referrer #
+    logged_in = authenticated_userid(request)
+    try: user = DBSession.query(People).filter_by(email=logged_in).first()
+    except DBAPIError: return Response("Mysql connection error", content_type='text/plain', status_int=500)
+    lucky_number=DBSession.query(LuckyNumbers).filter_by(date=datetime.datetime.now().date()+datetime.timedelta(1)).first()
+    try:
+        page['lucky_number']=lucky_number.number
+        page['lucky_number_date']=lucky_number.date
+    except AttributeError:
+        page['lucky_number']="??"
+        page['lucky_number_date']=""
+    week=get_week(datetime.datetime.now().date()+datetime.timedelta(1))
+    page['numbers']=[]
+    for x in DBSession.query(LuckyNumbers).filter(LuckyNumbers.date.between(week[0], week[1])):
+        page['numbers'].append([x.date, x.number])
+    all_numbers=range(37)
+    all_numbers.remove(0)
+    numbers=[]
+    for x in DBSession.query(LuckyNumbers).order_by(desc(LuckyNumbers.date)):
+        if x.number and not x.number in numbers:
+            numbers.append(x.number)
+        elif not x.number:
+            pass
+        else:
+            break
+    print numbers
+    for x in numbers:
+        all_numbers.remove(int(x))
+    page['left'] = sorted(all_numbers)
+    return page
 
 
 def get_week(day):

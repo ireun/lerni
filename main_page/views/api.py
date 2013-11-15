@@ -21,7 +21,7 @@ def jsonp_lucky_list(request):
     start_index = int(request.params['jtStartIndex'])
     page_size = int(request.params['jtPageSize'])
     for x in range(page_size):
-        week = get_week(datetime.datetime.now().date()+datetime.timedelta(1-page_size*(start_index+x)+7))
+        week = get_week(datetime.datetime.now().date()+datetime.timedelta(1-7*(start_index+x)+7))
         query = DBSession.query(LuckyNumbers).filter(LuckyNumbers.date.between(week[0], week[1]))
         record = {"first_date": 0, "0": "", "1": "", "2": "", "3": "", "4": "", "5": "", "6": "", "start" : "",
                   "end" : ""}
@@ -39,7 +39,7 @@ def jsonp_lucky_list(request):
             'method=lerni.lucky.delete', 'first_date'])
 def jsonp_lucky_delete(request):
     session = DBSession()
-    date = datetime.datetime(*(time.strptime(request.params['first_date'], "%d.%m.%Y")[0:6])).date()
+    date = datetime.datetime(*(time.strptime(request.params['first_date'], "%Y-%m-%d")[0:6])).date()
     week = get_week(date+datetime.timedelta(1))
     query = DBSession.query(LuckyNumbers).filter(LuckyNumbers.date.between(week[0], week[1]))
     for x in query:
@@ -52,7 +52,7 @@ def jsonp_lucky_delete(request):
             'method=lerni.lucky.edit', 'first_date', '0', '1', '2', '3', '4', '5', '6'])
 def jsonp_lucky_edit(request):
     session = DBSession()
-    date = datetime.datetime(*(time.strptime(request.params['first_date'], "%d.%m.%Y")[0:6])).date()
+    date = datetime.datetime(*(time.strptime(request.params['first_date'], "%Y-%m-%d")[0:6])).date()
     week = get_week(date+datetime.timedelta(1))
     for x in range(7):
         date2 = week[0]+datetime.timedelta(x)
