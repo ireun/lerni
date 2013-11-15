@@ -1,6 +1,9 @@
 head.js(jquery, autosize, function (){
    $(document).ready(function(){ $('textarea').autosize(); });
 });
+head.js(jquery, footable, footable_filter, function (){
+    $('.footable').footable();
+})
 head.js(jquery, jflickrfeed, owl, function (){
     $(document).ready(function() {
       $("#owlCarousel").owlCarousel({

@@ -116,9 +116,7 @@ def main(global_config, **settings):
     config.add_route('support_faq', '/support/faq')
 
 
-    config.add_route('successes', '/nasze-sukcesy')
-    config.add_route('successes_gim', '/nasze-sukcesy/gimnazjum')
-    config.add_route('successes_lic', '/nasze-sukcesy/liceum')
+    config.add_route('successes', '/successes')
     config.add_route('graduates', '/absolwenci')
 
     config.add_route('companionship', '/partnerzy')

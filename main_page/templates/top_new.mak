@@ -32,6 +32,7 @@
   <link href="/static/libs/owl-carousel/owl.theme.min.css" rel="stylesheet">
   <link href="/static/libs/progression/progression.min.css" rel="stylesheet">
   <link href="/static/libs/gridforms/gridforms.min.css"  rel="stylesheet">
+  <link href="/static/libs/footable/footable.core.min.css"  rel="stylesheet">
   </head>
   <body>
   <div id="wrapper">

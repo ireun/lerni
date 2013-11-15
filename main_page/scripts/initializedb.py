@@ -108,7 +108,6 @@ def main(argv=sys.argv):
     import_easy_links()
     import_banners()
     date_now=datetime.datetime.today()
-
     with transaction.manager:
         DBSession.add_all([
         Videos(2, 2, "68137365"),
@@ -133,6 +132,7 @@ def main(argv=sys.argv):
         Duty(2,2,2,2,1)])
     import_subjects()
     with transaction.manager:
+        import_competitors()
         DBSession.add_all([
         SchoolYears(datetime.date(2013, 9, 3),datetime.date(2014, 6, 28)),
         Terms(1,datetime.date(2013,9,3),datetime.date(2014,2,1)),
@@ -144,6 +144,29 @@ def main(argv=sys.argv):
         import_support()
         import_lucky_numbers()
         import_schedules()
+
+def import_competitors():
+    mypath="main_page/data/competitors/"
+    for x in [ f for f in listdir(mypath) if isfile(join(mypath,f)) ]:
+        f = codecs.open(mypath+x, "r", "utf-8")
+        tekst = f.read().split("\n")
+        f.close()
+        for y in tekst:
+            if len(y)>0:
+                line=y.split("|||")
+                if DBSession.query(CompetitorsGroups).filter_by(name=x).first() is None:
+                    DBSession.add_all([ CompetitorsGroups(x) ])
+                if DBSession.query(CompetitorsCompetitions).filter_by(name=line[1]).first() is None:
+                    DBSession.add_all([ CompetitorsCompetitions(line[1]) ])
+                if DBSession.query(CompetitorsTypes).filter_by(name=line[2]).first() is None:
+                    DBSession.add_all([ CompetitorsTypes(line[2]) ])
+                if DBSession.query(CompetitorsTutors).filter_by(name=line[3]).first() is None:
+                    DBSession.add_all([ CompetitorsTutors(line[3]) ])
+                DBSession.add_all([ Competitors(line[0].split(" ")[0], line[0].split(" ")[1],
+                DBSession.query(CompetitorsCompetitions).filter_by(name=line[1]).first().id,
+                DBSession.query(CompetitorsTypes).filter_by(name=line[2]).first().id,
+                DBSession.query(CompetitorsTutors).filter_by(name=line[3]).first().id,
+                line[4].split("/")[0], line[4].split("/")[1], DBSession.query(CompetitorsGroups).filter_by(name=x).first().id) ])
 
 def import_pages():
     f = open('main_page/data/pages.yaml')
@@ -344,26 +367,3 @@ def import_users():
             if x['teacher']:
                 DBSession.add_all([ Teachers(w)])
             w+=1
-
-def import_competitors():
-    mypath="./main_page/data/competitors/"
-    for x in [ f for f in listdir(mypath) if isfile(join(mypath,f)) ]:
-        f = codecs.open(mypath+x, "r", "utf-8")
-        tekst = f.read().split("\n")
-        f.close()
-        for y in tekst:
-            if len(y)>0:
-                line=y.split("|||")
-                if DBSession.query(CompetitorsGroups).filter_by(name=x).first() is None:
-                    DBSession.add_all([ CompetitorsGroups(x) ])
-                if DBSession.query(CompetitorsCompetitions).filter_by(name=line[1]).first() is None:
-                    DBSession.add_all([ CompetitorsCompetitions(line[1]) ])
-                if DBSession.query(CompetitorsTypes).filter_by(name=line[2]).first() is None:
-                    DBSession.add_all([ CompetitorsTypes(line[2]) ])
-                if DBSession.query(CompetitorsTutors).filter_by(name=line[3]).first() is None:
-                    DBSession.add_all([ CompetitorsTutors(line[3]) ])
-                DBSession.add_all([ Competitors(line[0].split(" ")[0], line[0].split(" ")[1],
-                DBSession.query(CompetitorsCompetitions).filter_by(name=line[1]).first().id,
-                DBSession.query(CompetitorsTypes).filter_by(name=line[2]).first().id,
-                DBSession.query(CompetitorsTutors).filter_by(name=line[3]).first().id,
-                line[4].split("/")[0], line[4].split("/")[1], DBSession.query(CompetitorsGroups).filter_by(name=x).first().id) ])

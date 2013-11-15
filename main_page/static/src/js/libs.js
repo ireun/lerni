@@ -16,6 +16,8 @@ jquery_browser = {jquery_browser: "/static/libs/jquery.browser/jquery.browser.mi
 social_count = {social_count: "/static/libs/socialcount/socialcount.min.js"}
 select2 = {select2: "//cdnjs.cloudflare.com/ajax/libs/select2/3.4.1/select2.min.js"}
 autosize = {autosize: "/static/libs/jquery.autosize/jquery.autosize.min.js"}
+footable = {footable: "/static/libs/footable/footable.min.js"}
+footable_filter = {footable_fitler: "/static/libs/footable/footable.filter.min.js"}
 
 uiji = {uiji: "/static/libs/uiji/uiji.min.js"}
 raptor = {raptor: "/static/libs/raptor/default.min.js"}

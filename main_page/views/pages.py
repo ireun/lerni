@@ -27,49 +27,23 @@ def easy_link(request):
 
 
 
-
-@view_config(route_name='successes', renderer='successes.mak')
-def succeses(request):
-   page={'editor':0, 'allerts':[], 'lol':['Sukcesy Gimnazjalistów','Sukcesy licealistów']}
-   logged_in = authenticated_userid(request)
-   page['logged_in']=logged_in
-   return page
-
-@view_config(route_name='successes_lic', renderer='content_text.mak', permission='view')
-def succeses_lic(request):
-   page={'editor':0, 'allerts':[]}
-   page.update({'lang':'pl_PL','title':u"Nasze sukcesy",'subtitle': u"Sukcesy Liecalistów",'keywords':u"sukcesy licealistów",'author':"", 'id':2,'date':""})#, 'lerni_link':entry.lerni_link})
-   page['css_data']=""
-   i=0
-   page['competitors']=[]
-   try:
-      for x in DBSession.query(Competitors).filter_by(competition_group_id=2):
-        i+=1
-        page['competitors'].append([i,x.first_name+" "+x.last_name,x.competition.name,x.competitor_type.name,x.competitor_tutor.name,str(x.start_year)+"/"+str(x.end_year)])
-      page['menu_left_list'] =[["/nasze-sukcesy","Wprowadzenie"],["/nasze-sukcesy/liceum","Liceum"],["/nasze-sukcesy/gimnazjum","Gimnazjum"]]
-      page['title']="Nasze sukcesy - Liceum"
-   except DBAPIError:
-      return Response("Mysql connection error", content_type='text/plain', status_int=500)
-   page['content'] = render('competitors.mak', page, request)
-   return page
-
-@view_config(route_name='successes_gim', renderer='content_text.mak', permission='view')
-def succeses_gim(request):
-   page={'editor':0, 'allerts':[]}
-   page.update({'lang':'pl_PL','title':u"Nasze sukcesy",'subtitle': u"Sukcesy Gimnazjalistów",'keywords':u"sukcesy gimnazjalistów",'author':"", 'id':2,'date':""})#, 'lerni_link':entry.lerni_link})
-   page['css_data']=""
-   i=0
-   page['competitors']=[]
-   try:
-      for x in DBSession.query(Competitors).filter_by(competition_group_id=1):
-        i+=1
-        page['competitors'].append([i,x.first_name+" "+x.last_name,x.competition.name,x.competitor_type.name,x.competitor_tutor.name,str(x.start_year)+"/"+str(x.end_year)])
-      page['menu_left_list'] =[["/nasze-sukcesy","Wprowadzenie"],["/nasze-sukcesy/liceum","Liceum"],["/nasze-sukcesy/gimnazjum","Gimnazjum"]]
-      page['title']="Nasze sukcesy - Liceum"
-   except DBAPIError:
-      return Response("Mysql connection error", content_type='text/plain', status_int=500)
-   page['content'] = render('competitors.mak', page, request)
-   return page
+@view_config(route_name='successes', renderer='pages.mak')
+def successes(request):
+    page={'editor':0, 'allerts':[]}
+    logged_in = authenticated_userid(request)
+    page['logged_in']=logged_in
+    page['name']=username(logged_in)
+    page['menu_top_list']=menu_top(request)
+    page['banners']=[]
+    for position in DBSession.query(Banners).limit(6):
+        page['banners'].append([position.link,position.alternative])
+    page['rows']=[[],[],[],[],[],[],[],[],[],[]]
+    for position in DBSession.query(Pages).filter_by(url_name="successes").first().widgets:
+        soup = BeautifulSoup(position.data)
+        [s.extract() for s in soup(['script','iframe','img','object','embed','param'])];
+        data = parser.format(unicode(soup), somevar='somevalue')
+        page['rows'][position.row].append(["",position.size_x,data])
+    return page
 
 @view_config(route_name='graduates', renderer='graduates.mak')
 def graduates(request):
