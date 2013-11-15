@@ -90,6 +90,7 @@ def main(global_config, **settings):
     config.add_route('admin_log_years_groups_students', '/admin/log/years/groups/{year}/{group}')
     config.add_route('admin_log_timetables', '/admin/log/timetables')
     config.add_route('admin_log_timetables_edit', '/admin/log/timetables/edit')
+    config.add_route('admin_log_lucky', '/admin/log/lucky')
 
     config.add_route('admin_layouts', '/admin/layouts')
 

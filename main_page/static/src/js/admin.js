@@ -293,7 +293,8 @@ var make_table = function(x){
 var done = new Array()
 head.ready("jtable", function() {
     jt=$('#jtable');
-    jt_data=jt.html()
+    var re = new RegExp("amp;", 'g');
+    var jt_data=jt.html().replace(re,"")
     if(jt_data){
         jt.html("");
         jt.jtable(jQuery.parseJSON(jt_data));

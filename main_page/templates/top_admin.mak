@@ -113,6 +113,7 @@
                     <li class=""><a href="/admin/log/years"> <span class="icon icon-angle-right"></span>Lata Szkolne</a></li>
                     <li class=""><a href="/admin/log/rooms"> <span class="icon icon-angle-right"></span>Sale lekcyjne</a></li>
                     <li class=""><a href="/admin/log/timetables"> <span class="icon icon-angle-right"></span>Plan lekcji</a></li>
+                    <li class=""><a href="/admin/log/lucky"> <span class="icon icon-angle-right"></span>Szczęśliwy numerek</a></li>
                     <li class=""><a href="/admin/log/extra"> <span class="icon icon-angle-right"></span>Zajęcia pozalekcyjne</a></li>
                   </ul>
                 </li>

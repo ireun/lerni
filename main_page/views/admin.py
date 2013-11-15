@@ -216,6 +216,41 @@ def admin_log_subjects(request):
                            u'"displayFormat": "dd.mm.yy", "create": "false", "edit": false, "sorting": false } } }'
     return page
 
+@view_config(route_name='admin_log_lucky', renderer='admin_jtable.mak')
+def admin_log_subjects(request):
+    page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["",u"Szczęśliwe numerki"]], 'allerts':[], 'tables':[]}
+    page.update(get_basic_account_info())
+    logged_in = authenticated_userid(request)
+    page['name'] = username(logged_in)
+    page['title'] = u"Szczęśliwe numerki"
+    page['title_desc'] = u"W poniższej tabeli znajdują się szczęśliwe numerki na poszczególne tygodnie."
+    page['table'] = u'{"messages": '+polishMessages+', '+\
+                           u'"title": "Przedmioty", '+\
+                           u'"paging": true, '+\
+                           u'"pageSize": 10, '+\
+                           u'"sorting": true, '+\
+                           u'"selecting": true, '+\
+                           u'"defaultSorting": "name ASC", '+\
+                           u'"actions": {'+\
+                                        u'"listAction": "/api?format=jsonp&method=lerni.lucky.getList", ' +\
+                                        u'"deleteAction": "/api?format=jsonp&method=lerni.lucky.delete", ' +\
+                                        u'"updateAction": "/api?format=jsonp&method=lerni.lucky.edit", ' +\
+                                        u'"createAction": "/api?format=jsonp&method=lerni.lucky.add"}, ' +\
+                           u'"fields": {"first_date":{ "title": "From", "key": true, "list": false, "type": "date", ' +\
+                           u'"displayFormat": "dd.mm.yy", "create": true, "edit": false, "sorting": false },' +\
+                           u'"0": {"title": "Pon"},'+\
+                           u'"1": {"title": "Wt"},'+\
+                           u'"2": {"title": "Sr"},'+\
+                           u'"3": {"title": "Czw"},'+\
+                           u'"4": {"title": "Pt"},'+\
+                           u'"5": {"title": "Sob"},'+\
+                           u'"6": {"title": "Ndz"},'+\
+                           u'"start": { "title": "start", "type": "date", '+\
+                           u'"displayFormat": "dd.mm.yy", "create": false, "edit": false, "sorting": false },' +\
+                           u'"end": { "title": "end", "type": "date", '+\
+                           u'"displayFormat": "dd.mm.yy", "create": false, "edit": false, "sorting": false } } }'
+    return page
+
 @view_config(route_name='admin_log_divisions_categories', renderer='admin_jtable.mak')
 def admin_log_divisions_categories(request):
     page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["","Kategorie klas"]], 'allerts':[], 'tables':[]}

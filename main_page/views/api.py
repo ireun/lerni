@@ -3,6 +3,93 @@ from base import *
 import psutil
 from pyramid.response import FileResponse
 import httplib2
+import datetime
+
+def get_week(day):
+    #day_of_week = datetime.timedelta(day.weekday()).days
+    start=day-datetime.timedelta(day.weekday())
+    end=day+datetime.timedelta(6-day.weekday())
+    return (start,end)
+
+#################
+# Lucky Numbers #
+#################
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.lucky.getList', 'jtStartIndex','jtPageSize'])
+def jsonp_lucky_list(request):
+    page = {"Result":"OK","Records":[]}
+    start_index = int(request.params['jtStartIndex'])
+    page_size = int(request.params['jtPageSize'])
+    for x in range(page_size):
+        week = get_week(datetime.datetime.now().date()+datetime.timedelta(1-page_size*(start_index+x)+7))
+        query = DBSession.query(LuckyNumbers).filter(LuckyNumbers.date.between(week[0], week[1]))
+        record = {"first_date": 0, "0": "", "1": "", "2": "", "3": "", "4": "", "5": "", "6": "", "start" : "",
+                  "end" : ""}
+        record['first_date'] = str(week[0])
+        record['start'] = str(week[0])
+        record['end'] = str(week[1])
+        for position in query:
+            record[str(position.date.weekday())] = position.number
+        page['Records'].append(record)
+    page['TotalRecordCount'] = 1000
+    return page
+
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.lucky.delete', 'first_date'])
+def jsonp_lucky_delete(request):
+    session = DBSession()
+    date = datetime.datetime(*(time.strptime(request.params['first_date'], "%d.%m.%Y")[0:6])).date()
+    week = get_week(date+datetime.timedelta(1))
+    query = DBSession.query(LuckyNumbers).filter(LuckyNumbers.date.between(week[0], week[1]))
+    for x in query:
+        session.delete(x)
+    transaction.commit()
+    return {"Result":"OK"}
+
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.lucky.edit', 'first_date', '0', '1', '2', '3', '4', '5', '6'])
+def jsonp_lucky_edit(request):
+    session = DBSession()
+    date = datetime.datetime(*(time.strptime(request.params['first_date'], "%d.%m.%Y")[0:6])).date()
+    week = get_week(date+datetime.timedelta(1))
+    for x in range(7):
+        date2 = week[0]+datetime.timedelta(x)
+        number = DBSession.query(LuckyNumbers).filter_by(date=date2).first()
+        if number:
+            number.number = request.params[str(x)]
+        else:
+            number = LuckyNumbers(date2,request.params[str(x)])
+            session.add(number)
+    transaction.commit()
+    return {"Result":"OK"}
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.lucky.add', 'first_date'])
+def jsonp_lucky_create(request):
+    page={"Result":"OK","Record":{}}
+    session = DBSession()
+    date = datetime.datetime(*(time.strptime(request.params['first_date'], "%d.%m.%Y")[0:6])).date()
+    week = get_week(date+datetime.timedelta(1))
+    record = {"first_date": str(week[0]), "0": " ", "1": " ", "2": " ", "3": " ", "4": " ", "5": " ", "6": " ",
+              "start" : str(week[0]), "end" : str(week[1])}
+    for x in range(7):
+        date2 = week[0]+datetime.timedelta(x)
+        number = DBSession.query(LuckyNumbers).filter_by(date=date2).first()
+        if number:
+            number.number = request.params[str(x)]
+        else:
+            number = LuckyNumbers(date2,request.params[str(x)])
+            session.add(number)
+        record[str(x)]=request.params[str(x)]
+    transaction.commit()
+    page['Record'] = record
+    return page
+
+
+
+
 @view_config(route_name='jsonp_post_comments', renderer='jsonp')
 def my_view(request):
     article_id = int(request.GET['post_id'])
@@ -71,14 +158,14 @@ def jsnop_system_info(request):
 ##########
 @view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp','method=lerni.users.getList'])
 def api_jsonp_lerni_users_getlist(request):
-    page = {"Result":"OK","Records":[]}
+    page = {"Result":"OK","Record":[]}
     start_index = request.params['jtStartIndex']
     page_size = request.params['jtPageSize']
     sorting = request.params['jtSorting'].split(" ")
     print sorting
     query = DBSession.query(People).offset(int(start_index)).limit(int(page_size))
     for position in query:
-        page['Records'].append({"user_id": position.id,
+        page['Record'].append({"user_id": position.id,
                                 "first_name": position.first_name,
                                 "second_name": position.second_name,
                                 "last_name": position.last_name,

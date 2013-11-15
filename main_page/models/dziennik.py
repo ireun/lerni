@@ -2,6 +2,17 @@
 from .meta import *
 
 
+class LuckyNumbers(Base):
+    __tablename__ = 'lucky_numbers'
+    id = Column(Integer, primary_key=True)
+    date = Column(Date)
+    number = Column(Integer)
+
+    def __init__(self, date, number):
+        self.date = date
+        self.number = number
+
+
 class SchoolYears(Base):
     __tablename__ = 'log_school_years'
     id = Column(Integer, primary_key=True)
