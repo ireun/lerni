@@ -146,6 +146,14 @@ def main(global_config, **settings):
     config.add_route('sis_about', '/sis/about')
     config.add_route('schedule', '/sis/schedule')
 
+    config.add_route('anki_sync_meta', '/syncmeta')
+    config.add_route('anki_sync_upload', '/syncupload')
+    config.add_route('sync_media_list', '/syncmediaList')
+    config.add_route('sync_remove', '/syncremove')
+    config.add_route('sync_files', '/syncfiles')
+    config.add_route('sync_host_key', '/synchostKey')
+    config.add_route('sync_download', '/syncdownload')
+
     config.add_route('easy_link', '/{link}')
 
     for x in os.walk("main_page/static/src/"):

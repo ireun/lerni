@@ -28,7 +28,10 @@ requires = [
     'cssmin',
     'bbcode',
     'xmpppy',
-    'pdfkit'
+    'pdfkit',
+    #Anki requipments
+    'send2trash',
+    'httplib2'
     ]
 
 setup(name='main_page',
