@@ -57,9 +57,11 @@ def jsonp_lucky_edit(request):
     for x in range(7):
         date2 = week[0]+datetime.timedelta(x)
         number = DBSession.query(LuckyNumbers).filter_by(date=date2).first()
-        if number:
+        if number and request.params[str(x)]:
             number.number = request.params[str(x)]
-        else:
+        elif number and not request.params[str(x)]:
+            session.delete(number)
+        elif request.params[str(x)]:
             number = LuckyNumbers(date2,request.params[str(x)])
             session.add(number)
     transaction.commit()
@@ -79,8 +81,10 @@ def jsonp_lucky_create(request):
         number = DBSession.query(LuckyNumbers).filter_by(date=date2).first()
         if number:
             number.number = request.params[str(x)]
-        else:
-            number = LuckyNumbers(date2,request.params[str(x)])
+        elif number and not request.params[str(x)]:
+            session.delete(number)
+        elif request.params[str(x)]:
+            number = LuckyNumbers(date2, request.params[str(x)])
             session.add(number)
         record[str(x)]=request.params[str(x)]
     transaction.commit()
