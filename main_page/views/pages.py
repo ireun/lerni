@@ -2,6 +2,24 @@
 from base import *
 from pyramid.request import Request
 import pyramid
+@view_config(route_name='page', renderer='pages.mak')
+def successes(request):
+    page={'editor':0, 'allerts':[]}
+    logged_in = authenticated_userid(request)
+    page['logged_in']=logged_in
+    page['name']=username(logged_in)
+    page['menu_top_list']=menu_top(request)
+    page['banners']=[]
+    for position in DBSession.query(Banners).limit(6):
+        page['banners'].append([position.link,position.alternative])
+    page['rows']=[[],[],[],[],[],[],[],[],[],[]]
+    for position in DBSession.query(Pages).filter_by(url_name=request.matchdict['id']).first().widgets:
+        soup = BeautifulSoup(position.data)
+        [s.extract() for s in soup(['script','iframe','img','object','embed','param'])];
+        data = parser.format(unicode(soup), somevar='somevalue')
+        page['rows'][position.row].append(["",position.size_x,data])
+    return page
+
 @view_config(route_name='set', renderer='grid.mak') ##idiki originalne - lerni zapisze sobie original article id [locallink][/locallink]  [map][/map]
 def set(request):
     page={'editor':0, 'allerts':[]}
@@ -24,26 +42,6 @@ def easy_link(request):
         response = request.invoke_subrequest(subreq)
         return response
     return HTTPNotFound()
-
-
-
-@view_config(route_name='successes', renderer='pages.mak')
-def successes(request):
-    page={'editor':0, 'allerts':[]}
-    logged_in = authenticated_userid(request)
-    page['logged_in']=logged_in
-    page['name']=username(logged_in)
-    page['menu_top_list']=menu_top(request)
-    page['banners']=[]
-    for position in DBSession.query(Banners).limit(6):
-        page['banners'].append([position.link,position.alternative])
-    page['rows']=[[],[],[],[],[],[],[],[],[],[]]
-    for position in DBSession.query(Pages).filter_by(url_name="successes").first().widgets:
-        soup = BeautifulSoup(position.data)
-        [s.extract() for s in soup(['script','iframe','img','object','embed','param'])];
-        data = parser.format(unicode(soup), somevar='somevalue')
-        page['rows'][position.row].append(["",position.size_x,data])
-    return page
 
 @view_config(route_name='graduates', renderer='graduates.mak')
 def graduates(request):
@@ -88,57 +86,6 @@ def competitions(request):
     print(username)
     response = Response(body='10', content_type='text/plain')
     return response
-
-@view_config(route_name='view_page', renderer='pages.mak')
-def view_page(request):
-    pagename = request.matchdict['pagename']
-    Page = DBSession.query(Pages).filter_by(url_name=pagename).first()
-    if Page is None:     
-        page={'editor':0, 'allerts':[]}
-        logged_in = authenticated_userid(request)
-        page['logged_in']=logged_in
-        Page = DBSession.query(Pages).filter_by(url_name="main_page").first()
-        SubPage = DBSession.query(SubPages).filter_by(page_id=Page.id).filter_by(url_name=request.matchdict['pagename']).first()
-        if SubPage is None:
-            return HTTPNotFound('No such page')
-        page['data']=SubPage.data
-        page['breadcrumbs']=[["",SubPage.name]]
-        if Page is None:
-            return HTTPNotFound('No such page')
-        try:
-            page['menu_top_list']=[]
-            for position in DBSession.query(MenuTop):
-                page['menu_top_list'].append([position.link,position.name])
-            page['menu_left_list'] =[['/',u'Strona Główna']]
-            for position in Page.sub_pages:
-                page['menu_left_list'].append(["/p/"+position.url_name,position.name])
-            page['name']=username(logged_in)
-        except DBAPIError:
-            return Response("Mysql connection error", content_type='text/plain', status_int=500)
-        return page
-    SubPage = DBSession.query(SubPages).filter_by(page_id=Page.id).first() ## Add Sorting
-    if SubPage is None:
-        return HTTPNotFound('No such page')
-    return HTTPFound(location = request.route_url('page', pagename = Page.url_name, subname = SubPage.url_name))
-
-@view_config(route_name='page', renderer='pages.mak')
-def page(request):
-    page={'editor':0, 'allerts':[]}
-    logged_in = authenticated_userid(request)
-    page['logged_in']=logged_in
-    pagename = request.matchdict['pagename']
-    Page = DBSession.query(Pages).filter_by(url_name=pagename).first()
-    SubPage = DBSession.query(SubPages).filter_by(page_id=Page.id).filter_by(url_name=request.matchdict['subname']).first()
-    page['data']=SubPage.data
-    page['breadcrumbs']=[["/p/"+Page.url_name,Page.name],["",SubPage.name]]
-    if Page is None:
-        return HTTPNotFound('No such page')
-    page['menu_left_list'] =[]
-    for position in Page.sub_pages:
-        page['menu_left_list'].append(["/p/"+Page.url_name+"/"+position.url_name,position.name])        
-    page['menu_top_list']=menu_top(request)
-    page['name']=username(logged_in)
-    return page
 
 @view_config(route_name='gallery', renderer='gallery.mak')
 def gallery(request):

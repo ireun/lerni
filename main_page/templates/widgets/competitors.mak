@@ -13,6 +13,9 @@ Status: <select class="filter-status">
 <thead>
 <tr>
   <th>
+    ID
+  </th>
+  <th>
     Imię i Nazwisko
   </th>
   <th>
@@ -24,20 +27,17 @@ Status: <select class="filter-status">
   <th>
     Rok szkolny
   </th>
-  <th>
-    Rok szkolny
-  </th>
 </tr>
 </thead>
 <tbody>
- % for row in competitors:
-     <tr>
-         <td></span>${row[0]}</td>
-         <td>${row[1]}</td>
-         <td>${row[2]}</td>
-         <td>${row[4]}</td>
-         <td>${row[5]}</td>
-     </tr>
- % endfor
+    % for row in competitors:
+        <tr>
+            <td></span>${row[0]}</td>
+            <td>${row[1]}</td>
+            <td>${row[2]}</td>
+            <td>${row[4]}</td>
+            <td>${row[5]}</td>
+        </tr>
+    % endfor
 </tbody>
 </table>

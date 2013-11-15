@@ -63,12 +63,6 @@ def main(global_config, **settings):
 
     config.add_route('jsonp_system_info', '/api/jsonp/system_info')
 
-    config.add_route('view_page', '/p/{pagename}')
-    config.add_route('page', '/p/{pagename}/{subname}')
-    config.add_route('edit_page', '/p_edit/{pagename}')
-
-
-
     config.add_route('admin', '/admin')
     config.add_route('admin_overview', '/admin/overview')
     config.add_route('admin_articles', '/admin/articles')
@@ -115,8 +109,6 @@ def main(global_config, **settings):
     config.add_route('support_ask_ticket', '/support/ticket-{id}')
     config.add_route('support_faq', '/support/faq')
 
-
-    config.add_route('successes', '/successes')
     config.add_route('graduates', '/absolwenci')
 
     config.add_route('companionship', '/partnerzy')
@@ -132,6 +124,7 @@ def main(global_config, **settings):
     config.add_route('loading', '/loading')
     config.add_route('entries', '/entries')
     config.add_route('entry_save', '/entry/save')
+    config.add_route('page', '/p/{id}')
     config.add_route('entry', '/entry/{id}')
     config.add_route('folder', '/folder/{id}')
     config.add_route('presentations', '/presentations')

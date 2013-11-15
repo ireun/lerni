@@ -1,24 +1,6 @@
 # -*- coding: utf-8 -*-
 from base import *
 
-@view_config(route_name='support', renderer='pages.mak')
-def support(request):
-    page={'editor':0, 'allerts':[]}
-    logged_in = authenticated_userid(request)
-    page['logged_in']=logged_in
-    page['name']=username(logged_in)
-    page['menu_top_list']=menu_top(request)
-    page['banners']=[]
-    for position in DBSession.query(Banners).limit(6):
-        page['banners'].append([position.link,position.alternative])
-    page['rows']=[[],[],[],[],[],[],[],[],[],[]]
-    for position in DBSession.query(Pages).filter_by(url_name="support").first().widgets:
-        soup = BeautifulSoup(position.data)
-        [s.extract() for s in soup(['script','iframe','img','object','embed','param'])];
-        data = parser.format(unicode(soup), somevar='somevalue')
-        page['rows'][position.row].append(["",position.size_x,data])
-    return page
-
 @view_config(route_name='support_ask', renderer='message.mak',
              request_param=['action','topic','email'])
 def support_ticket_send(request):
