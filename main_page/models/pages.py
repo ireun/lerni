@@ -7,10 +7,12 @@ class Pages(Base):
     url_name = Column(Text, unique=True)
     name = Column(Text)
     widgets = relationship("Widgets")
+    pre = Column(Text)
 
-    def __init__(self, url_name, name):
+    def __init__(self, url_name, name, pre=""):
         self.url_name = url_name
         self.name = name
+        self.pre = pre
 
 
 class Widgets(Base):
@@ -23,14 +25,17 @@ class Widgets(Base):
     size_x = Column(Integer)
     size_y = Column(Integer)
     data = Column(Text)
+    add_class = Column(Text)
 
-    def __init__(self, page_id, column, row, size_x, size_y, data):
+
+    def __init__(self, page_id, column, row, size_x, size_y, data, add_class=""):
         self.page_id = page_id
         self.column = column
         self.row = row
         self.size_x = size_x
         self.size_y = size_y
         self.data = data
+        self.add_class = add_class
 
         
 class Competitors(Base):

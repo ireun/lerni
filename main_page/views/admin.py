@@ -13,8 +13,13 @@ def admin_overview(request):
     page.update(get_basic_account_info())
     logged_in = authenticated_userid(request)
     page['logged_in'] = logged_in
-    page['menu_top_list'] = menu_top(request)
     page['name'] = username(logged_in)
+    page['rows'] = [[],[],[],[],[],[],[],[],[],[]]
+    for position in DBSession.query(Pages).filter_by(url_name='overview').first().widgets:
+        soup = BeautifulSoup(position.data)
+        [s.extract() for s in soup(['script','iframe','img','object','embed','param'])];
+        data = parser.format(unicode(soup), somevar='somevalue')
+        page['rows'][position.row].append(["", position.size_x, position.add_class, data])
     return page
 
 
@@ -24,7 +29,6 @@ def admin_gallery(request):
     page.update(get_basic_account_info())
     logged_in = authenticated_userid(request)
     page['logged_in'] = logged_in
-    page['menu_top_list'] = menu_top(request)
     page['name'] = username(logged_in)
     return page
 
@@ -73,23 +77,24 @@ def admin_users(request):
 
 @view_config(route_name='admin_people', renderer='admin_people.mak')
 def admin_people(request):
-    page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["","Nauczyciele"]], 'allerts':[], 'tables':[]}
+    page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", "Nauczyciele"]], 'allerts': [],
+            'tables': []}
     logged_in = authenticated_userid(request)
     page.update(get_basic_account_info())
     page['name'] = username(logged_in)
     page['title'] = u"Nauczyciele"
     page['title_desc'] = u"Tutaj możesz dodać lub usunąć nauczycieli."
-    can_teachers = [] #candidate
-    emp_teachers = [] #employed
+    can_teachers = []
+    emp_teachers = []
     ex_teachers = []
     for position in DBSession.query(Teachers):
         if position.state==0: can_teachers.append([["",position.user.full_name],["hidden-phone", "x"],["hidden-phone","y"],["hidden-phone","z"],["","w"]])
         elif position.state==1: emp_teachers.append([["",position.user.full_name],["hidden-phone", "x"],["hidden-phone","y"],["hidden-phone","z"],["","w"]])
         elif position.state==2: ex_teachers.append([["",position.user.full_name],["hidden-phone", "x"],["hidden-phone","y"],["hidden-phone","z"],["","w"]])
     table_head=[[u"",u"Imię i Nazwisko"],[u"hidden-phone",u"Przemiot"],[u"hidden-phone",u"Ilość uczonych klas"],[u"hidden-phone",u"Wychowawstwo"],[u"",u"Akcje"]]
-    page['tables'].append(["1",u"Zatrudnieni",table_head, emp_teachers])
-    page['tables'].append(["2",u"Oczekujący",table_head, can_teachers])
-    page['tables'].append(["3",u"Byli",table_head, ex_teachers])
+    page['tables'].append(["1", u"Zatrudnieni", table_head, emp_teachers])
+    page['tables'].append(["2", u"Oczekujący", table_head, can_teachers])
+    page['tables'].append(["3", u"Byli", table_head, ex_teachers])
     return page
 
 @view_config(route_name='admin_personel', renderer='admin_people.mak')
@@ -138,9 +143,11 @@ def admin_log_years(request):
                            "displayFormat": "dd.mm.yy", "create": False, "edit": False, "sorting": False})
     return page
 
+
 @view_config(route_name='admin_log', renderer='admin_jtable.mak', match_param='page=subjects')
 def admin_log_subjects(request):
-    page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["","Przedmioty"]], 'allerts':[], 'tables':[]}
+    page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", "Przedmioty"]], 'allerts': [],
+            'tables': []}
     page.update(get_basic_account_info())
     logged_in = authenticated_userid(request)
     page['name'] = username(logged_in)
@@ -160,9 +167,11 @@ def admin_log_subjects(request):
                            "displayFormat": "dd.mm.yy", "create": False, "edit": False, "sorting": False})
     return page
 
+
 @view_config(route_name='admin_log', renderer='admin_jtable.mak', match_param='page=lucky')
 def admin_log_lucky(request):
-    page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["",u"Szczęśliwe numerki"]], 'allerts':[], 'tables':[]}
+    page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Szczęśliwe numerki"]], 'allerts': [],
+            'tables': []}
     page.update(get_basic_account_info())
     logged_in = authenticated_userid(request)
     page['name'] = username(logged_in)
@@ -188,9 +197,11 @@ def admin_log_lucky(request):
                            "create": "false", "edit": "false", "sorting": "false"})
     return page
 
+
 @view_config(route_name='admin_log_divisions_categories', renderer='admin_jtable.mak')
 def admin_log_divisions_categories(request):
-    page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["","Kategorie klas"]], 'allerts':[], 'tables':[]}
+    page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", "Kategorie klas"]], 'allerts': [],
+            'tables': []}
     page.update(get_basic_account_info())
     logged_in = authenticated_userid(request)
     page['name'] = username(logged_in)
@@ -264,31 +275,15 @@ def admin_log_timetables(request):
                            "displayFormat": "dd.mm.yy", "create": "false", "edit": "false", "sorting": "false"})
     return page
 
+
 @view_config(route_name='admin_log_timetables_edit', renderer='admin_log_timetables_edit.mak')
 def admin_log_timetables_edit(request):
-    page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["","Lata szkolne"]], 'allerts':[], 'tables':[]}
+    page = {'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["","Lata szkolne"]], 'allerts':[], 'tables':[]}
     page.update(get_basic_account_info())
     logged_in = authenticated_userid(request)
-
-    page['name']=username(logged_in)
-    page['title']=u"Plan lekcji"
-    page['title_desc']=u"Nie zapomnij zapisać zmian po skończeniu pracy."
-    page['lessons']=[[1,u'Poniedziałek',[[1,u'Lekcja1',[]],[2,u'Lekcja2',[]],[3,u'Lekcja3',[]],[4,u'Lekcja4',[]],
-                      [5,u'Lekcja5',[]],[6,u'Lekcja6',[]],[7,u'Lekcja7',[]],[8,u'Lekcja8',[]]]],
-                    [2,u'Wtorek',[[1,u'Lekcja1',[]],[2,u'Lekcja2',[]],[3,u'Lekcja3',[]],[4,u'Lekcja4',[]],
-                      [5,u'Lekcja5',[]],[6,u'Lekcja6',[]],[7,u'Lekcja7',[]],[8,u'Lekcja8',[]]]],
-                    [3,u'Środa',[[1,u'Lekcja1',[]],[2,u'Lekcja2',[]],[3,u'Lekcja3',[]],[4,u'Lekcja4',[]],
-                      [5,u'Lekcja5',[]],[6,u'Lekcja6',[]],[7,u'Lekcja7',[]],[8,u'Lekcja8',[]]]],
-                    [4,u'Czwartek',[[1,u'Lekcja1',[]],[2,u'Lekcja2',[]],[3,u'Lekcja3',[]],[4,u'Lekcja4',[]],
-                      [5,u'Lekcja5',[]],[6,u'Lekcja6',[]],[7,u'Lekcja7',[]],[8,u'Lekcja8',[]]]],
-                    [5,u'Piątek',[[1,u'Lekcja1',[]],[2,u'Lekcja2',[]],[3,u'Lekcja3',[]],[4,u'Lekcja4',[]],
-                      [5,u'Lekcja5',[]],[6,u'Lekcja6',[]],[7,u'Lekcja7',[]],[8,u'Lekcja8',[]]]],
-                    [6,u'Sobota',[[1,u'Lekcja1',[]],[2,u'Lekcja2',[]],[3,u'Lekcja3',[]],[4,u'Lekcja4',[]],
-                      [5,u'Lekcja5',[]],[6,u'Lekcja6',[]],[7,u'Lekcja7',[]],[8,u'Lekcja8',[]]]],
-                    [7,u'Niedziela',[[1,u'Lekcja1',[]],[2,u'Lekcja2',[]],[3,u'Lekcja3',[]],[4,u'Lekcja4',[]],
-                      [5,u'Lekcja5',[]],[6,u'Lekcja6',[]],[7,u'Lekcja7',[]],[8,u'Lekcja8',[]]]]]
-    for position in DBSession.query(Lessons):
-        page['lessons'][0][2][0][2].append("XD")
+    page['name'] = username(logged_in)
+    page['title'] = u"Plan lekcji"
+    page['title_desc'] = u"Nie zapomnij zapisać zmian po skończeniu pracy."
     return page
 
 @view_config(route_name='admin_substitutions', renderer='admin_substitutions.mak')
@@ -434,74 +429,3 @@ def my_view6(request):
         return Response(conn_err_msg, content_type='text/plain', status_int=500)
     return {'menu_top_list':menu_top_list , 'menu_left_list':menu_left_list,
     'date_for':date_for, 'absent_list':absent_list, 'replace_list':replace_list, "duty_list":duty_list, 'knows_password':True}
-
-@view_config(route_name='admin_articles_add', renderer='admin_articles_edit.mak')
-def my_view8(request):
-    logged_in = authenticated_userid(request)
-    menu_top_list =[]
-    for position in DBSession.query(MenuTop):
-        menu_top_list.append([position.link,position.name])
-
-    return {'menu_top_list':menu_top_list, 'menu_left_list':menu_left_list, 'articles':[], 'logged_in':logged_in}
-
-
-######################################## Od tąd się powtarza, zrobić coś z tym!
-######################################## Od tąd się powtarza, zrobić coś z tym!
-
-def lessons_get(t_id,day):
-    to_return=[]
-    for x in [1,2,3,4,5,6,7,8]:
-        for y in DBSession.query(TeacherSubject).filter(TeacherSubject.teacher_id==t_id):
-            lesson1_query = DBSession.query(Lessons).filter(Lessons.teacher_subject_id==y.id).filter(Lessons.day==day).filter(Lessons.order==x)
-            if not lesson1_query.first() is None:
-                temp2=[]
-                for position in lesson1_query:
-                    group_id = position.group_id
-                    temp2.append(groupname_get(group_id,position.part_1,position.part_2))
-                to_return.append("/".join(temp2))
-            else:
-                to_return.append("")
-    return to_return
-
-def groupname_get(group_id,part_1,part_2):
-    temp=""
-    groups_guery = DBSession.query(Groups).filter(Groups.id==group_id).first()
-    year = str(8-groups_guery.year_id)
-    temp = temp + year+groups_guery.name
-    if part_1 and part_2:
-        pass
-    elif part_1:
-        temp+="1"
-    elif part_2:
-        temp+="2"
-    else:
-        temp=""
-    return temp
-
-def groupname_get2(group_id):
-    to_return=[]
-    group_id=eval(group_id)
-    for x in group_id:
-        x=str(x)
-        if x.find(".")!=-1:
-            part_1=False
-            part_2=False
-            if x[x.find(".")+1:]=="1" : part_1 = True
-            elif x[x.find(".")+1:]=="2": part_2 = True
-            else: part_1 = 1; part_2 = 1
-            x=x[:x.find(".")]
-        else: part_1=True; part_2=True
-        temp=""
-        groups_guery = DBSession.query(Groups).filter(Groups.id==x).first()
-        year = str(8-groups_guery.year_id)
-        temp = temp + year+groups_guery.name
-        if part_1 and part_2:
-            pass
-        elif part_1:
-            temp+="1"
-        elif part_2:
-            temp+="2"
-        else:
-            temp=""
-        to_return.append(temp)
-    return "/".join(to_return)

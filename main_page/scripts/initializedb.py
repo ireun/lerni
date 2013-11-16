@@ -175,12 +175,18 @@ def import_pages():
     w=1
     for x in dataMap['pages']:
         session = DBSession()
-        page = Pages(x['url_name'],x['name'])
+        if 'pre' in x:
+            page = Pages(x['url_name'], x['name'], x['pre'])
+        else:
+            page = Pages(x['url_name'], x['name'])
         session.add(page)
         transaction.commit()
         for y in x['widgets']:
             session = DBSession()
-            widget = Widgets(w, y['column'],y['row'],y['size_x'],y['size_y'],y['data'])
+            if 'class' in y:
+                widget = Widgets(w, y['column'], y['row'], y['size_x'], y['size_y'], y['data'], y['class'])
+            else:
+                widget = Widgets(w, y['column'], y['row'], y['size_x'], y['size_y'], y['data'])
             session.add(widget)
             transaction.commit()
         w+=1

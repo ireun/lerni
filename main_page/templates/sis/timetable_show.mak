@@ -32,27 +32,8 @@
                 </ul>
             </div>
             <div id="content">
-        <h2>${who}: tygodniowy plan lekcji</h2>
-        <table border="1">
-            <tr>
-                <th>lp.</th>
-                <th>poniedziałek</th>
-                <th>wtorek</th>
-                <th>środa</th>
-                <th>czwartek</th>
-                <th>piątek</th>
-            </tr>
-            %for x in lessons:
-            <tr>
-                <td>${x[0]}.</td>
-                <td>${"/".join(x[1])}</td>
-                <td>${"/".join(x[2])}</td>
-                <td>${"/".join(x[3])}</td>
-                <td>${"/".join(x[4])}</td>
-                <td>${"/".join(x[5])}</td>
-            </tr>
-            %endfor
-        </table>
+                <h2>${who}: tygodniowy plan lekcji</h2>
+                ${schedule | n}
             </div>
         </body>
 </html>

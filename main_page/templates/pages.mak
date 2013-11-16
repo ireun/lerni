@@ -6,8 +6,8 @@
         %if row != []:
 		<div class="row">
             %for widget in row:
-			<div id="${widget[0]}" class="col-md-${widget[1]}" >
-                ${widget[2] | n}
+			<div id="${widget[0]}" class="col-md-${widget[1]} ${widget[2]}" >
+                ${widget[3] | n}
 			</div>
             %endfor
     	</div>

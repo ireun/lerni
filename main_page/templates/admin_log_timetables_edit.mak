@@ -1,5 +1,19 @@
 # -*- coding: utf-8 -*-
 <%include file="top_admin.mak"/>
+<%lessons = [[1,u'Poniedziałek',[[1,u'Lekcja1',[]],[2,u'Lekcja2',[]],[3,u'Lekcja3',[]],
+                        [4,u'Lekcja4',[]],[5,u'Lekcja5',[]],[6,u'Lekcja6',[]],[7,u'Lekcja7',[]],[8,u'Lekcja8',[]]]],
+                    [2,u'Wtorek',[[1,u'Lekcja1',[]],[2,u'Lekcja2',[]],[3,u'Lekcja3',[]],[4,u'Lekcja4',[]],
+                      [5,u'Lekcja5',[]],[6,u'Lekcja6',[]],[7,u'Lekcja7',[]],[8,u'Lekcja8',[]]]],
+                    [3,u'Środa',[[1,u'Lekcja1',[]],[2,u'Lekcja2',[]],[3,u'Lekcja3',[]],[4,u'Lekcja4',[]],
+                      [5,u'Lekcja5',[]],[6,u'Lekcja6',[]],[7,u'Lekcja7',[]],[8,u'Lekcja8',[]]]],
+                    [4,u'Czwartek',[[1,u'Lekcja1',[]],[2,u'Lekcja2',[]],[3,u'Lekcja3',[]],[4,u'Lekcja4',[]],
+                      [5,u'Lekcja5',[]],[6,u'Lekcja6',[]],[7,u'Lekcja7',[]],[8,u'Lekcja8',[]]]],
+                    [5,u'Piątek',[[1,u'Lekcja1',[]],[2,u'Lekcja2',[]],[3,u'Lekcja3',[]],[4,u'Lekcja4',[]],
+                      [5,u'Lekcja5',[]],[6,u'Lekcja6',[]],[7,u'Lekcja7',[]],[8,u'Lekcja8',[]]]],
+                    [6,u'Sobota',[[1,u'Lekcja1',[]],[2,u'Lekcja2',[]],[3,u'Lekcja3',[]],[4,u'Lekcja4',[]],
+                      [5,u'Lekcja5',[]],[6,u'Lekcja6',[]],[7,u'Lekcja7',[]],[8,u'Lekcja8',[]]]],
+                    [7,u'Niedziela',[[1,u'Lekcja1',[]],[2,u'Lekcja2',[]],[3,u'Lekcja3',[]],[4,u'Lekcja4',[]],
+                      [5,u'Lekcja5',[]],[6,u'Lekcja6',[]],[7,u'Lekcja7',[]],[8,u'Lekcja8',[]]]]] %>
 <section id="main">
     <div class="navbar navbar-static-top">
         <div class="navbar-inner">

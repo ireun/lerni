@@ -23,7 +23,7 @@ def home(request):
         soup = BeautifulSoup(position.data)
         [s.extract() for s in soup(['script','iframe','img','object','embed','param'])];
         data = parser.format(unicode(soup), somevar='somevalue')
-        page['rows'][position.row].append(["",position.size_x,data])
+        page['rows'][position.row].append(["", position.size_x, position.add_class, data])
 
     page['banners']=[]
     for position in DBSession.query(Banners).limit(6):

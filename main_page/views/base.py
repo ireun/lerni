@@ -150,32 +150,17 @@ def response_pdf(request,html,filename):
             filename = ''.join(c for c in filename if c in valid_chars).strip(".")
             response.headerlist.append(("Content-Disposition", "attachment; filename='"+str(filename)+".pdf'"))
             return response
-def menu_left(request):
-   menu_left_list=[[request.route_url('support'),"Centrum Supportu"],[request.route_url('support_services'),u"Status serwisów"]]
-   menu_left_list+=[[request.route_url('support_stats'),u"Statystyki"],[request.route_url('support_ask'),u"Zapytaj"]]
-   menu_left_list+=[[request.route_url('support_faq'),u"FAQ"]]
-   return menu_left_list
-def menu_top(request):
-   try:
-      menu_top_list=[]
-      for position in DBSession.query(MenuTop):
-         menu_top_list.append([position.link,position.name])
-      return menu_top_list
-   except DBAPIError:
-      return Response("Mysql connection error", content_type='text/plain', status_int=500)
+
+
 def username(logged_in):
-   try:
-      name=""
-      if logged_in:
-         name=DBSession.query(People).filter_by(email=logged_in).first().first_name
-   except DBAPIError:
-      return Response("Mysql connection error", content_type='text/plain', status_int=500)
-   return name
-   
-from string import digits
-from random import choice
-def new_pin():
-	return ''.join(choice(digits) for i in xrange(4))
+    try:
+        name = ""
+        if logged_in:
+            name = DBSession.query(People).filter_by(email=logged_in).first().first_name
+    except DBAPIError:
+        return Response("Mysql connection error", content_type='text/plain', status_int=500)
+    return name
+
 
 def send_mail(request,subject,recipients,body,fingerprint=False):
     if fingerprint:
@@ -193,29 +178,18 @@ parser.add_simple_formatter('hr', '<hr />', standalone=True)
 parser.add_simple_formatter('p', '<p>%(value)s</p>')
 parser.add_simple_formatter('diagram', '<div class="diagram">%(value)s</div>')
 parser.add_simple_formatter('date', '<abbr class="timeago" title="%(value)s">%(value)s</abbr>')
-parser.add_simple_formatter('vimeo', '<iframe src="http://player.vimeo.com/video/%(value)s" height="315"\
-                            frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>')
-parser.add_simple_formatter('support', u'<a href="/support/ticket-new">'+
-                                       u'<button type="button" class="btn btn-primary">Zgłoś nowy problem.</button>'+
-                            u'''</a></br>
-                            <form role="form">
-                              <div class="form-group">
-                                <label for="exampleInputEmail1">Podaj id ticketu:</label>
-                                <input type="text" class="form-control" id="ticket_id" placeholder="ID ticketu">
-                              </div>
-                              <button type="submit" class="btn btn-primary">Pokaż</button>
-                            </form>''')
 
-#</br> Podaj numer ticketu i adres email.
-
+def render_widget(tag_name, value, options, parent, context):
+    return render('widgets/'+tag_name+'.mak', dict(list(options.items()) + list({'value':value}.items())))
+for widget in ("map", "vimeo", 'support'):
+    parser.add_formatter(widget, render_widget)
 
 def last_video(tag_name, value, options, parent, context):
     last_video=DBSession.query(VideosMain).order_by('-id').first().video
     if last_video.hosting_id == 1:
         return ""
     elif last_video.hosting_id == 2:
-        return '<iframe src="http://player.vimeo.com/video/'+last_video.link+'" height="315"\
-                frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>'
+        return render('widgets/vimeo.mak', {'value': last_video.link})
 parser.add_formatter("last_video", last_video)
 
 def tweets(tag_name, value, options, parent, context):
@@ -232,6 +206,7 @@ def tweets(tag_name, value, options, parent, context):
     return to_return
 parser.add_formatter("tweets", tweets)
 
+
 def successes(tag_name, value, options, parent, context):
     competitors=[]
     i=0
@@ -241,28 +216,6 @@ def successes(tag_name, value, options, parent, context):
     to_return = render('widgets/competitors.mak', {'competitors':competitors})
     return to_return
 parser.add_formatter("successes", successes)
-
-def map(tag_name, value, options, parent, context):
-    to_return = render('widgets/map.mak', {'x': options['x'], 'y': options['y'], 'z': options['z'],
-                                           'text': value})
-    return to_return
-parser.add_formatter("map", map)
-
-def jtable(tag_name, value, options, parent, context):
-    to_return = render('widgets/title.mak', {'title': options['title'],
-                                           'y': options['y'],
-                                           'z': options['z'],
-                                           'text': value})
-    return to_return
-parser.add_formatter("jtable", jtable)
-
-# A custom render function.
-def render_color(tag_name, value, options, parent, context):
-    return '<span style="color:%s;">%s</span>' % (tag_name, value)
-# Installing advanced formatters.
-for color in ('red', 'blue', 'green', 'yellow', 'black', 'white'):
-    parser.add_formatter(color, render_color)
-
 
 def get_basic_account_info():
     page = {}
@@ -275,3 +228,60 @@ def get_basic_account_info():
     page['preparation_history'] = ",".join(["100", "100", "100", "100", "100", "100", "100", "100", "100"])
     page['preparation'] = 100
     return page
+
+def timetable(tag_name, value, options, parent, context):
+    page = {}
+    page['lessons'] = [['1', [], [], [], [], []],['2', [], [], [], [], []],
+                       ['3', [], [], [], [], []],['4', [], [], [], [], []],
+                       ['5', [], [], [], [], []],['6', [], [], [], [], []],
+                       ['7', [], [], [], [], []],['8', [], [], [], [], []]]
+    page['lessons2'] = [['1', [], [], [], [], []],['2', [], [], [], [], []],
+                       ['3', [], [], [], [], []],['4', [], [], [], [], []],
+                       ['5', [], [], [], [], []],['6', [], [], [], [], []],
+                       ['7', [], [], [], [], []],['8', [], [], [], [], []]]
+
+    if 'teacher' in options:
+        page['who'] = options['teacher']
+        t = page['who']
+        teacher = DBSession.query(People).filter_by(first_name=t.split(" ")[0], last_name=t.split(" ")[1])
+        teacher = DBSession.query(Teachers).filter_by(user_id=teacher.first().id).first()
+        for position in DBSession.query(Lessons).filter_by(teacher_id=teacher.id):
+            for x in DBSession.query(LessonsGroups).filter_by(lesson_id=position.id):
+                page['lessons'][position.order-1][position.day+1].append(x.group.name)
+                page['lessons2'][position.order-1][position.day+1].append(x.group.name)
+            for x in page['lessons2'][position.order-1][position.day+1]:
+                division=DBSession.query(Groups).filter_by(name=x).first().division
+                all_groups=[]
+                for y in DBSession.query(Groups).filter_by(division_id=division.id):
+                    all_groups.append(y.name)
+                if set(all_groups) <= set(page['lessons'][position.order-1][position.day+1]):
+                    for z in all_groups:
+                        page['lessons'][position.order-1][position.day+1].remove(z)
+                    page['lessons'][position.order-1][position.day+1].append(division.name)
+            page['lessons'][position.order-1][position.day+1][-1] += "["+str(position.room)+"]"
+            #    page['lessons'][position.order-1][position.day+1][0].append(x.group.name)
+    elif 'group' in options:
+        page['who'] = options['group']
+        division = DBSession.query(Divisions).filter_by(name=page['who']).first()
+        g_id=0
+        for group in DBSession.query(Groups).filter_by(division_id=division.id):
+            for x in range(8):
+                for y in range(5):
+                    page['lessons'][x][y+1].append("---")
+
+            for p in DBSession.query(LessonsGroups).filter_by(group_id=group.id):
+                if p.lesson.subject.name:
+                    s_name = p.lesson.subject.name
+                else:
+                    s_name = "unknown"
+                page['lessons'][p.lesson.order-1][p.lesson.day+1][g_id] = s_name+"["+str(p.lesson.room)+"]"
+            g_id += 1
+        for order in range(len(page['lessons'])):
+            for lesson in range(len(page['lessons'][order])):
+                l=page['lessons'][order][lesson]
+                if len(l)==2 and l[0]==l[1]:
+                    page['lessons'][order][lesson]=[l[0]]
+    else:
+        return "error"
+    return render('widgets/timetable.mak', page)
+parser.add_formatter("timetable", timetable)
