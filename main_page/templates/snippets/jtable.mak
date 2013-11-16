@@ -51,6 +51,11 @@ head.js(jquery, jtable, function(){
         % else:
             pageSize: 10,
         % endif
+        % if selecting and selecting == True:
+            selecting: true,
+        % else:
+            selecting: false,
+        % endif
         % if sorting and sorting == True:
             sorting: true,
         % else:

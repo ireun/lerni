@@ -250,6 +250,7 @@ def admin_log_timetables(request):
     page['jtitle'] = u"Plany lekcji"
     page['sorting'] = True
     page['defaultSorting'] = "start DESC"
+    page['selecting'] = True
     page['list'] = "/api?format=jsonp&method=lerni.timetables.getList"
     page['delete'] = "/api?format=jsonp&method=lerni.timetables.delete"
     page['update'] = "/api?format=jsonp&method=lerni.timetables.edit"
