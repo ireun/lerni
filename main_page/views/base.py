@@ -98,8 +98,6 @@ from pyramid.security import (
     authenticated_userid,
     has_permission,
     )
-
-from pyramid.security import authenticated_userid
 from math import ceil
    
 from pyramid_mailer import get_mailer
@@ -217,8 +215,10 @@ def successes(tag_name, value, options, parent, context):
     return to_return
 parser.add_formatter("successes", successes)
 
-def get_basic_account_info():
+def get_basic_account_info(request):
     page = {}
+    page['logged_in'] = authenticated_userid(request)
+    page['name'] = username(page['logged_in'])
     page['balance_history'] = ",".join(["0", "0", "0", "0", "0", "0", "0", "0", "0"])
     page['balance'] = 0
     page['likes_history'] = ",".join(["0", "0", "0", "0", "0", "0", "0", "0", "0"])

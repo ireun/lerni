@@ -2,14 +2,14 @@
 from base import *
 import psutil
 from pyramid.response import FileResponse
+from pyramid.security import authenticated_userid
 import httplib2
 import datetime
 
 def get_week(day):
-    #day_of_week = datetime.timedelta(day.weekday()).days
-    start=day-datetime.timedelta(day.weekday())
-    end=day+datetime.timedelta(6-day.weekday())
-    return (start,end)
+    start = day-datetime.timedelta(day.weekday())
+    end = day+datetime.timedelta(6-day.weekday())
+    return (start, end)
 
 #################
 # Lucky Numbers #
@@ -72,7 +72,7 @@ def jsonp_lucky_edit(request):
 def jsonp_lucky_create(request):
     page={"Result":"OK","Record":{}}
     session = DBSession()
-    date = datetime.datetime(*(time.strptime(request.params['first_date'], "%d.%m.%Y")[0:6])).date()
+    date = datetime.datetime(*(time.strptime(request.params['first_date'], "%Y-%m-%d")[0:6])).date()
     week = get_week(date+datetime.timedelta(1))
     record = {"first_date": str(week[0]), "0": " ", "1": " ", "2": " ", "3": " ", "4": " ", "5": " ", "6": " ",
               "start" : str(week[0]), "end" : str(week[1])}
@@ -90,52 +90,6 @@ def jsonp_lucky_create(request):
     transaction.commit()
     page['Record'] = record
     return page
-
-
-
-
-@view_config(route_name='jsonp_post_comments', renderer='jsonp')
-def my_view(request):
-    article_id = int(request.GET['post_id'])
-    comments=[]
-    for position in DBSession.query(Articles_Comments).filter_by(article_id=article_id):
-       username=DBSession.query(People).filter_by(id=position.author_id).first().username
-       comments.append([position.id,username,str(position.add_date)[:str(position.add_date).find(".")],position.content])
-    return {'comments':comments}
-
-@view_config(route_name='jsonp_people', renderer='jsonp')
-def jsonp_people(request):
-    people="["
-    for position in DBSession.query(People):
-       people+='{"name": "%s","pesel": "%s","email": "%s","value": "%s","tokens": ["%s","%s"]},'%\
-       (position.full_name,position.pesel,position.email.lower(),position.email.lower(),\
-       position.first_name,position.last_name)
-    people=people[:-1]+"]"
-    with tempinput(people) as tempfilename:
-        return FileResponse(tempfilename)
-
-@view_config(route_name='jsonp_groups', renderer='jsonp')
-def jsonp_groups(request):
-    groups=[]
-    for position in DBSession.query(Groups):
-       groups.append(position.name)
-    return {'groups':groups}
-    
-@view_config(route_name='jsonp_year', renderer='jsonp')
-def jsonp_groups(request):
-    #groups=[]#
-    #for position in DBSession.query(Groups):#
-    #   groups.append(position.name)#
-    return {'yearname':"LOL"}
-
-@view_config(route_name='jsonp_year_add', renderer='jsonp')
-def jsonp_groups(request):
-    if set(['startdate','enddate']) <= set(request.params):
-        request.params['startdate']
-        request.params['enddate']
-        
-        return {'message':"Podany rok istnieje już w bazie danych"}
-    return {'message':"Podany rok istnieje już w bazie danych"}
 
 @view_config(route_name='jsonp_mobile_login', renderer='jsonp')
 def my_view4(request):
@@ -182,7 +136,6 @@ def api_jsonp_lerni_users_getlist(request):
     page['TotalRecordCount'] = DBSession.query(People).count()
     return page
 
-
 @view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp','method=lerni.users.delete','user_id'])
 def api_jsonp_lerni_users_delete(request):
     session = DBSession()
@@ -207,7 +160,7 @@ def api_jsonp_lerni_users_edit(request):
     user.second_name = request.params["second_name"]
     user.last_name = request.params["last_name"]
     user.pesel = request.params["pesel"]
-    user.birth_date = datetime.datetime(*(time.strptime(request.params['birth_date'], "%d.%m.%Y")[0:6]))
+    user.birth_date = datetime.datetime(*(time.strptime(request.params['birth_date'], "%Y-%m-%d")[0:6]))
     user.phone_number = request.params["phone_number"]
     user.email = request.params["email"]
     if request.params["password"] != "do_not_change":
@@ -229,7 +182,7 @@ def api_jsonp_lerni_users_add(request):
         session.refresh(wallet)
         user = People(request.params["first_name"], request.params["second_name"], request.params["last_name"],
                       request.params["pesel"],
-                      datetime.datetime(*(time.strptime(request.params['birth_date'], "%d.%m.%Y")[0:6])),
+                      datetime.datetime(*(time.strptime(request.params['birth_date'], "%Y-%m-%d")[0:6])),
                       request.params["phone_number"],request.params["email"],request.params["password"],
                       "","",wallet.id,0,0,0,request.params["group"])
         session.add(user)
@@ -361,8 +314,8 @@ def jsonp_timetables_delete(request):
 def jsonp_timetables_edit(request):
     session = DBSession()
     schedule = DBSession.query(Schedules).filter_by(id=request.params['timetable_id']).first()
-    schedule.start=datetime.datetime(*(time.strptime(request.params['start'], "%d.%m.%Y")[0:6]))
-    schedule.end=datetime.datetime(*(time.strptime(request.params['end'], "%d.%m.%Y")[0:6]))
+    schedule.start=datetime.datetime(*(time.strptime(request.params['start'], "%Y-%m-%d")[0:6]))
+    schedule.end=datetime.datetime(*(time.strptime(request.params['end'], "%Y-%m-%d")[0:6]))
     transaction.commit()
     return {"Result":"OK"}
 
@@ -371,8 +324,8 @@ def jsonp_timetables_edit(request):
 def jsonp_timetables_create(request):
     page={"Result":"OK"}
     session = DBSession()
-    start=datetime.datetime(*(time.strptime(request.params['start'], "%d.%m.%Y")[0:6]))
-    end=datetime.datetime(*(time.strptime(request.params['end'], "%d.%m.%Y")[0:6]))
+    start=datetime.datetime(*(time.strptime(request.params['start'], "%Y-%m-%d")[0:6]))
+    end=datetime.datetime(*(time.strptime(request.params['end'], "%Y-%m-%d")[0:6]))
     schedule = Schedules(start,end)
     session.add(schedule)
     page["Record"]={"timetable_id": schedule.id,
@@ -541,8 +494,8 @@ def jsonp_years_delete(request):
 def jsonp_years_edit(request):
     session = DBSession()
     year = DBSession.query(SchoolYears).filter_by(id=request.params['year_id']).first()
-    year.start=datetime.datetime(*(time.strptime(request.params['start'], "%d.%m.%Y")[0:6]))
-    year.end=datetime.datetime(*(time.strptime(request.params['end'], "%d.%m.%Y")[0:6]))
+    year.start=datetime.datetime(*(time.strptime(request.params['start'], "%Y-%m-%d")[0:6]))
+    year.end=datetime.datetime(*(time.strptime(request.params['end'], "%Y-%m-%d")[0:6]))
     year.modification_date = datetime.datetime.now()
     transaction.commit()
     return {"Result":"OK"}
@@ -552,8 +505,8 @@ def jsonp_years_edit(request):
 def jsonp_years_create(request):
     page={"Result":"OK"}
     session = DBSession()
-    start=datetime.datetime(*(time.strptime(request.params['start'], "%d.%m.%Y")[0:6]))
-    end=datetime.datetime(*(time.strptime(request.params['end'], "%d.%m.%Y")[0:6]))
+    start=datetime.datetime(*(time.strptime(request.params['start'], "%Y-%m-%d")[0:6]))
+    end=datetime.datetime(*(time.strptime(request.params['end'], "%Y-%m-%d")[0:6]))
     schedule = SchoolYears(start,end)
     session.add(schedule)
     session.flush()
@@ -598,7 +551,7 @@ def options_groups_list(request):
 @view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
             'method=lerni.folders.getList', 'jtStartIndex','jtPageSize', 'jtSorting'])
 def jsonp_folders_get_list(request):
-    logged_in = authenticated_user_id(request)
+    logged_in = authenticated_userid(request)
     if not logged_in:
         return {"Result":"ERROR","Message":"User not logged in."}
     page = {"Result":"OK","Records":[]}
@@ -627,7 +580,7 @@ def jsonp_folders_get_list(request):
 @view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.folders.delete',
                                                                 'folder_id'])
 def jsonp_folders_delete(request):
-    logged_in = authenticated_user_id(request)
+    logged_in = authenticated_userid(request)
     if not logged_in:
         return {"Result":"ERROR","Message":"User not logged in."}
     session = DBSession()
@@ -645,7 +598,7 @@ def jsonp_folders_delete(request):
 @view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.folders.edit',
                                                                 "folder_id","title","tags","css","gpg","published"])
 def jsonp_folders_edit(request):
-    logged_in = authenticated_user_id(request)
+    logged_in = authenticated_userid(request)
     if not logged_in:
         return {"Result":"ERROR","Message":"User not logged in."}
     session = DBSession()
@@ -664,7 +617,7 @@ def jsonp_folders_edit(request):
                                                                 "title","tags","css","gpg","published"])
 def jsonp_folders_add(request):
     page={"Result":"OK","Record":[]}
-    logged_in = authenticated_user_id(request)
+    logged_in = authenticated_userid(request)
     if not logged_in:
         return {"Result":"ERROR","Message":"User not logged in."}
     session = DBSession()
@@ -700,7 +653,7 @@ def options_folders_list(request):
 ############
 @view_config(route_name='entry_list', renderer='jsonp')
 def entry_list(request):
-    logged_in = authenticated_user_id(request)
+    logged_in = authenticated_userid(request)
     if not logged_in:
         return {"Result":"ERROR","Message":"User not logged in."}
     page={"Result":"OK","Records":[]}
@@ -720,7 +673,7 @@ def entry_list(request):
 
 @view_config(route_name='delete_entry', renderer='jsonp')
 def delete_entry(request):
-    logged_in = authenticated_user_id(request)
+    logged_in = authenticated_userid(request)
     if not logged_in:
         return {"Result":"ERROR","Message":"User not logged in."}
     if 'FolderID' in request.params:
@@ -740,7 +693,7 @@ def delete_entry(request):
 
 @view_config(route_name='update_entry', renderer='jsonp')
 def update_entry(request):
-    logged_in = authenticated_user_id(request)
+    logged_in = authenticated_userid(request)
     if not logged_in:
         return {"Result":"ERROR","Message":"User not logged in."}
     if set(["Title","Tags","CSS","GPG","Published"]) <= set(request.params):
@@ -760,7 +713,7 @@ def update_entry(request):
 
 @view_config(route_name='create_entry', renderer='jsonp')
 def create_entry(request):
-    logged_in = authenticated_user_id(request)
+    logged_in = authenticated_userid(request)
     if not logged_in:
         return {"Result":"ERROR","Message":"User not logged in."}
     page={"Result":"OK","Record":[]}

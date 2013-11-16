@@ -9,15 +9,12 @@ def admin_home(request):
 
 @view_config(route_name='admin', renderer='admin_overview.mak', match_param='page=overview')
 def admin_overview(request):
-    page = {'editor': 0, 'allerts': []}
-    page.update(get_basic_account_info())
-    logged_in = authenticated_userid(request)
-    page['logged_in'] = logged_in
-    page['name'] = username(logged_in)
-    page['rows'] = [[],[],[],[],[],[],[],[],[],[]]
+    page = {'allerts': []}
+    page.update(get_basic_account_info(request))
+    page['rows'] = [[], [], [], [], [], [], [], [], [], []]
     for position in DBSession.query(Pages).filter_by(url_name='overview').first().widgets:
         soup = BeautifulSoup(position.data)
-        [s.extract() for s in soup(['script','iframe','img','object','embed','param'])];
+        [s.extract() for s in soup(['script', 'iframe', 'img', 'object', 'embed', 'param'])];
         data = parser.format(unicode(soup), somevar='somevalue')
         page['rows'][position.row].append(["", position.size_x, position.add_class, data])
     return page
@@ -26,31 +23,23 @@ def admin_overview(request):
 @view_config(route_name='admin', renderer='admin_gallery.mak', match_param='page=gallery')
 def admin_gallery(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin", u"Panel Administratora"], ["", u"Overview"]], 'allerts': []}
-    page.update(get_basic_account_info())
-    logged_in = authenticated_userid(request)
-    page['logged_in'] = logged_in
-    page['name'] = username(logged_in)
+    page.update(get_basic_account_info(request))
     return page
 
 
 @view_config(route_name='admin', renderer='admin_layout_edit.mak', match_param='page=layouts')
 def admin_layouts(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Użytkownicy"]], 'allerts': []}
-    page.update(get_basic_account_info())
-    logged_in = authenticated_userid(request)
-    page['name'] = username(logged_in)
+    page.update(get_basic_account_info(request))
     page['title'] = u"Użytkownicy"
     page['title_desc'] = u"Wybierz stonę, której layout chcesz edytować."
-    page['table_name'] = "table_layouts"
     return page
 
 
 @view_config(route_name='admin', renderer='admin_jtable.mak', match_param='page=users')
 def admin_users(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Użytkownicy"]], 'allerts': []}
-    page.update(get_basic_account_info())
-    logged_in = authenticated_userid(request)
-    page['name'] = username(logged_in)
+    page.update(get_basic_account_info(request))
     page['title'] = u"Użytkownicy"
     page['title_desc'] = u'''Poniżej możesz dodać nowych albo edyotwać istniejąch użytkowników.
                         Jeśli to możliwe spróbuj jednak zasugerować im aby dokonali zmian samodzielnie.'''
@@ -79,9 +68,7 @@ def admin_users(request):
 def admin_people(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", "Nauczyciele"]], 'allerts': [],
             'tables': []}
-    logged_in = authenticated_userid(request)
-    page.update(get_basic_account_info())
-    page['name'] = username(logged_in)
+    page.update(get_basic_account_info(request))
     page['title'] = u"Nauczyciele"
     page['title_desc'] = u"Tutaj możesz dodać lub usunąć nauczycieli."
     can_teachers = []
@@ -100,10 +87,7 @@ def admin_people(request):
 @view_config(route_name='admin_personel', renderer='admin_people.mak')
 def admin_personel(request):
     page={'editor':0, 'allerts': [], 'tables': []}
-    page.update(get_basic_account_info())
-    logged_in = authenticated_userid(request)
-
-    page['name']=username(logged_in)
+    page.update(get_basic_account_info(request))
     page['title']=u"Personel"
     page['title_desc']=u"Tutaj możesz dodać lub usunąć personel."
     can_teachers=[] #candidate
@@ -122,9 +106,7 @@ def admin_personel(request):
 @view_config(route_name='admin_log', renderer='admin_jtable.mak', match_param='page=years')
 def admin_log_years(request):
     page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["","Lata szkolne"]], 'allerts':[], 'tables':[]}
-    page.update(get_basic_account_info())
-    logged_in = authenticated_userid(request)
-    page['name'] = username(logged_in)
+    page.update(get_basic_account_info(request))
     page['title'] = u"Lata szkolne"
     page['title_desc'] = u"Aby dodać nowy rok szkolny skorzystaj z formularza poniżej."
     page['sorting'] = True
@@ -148,9 +130,7 @@ def admin_log_years(request):
 def admin_log_subjects(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", "Przedmioty"]], 'allerts': [],
             'tables': []}
-    page.update(get_basic_account_info())
-    logged_in = authenticated_userid(request)
-    page['name'] = username(logged_in)
+    page.update(get_basic_account_info(request))
     page['title'] = u"Przedmioty"
     page['title_desc'] = u"Utwórz listę przedmiotów nauczanych w twojej szkole."
     page['sorting'] = True
@@ -172,9 +152,7 @@ def admin_log_subjects(request):
 def admin_log_lucky(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Szczęśliwe numerki"]], 'allerts': [],
             'tables': []}
-    page.update(get_basic_account_info())
-    logged_in = authenticated_userid(request)
-    page['name'] = username(logged_in)
+    page.update(get_basic_account_info(request))
     page['title'] = u"Szczęśliwe numerki"
     page['title_desc'] = u"W poniższej tabeli znajdują się szczęśliwe numerki na poszczególne tygodnie."
     page['defaultSorting'] = "name ASC"
@@ -202,9 +180,7 @@ def admin_log_lucky(request):
 def admin_log_divisions_categories(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", "Kategorie klas"]], 'allerts': [],
             'tables': []}
-    page.update(get_basic_account_info())
-    logged_in = authenticated_userid(request)
-    page['name'] = username(logged_in)
+    page.update(get_basic_account_info(request))
     page['title'] = u"Kategorie klas"
     page['title_desc'] = u"Utwórz listę kategorii klas w twojej szkole."
     page['defaultSorting'] = "name ASC"
@@ -222,9 +198,7 @@ def admin_log_divisions_categories(request):
 @view_config(route_name='admin_log_years_groups', renderer='admin_log_groups.mak')
 def admin_log_groups(request):
     page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["","Lata szkolne"],["","2012"]], 'allerts':[], 'tables':[]}
-    logged_in = authenticated_userid(request)
-    page.update(get_basic_account_info())
-    page['name']=username(logged_in)
+    page.update(get_basic_account_info(request))
     page['title']=u"Lata szkolne"
     page['title_desc']=u"Aby dodać nowy rok szkolny skorzystaj z formularza poniżej."
     page['categories']=[]
@@ -236,9 +210,7 @@ def admin_log_groups(request):
 @view_config(route_name='admin_log_years_groups_students', renderer='admin_log_groups.mak')
 def admin_log_groups_students(request):
     page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["","Lata szkolne"],["","2012"]], 'allerts':[], 'tables':[]}
-    logged_in = authenticated_userid(request)
-    page.update(get_basic_account_info())
-    page['name']=username(logged_in)
+    page.update(get_basic_account_info(request))
     page['title']=u"Lata szkolne"
     page['title_desc']=u"Aby dodać nowy rok szkolny skorzystaj z formularza poniżej."
     page['categories']=[]
@@ -253,9 +225,7 @@ def admin_log_groups_students(request):
 @view_config(route_name='admin_log', renderer='admin_jtable.mak', match_param='page=timetables')
 def admin_log_timetables(request):
     page = {'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["","Lata szkolne"]], 'allerts':[], 'tables':[]}
-    page.update(get_basic_account_info())
-    logged_in = authenticated_userid(request)
-    page['name'] = username(logged_in)
+    page.update(get_basic_account_info(request))
     page['title'] = u"Plan lekcji"
     page['title_desc'] = u"Poniżej możesz dodać nowy albo edyować instniejący plan lekcji."
     page['jtitle'] = u"Plany lekcji"
@@ -279,9 +249,7 @@ def admin_log_timetables(request):
 @view_config(route_name='admin_log_timetables_edit', renderer='admin_log_timetables_edit.mak')
 def admin_log_timetables_edit(request):
     page = {'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["","Lata szkolne"]], 'allerts':[], 'tables':[]}
-    page.update(get_basic_account_info())
-    logged_in = authenticated_userid(request)
-    page['name'] = username(logged_in)
+    page.update(get_basic_account_info(request))
     page['title'] = u"Plan lekcji"
     page['title_desc'] = u"Nie zapomnij zapisać zmian po skończeniu pracy."
     return page

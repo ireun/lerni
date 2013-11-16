@@ -3,17 +3,24 @@ from base import *
 
 @view_config(route_name='sis_home', renderer='sis/home.mak')
 def sis_home(request):
-    page={'editor':0, 'allerts':[]}
+    page = {'allerts': []}
+    page.update(get_basic_account_info(request))
     page['last_update'] = '2013-11-01'
     return page
+
+
 @view_config(route_name='sis_about', renderer='sis/about.mak')
 def sis_about(request):
-    page={'editor':0, 'allerts':[]}
+    page = {'allerts': []}
+    page.update(get_basic_account_info(request))
     page['last_update'] = '2013-11-01'
     return page
+
+
 @view_config(route_name='schedule', renderer='sis/timetable.mak')
 def plan(request):
-    page={'editor':0, 'allerts':[]}
+    page = {'allerts': []}
+    page.update(get_basic_account_info(request))
     page['last_update'] = '2013-11-01'
     page['groups'] = []
     page['teachers'] = []
@@ -26,9 +33,11 @@ def plan(request):
     page['teachers'].sort(key=lambda teacher: teacher.split(" ")[1])
     return page
 
+
 @view_config(route_name='schedule', renderer='sis/timetable_show.mak', request_method='POST')
 def plan_post(request):
-    page = dict(editor=0, allerts=[])
+    page = {'allerts': []}
+    page.update(get_basic_account_info(request))
     page['last_update'] = '2013-11-01'
     page['groups'] = []
     page['teachers'] = []
@@ -39,3 +48,42 @@ def plan_post(request):
         page['schedule'] = timetable("", "", {'group': request.params['group_name']}, "", "")
         page['who'] = request.params['group_name']
     return page
+
+
+@view_config(route_name='lucky', renderer='sis/lucky.mak', permission='view')
+def lucky(request):
+    page = {'allerts': []}
+    page.update(get_basic_account_info(request))
+    lucky_number = DBSession.query(LuckyNumbers).filter_by(date=datetime.datetime.now().date()+datetime.timedelta(1))
+    lucky_number = lucky_number.first()
+    try:
+        page['lucky_number'] = lucky_number.number
+        page['lucky_number_date'] = lucky_number.date
+    except AttributeError:
+        page['lucky_number'] = "??"
+        page['lucky_number_date'] = ""
+    week = get_week(datetime.datetime.now().date()+datetime.timedelta(1))
+    page['numbers'] = []
+    for x in DBSession.query(LuckyNumbers).filter(LuckyNumbers.date.between(week[0], week[1])):
+        page['numbers'].append([x.date, x.number])
+    all_numbers = range(37)
+    all_numbers.remove(0)
+    numbers = []
+    for x in DBSession.query(LuckyNumbers).order_by(desc(LuckyNumbers.date)):
+        if x.number and not x.number in numbers:
+            numbers.append(x.number)
+        elif not x.number:
+            pass
+        else:
+            break
+    print numbers
+    for x in numbers:
+        all_numbers.remove(int(x))
+    page['left'] = sorted(all_numbers)
+    return page
+
+
+def get_week(day):
+    start = day-datetime.timedelta(day.weekday())
+    end = day+datetime.timedelta(6-day.weekday())
+    return [start, end]

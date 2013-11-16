@@ -6,35 +6,35 @@ def entries(request):
 
 @view_config(route_name='entry', renderer='content_text.mak', permission='view')  
 def entry(request):
-   page={'editor':0, 'allerts':[]} #referrer #
-   logged_in = authenticated_userid(request)
-   try: user = DBSession.query(People).filter_by(email=logged_in).first()
-   except DBAPIError: return Response("Mysql connection error", content_type='text/plain', status_int=500)   
-   entry = DBSession.query(Entries).filter_by(id=request.matchdict['id']).first()
-   #if not entry:#
-   #	return notfound#
-   page['lang']='pl_PL'
-   page['title']=entry.folder.last_version.title  #'flattr_uid':entry.folder.user.flattr_uid,'flattr_category':entry.last_version.flattr_category#
-   page['subtitle']=entry.last_version.title      #'lerni_link':entry.lerni_link})#
-   page['keywords']=entry.last_version.tags
-   page['author']=entry.folder.user.full_name
-   page['id']=request.matchdict['id']
-   page['date']=str(entry.date).split(" ")[0]
-   page['css_data']="" 
-   page['back'] = "/folder/"+str(entry.folder.id)
-   page['share_url']=request.url
-   page['share_title']="LOOL"
-   page['leaves']=True
-   page['snow']=True
-   soup = BeautifulSoup(entry.last_version.text)
-   [s.extract() for s in soup(['script','iframe','img','object','embed','param'])];
-   page['content'] = parser.format(unicode(soup), somevar='somevalue')
-   if 'pdf' in request.params:
+    page = {'editor':0, 'allerts': []} #referrer #
+    logged_in = authenticated_userid(request)
+    try: user = DBSession.query(People).filter_by(email=logged_in).first()
+    except DBAPIError: return Response("Mysql connection error", content_type='text/plain', status_int=500)
+    entry = DBSession.query(Entries).filter_by(id=request.matchdict['id']).first()
+    #if not entry:#
+    #	return notfound#
+    page['lang']='pl_PL'
+    page['title']=entry.folder.last_version.title  #'flattr_uid':entry.folder.user.flattr_uid,'flattr_category':entry.last_version.flattr_category#
+    page['subtitle']=entry.last_version.title      #'lerni_link':entry.lerni_link})#
+    page['keywords']=entry.last_version.tags
+    page['author']=entry.folder.user.full_name
+    page['id']=request.matchdict['id']
+    page['date']=str(entry.date).split(" ")[0]
+    page['css_data']=""
+    page['back'] = "/folder/"+str(entry.folder.id)
+    page['share_url']=request.url
+    page['share_title']="LOOL"
+    page['leaves']=True
+    page['snow']=True
+    soup = BeautifulSoup(entry.last_version.text)
+    [s.extract() for s in soup(['script','iframe','img','object','embed','param'])];
+    page['content'] = parser.format(unicode(soup), somevar='somevalue')
+    if 'pdf' in request.params:
         css=["entries.css","content.css"]
         for x in css:
             css_file=open("main_page/static/css/"+x);page['css_data']+="\n"+css_file.read();css_file.close()
         return response_pdf(request, unicode(render('content_text.mak', page, request)), filename=page['title']+"-"+page['subtitle'])
-   return page
+    return page
 
 #@view_config(route_name='entry_pdf', permission='view')
 #def entry_pdf(request):
@@ -109,43 +109,3 @@ def about(request):
     [u"Szkolne Muzeum",""],[u"Regulamin Szkoły",""],[u"Galeria",""],[u"Kontakt",""],
     [u"Dojazd","/p/dojazd"],[u"Plan lekcji",""],[u"Panorama",""],[u"Kalendarium",""],[u"Staszic na Facebooku",""]]
     return page
-
-@view_config(route_name='lucky', renderer='sis/lucky.mak', permission='view')
-def lucky(request):
-    page={'editor':0, 'allerts':[]} #referrer #
-    logged_in = authenticated_userid(request)
-    try: user = DBSession.query(People).filter_by(email=logged_in).first()
-    except DBAPIError: return Response("Mysql connection error", content_type='text/plain', status_int=500)
-    lucky_number=DBSession.query(LuckyNumbers).filter_by(date=datetime.datetime.now().date()+datetime.timedelta(1)).first()
-    try:
-        page['lucky_number']=lucky_number.number
-        page['lucky_number_date']=lucky_number.date
-    except AttributeError:
-        page['lucky_number']="??"
-        page['lucky_number_date']=""
-    week=get_week(datetime.datetime.now().date()+datetime.timedelta(1))
-    page['numbers']=[]
-    for x in DBSession.query(LuckyNumbers).filter(LuckyNumbers.date.between(week[0], week[1])):
-        page['numbers'].append([x.date, x.number])
-    all_numbers=range(37)
-    all_numbers.remove(0)
-    numbers=[]
-    for x in DBSession.query(LuckyNumbers).order_by(desc(LuckyNumbers.date)):
-        if x.number and not x.number in numbers:
-            numbers.append(x.number)
-        elif not x.number:
-            pass
-        else:
-            break
-    print numbers
-    for x in numbers:
-        all_numbers.remove(int(x))
-    page['left'] = sorted(all_numbers)
-    return page
-
-
-def get_week(day):
-    #day_of_week = datetime.timedelta(day.weekday()).days
-    start=day-datetime.timedelta(day.weekday())
-    end=day+datetime.timedelta(6-day.weekday())
-    return (start,end)
