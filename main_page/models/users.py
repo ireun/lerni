@@ -17,7 +17,6 @@ class People(Base):
     password_force_update = Column(Boolean)
     key_data = Column(Text)
     fingerprint = Column(Text)
-    classes = relationship("Association")  #zastanowic sie
     teacher = relationship("Teachers")
     student = relationship("Students")
     officials = relationship("Officials")
@@ -62,7 +61,7 @@ class People(Base):
         self.email_confirmed = email_confirmed
         self.gpg_confirmed = gpg_confirmed
         self.phone_confirmed = phone_confirmed
-        self.is_male = True     #int(self.pesel[9])%2
+        self.is_male = True
         self.group_id = group_id
 
     def check_password(self, passwd):
@@ -98,9 +97,12 @@ class Teachers(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('people.id'), unique=True)
     user = relationship("People")
+    state = Column(Integer)
 
-    def __init__(self, user_id):
+    #1 - waiting for acceptation, 2 - working, 3 - ended work
+    def __init__(self, user_id, state=1):
         self.user_id = user_id
+        self.state = state
 
 
 class Students(Base):
@@ -146,8 +148,7 @@ class AppCodes(Base):
 from pyramid.security import (
     Allow,
     Everyone,
-    ALL_PERMISSIONS
-    )
+    ALL_PERMISSIONS)
 
 
 class RootFactory(object):
@@ -157,8 +158,8 @@ class RootFactory(object):
                (Allow, 'group:teacher', 'oceny'),
                (Allow, 'group:admin', 'edit_articlesa'),
                (Allow, 'group:redaktor', 'edit_articles'),
-               (Allow, 'group:student', ('view_subs','edit')),
-               (Allow, 'group:basic', ('account_settings','edit')) ]
+               (Allow, 'group:student', ('view_subs', 'edit')),
+               (Allow, 'group:basic', ('account_settings', 'edit'))]
 
     def __init__(self, request):
       pass

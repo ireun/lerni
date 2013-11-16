@@ -162,23 +162,23 @@ def jsnop_system_info(request):
 ##########
 @view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp','method=lerni.users.getList'])
 def api_jsonp_lerni_users_getlist(request):
-    page = {"Result":"OK","Record":[]}
+    page = {"Result":"OK","Records":[]}
     start_index = request.params['jtStartIndex']
     page_size = request.params['jtPageSize']
     sorting = request.params['jtSorting'].split(" ")
     print sorting
     query = DBSession.query(People).offset(int(start_index)).limit(int(page_size))
     for position in query:
-        page['Record'].append({"user_id": position.id,
-                                "first_name": position.first_name,
-                                "second_name": position.second_name,
-                                "last_name": position.last_name,
-                                "pesel": position.pesel,
-                                "birth_date":str(position.birth_date.date()),
-                                "email": position.email,
-                                "phone_number":position.phone_number,
-                                "password":"do_not_change",
-                                "Group":1})
+        page['Records'].append({u"user_id": position.id,
+                                u"first_name": position.first_name,
+                                u"second_name": position.second_name,
+                                u"last_name": position.last_name,
+                                u"pesel": position.pesel,
+                                u"phone_number": position.phone_number,
+                                u"birth_date": str(position.birth_date.date()),
+                                u"email": position.email,
+                                u"password": "do_not_change",
+                                u"group": 1})
     page['TotalRecordCount'] = DBSession.query(People).count()
     return page
 
@@ -197,7 +197,7 @@ def api_jsonp_lerni_users_delete(request):
         return {"Result":"ERROR","Message":"Nie można usunąć użytkownika, który potwierdził swój adres email."}
 
 @view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp','method=lerni.users.edit',
-             "user_id", "first_name", "second_name", "last_name", "pesel", "birth_date", "email", "password", "Group"])
+             "user_id", "first_name", "second_name", "last_name", "pesel", "birth_date", "email", "password", "group"])
 def api_jsonp_lerni_users_edit(request):
     session = DBSession()
     user = DBSession.query(People).filter_by(id=request.params['user_id']).first()
@@ -213,12 +213,12 @@ def api_jsonp_lerni_users_edit(request):
     if request.params["password"] != "do_not_change":
         user.password = hashlib.sha512(unicode(request.params["password"]+
                                                str(user.registration_date).encode('utf-8'))).hexdigest()
-    user.group_id = request.params["Group"]
+    user.group_id = request.params["group"]
     transaction.commit()
     return {"Result":"OK"}
 
 @view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp','method=lerni.users.add',
-            "first_name", "second_name", "last_name", "pesel", "birth_date", "email", "password", "Group"])
+            "first_name", "second_name", "last_name", "pesel", "birth_date", "email", "password", "group"])
 def api_jsonp_lerni_users_add(request):
     page={"Result":"OK","Record":[]}
     try:
@@ -231,13 +231,13 @@ def api_jsonp_lerni_users_add(request):
                       request.params["pesel"],
                       datetime.datetime(*(time.strptime(request.params['birth_date'], "%d.%m.%Y")[0:6])),
                       request.params["phone_number"],request.params["email"],request.params["password"],
-                      "","",wallet.id,0,0,0,request.params["Group"])
+                      "","",wallet.id,0,0,0,request.params["group"])
         session.add(user)
         page['Record'].append({"user_id":user.id,"first_name":user.first_name,
                                 "second_name":user.second_name,"last_name":user.last_name,
                                 "pesel":user.pesel,"birth_date":str(user.birth_date.date()),
                                 "email":user.email,"phone_number":user.phone_number,
-                                "password":"do_not_change","Group":1})
+                                "password":"do_not_change","group":1})
         transaction.commit()
     except DBAPIError:
         return {"Result":"ERROR","Message":"Form is not valid! Please correct it and try again."}

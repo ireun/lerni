@@ -242,6 +242,20 @@ def successes(tag_name, value, options, parent, context):
     return to_return
 parser.add_formatter("successes", successes)
 
+def map(tag_name, value, options, parent, context):
+    to_return = render('widgets/map.mak', {'x': options['x'], 'y': options['y'], 'z': options['z'],
+                                           'text': value})
+    return to_return
+parser.add_formatter("map", map)
+
+def jtable(tag_name, value, options, parent, context):
+    to_return = render('widgets/title.mak', {'title': options['title'],
+                                           'y': options['y'],
+                                           'z': options['z'],
+                                           'text': value})
+    return to_return
+parser.add_formatter("jtable", jtable)
+
 # A custom render function.
 def render_color(tag_name, value, options, parent, context):
     return '<span style="color:%s;">%s</span>' % (tag_name, value)

@@ -33,6 +33,7 @@
   <link href="/static/libs/progression/progression.min.css" rel="stylesheet">
   <link href="/static/libs/gridforms/gridforms.min.css"  rel="stylesheet">
   <link href="/static/libs/footable/footable.core.min.css"  rel="stylesheet">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.6.4/leaflet.css" type="text/css" />
   </head>
   <body>
   <div id="wrapper">

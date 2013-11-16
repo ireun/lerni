@@ -1,135 +1,87 @@
 # -*- coding: utf-8 -*-
 from base import *
 
-polishMessages=u'''
-{"serverCommunicationError": "Próba połączenia z serwerem zakończona niepowodzeniem.",
-"loadingMessage": "Ładowanie...",
-"noDataAvailable": "Brak danych do wyświetlenia",
-"addNewRecord": "Dodaj nowy rekord",
-"editRecord": "Edytuj",
-"areYouSure": "Czy jesteś pewien?",
-"deleteConfirmation": "Czy jesteś pewien, że chcesz usunąć wybrany rekord?",
-"save": "Zapisz",
-"saving": "Zapisywanie",
-"cancel": "Anuluj",
-"deleteText": "Usuń",
-"deleting": "Usuwanie",
-"error": "Błąd",
-"close": "Zamknij",
-"cannotLoadOptionsFor": "{0} cannotLoadOptionsFor!",
-"pagingInfo": "Rekordy od {0} do {1} / {2}",
-"canNotDeletedRecords": "Nie można usunąć {1} kayıttan {0}",
-"deleteProggress": "{1} usuwanie {0} adedi silindi, devam ediliyor..."}
-'''
 
-@view_config(route_name='admin')
-def my_view(request):
-    return HTTPFound(location = request.route_url('admin_overview'))
+@view_config(route_name='admin_home')
+def admin_home(request):
+    return HTTPFound(location=request.route_path('admin', page='overview'))
 
 
-@view_config(route_name='admin_overview', renderer='admin_overview.mak')
-def my_view2(request):
-    page={'editor':0, 'allerts':[]}
+@view_config(route_name='admin', renderer='admin_overview.mak', match_param='page=overview')
+def admin_overview(request):
+    page = {'editor': 0, 'allerts': []}
     page.update(get_basic_account_info())
     logged_in = authenticated_userid(request)
-    page['logged_in']=logged_in
-    page['menu_top_list']=menu_top(request)
-    page['name']=username(logged_in)
+    page['logged_in'] = logged_in
+    page['menu_top_list'] = menu_top(request)
+    page['name'] = username(logged_in)
     return page
 
 
-@view_config(route_name='admin_articles', renderer='admin_articles.mak')
-def admin_articles(request):
-    page={'editor':0, 'breadcrumbs':[["/admin",u"Panel Administratora"],["",u"Artykuły"]], 'allerts':[]}
-    page.update(get_basic_account_info())
-    logged_in = authenticated_userid(request)
-    page['logged_in']=logged_in
-    page['menu_top_list']=menu_top(request)
-    page['name']=username(logged_in)
-    page['title']=u"Lista artykułów"
-    page['competitors']=[]
-    return page
-
-
-@view_config(route_name='admin_gallery', renderer='admin_gallery.mak')
+@view_config(route_name='admin', renderer='admin_gallery.mak', match_param='page=gallery')
 def admin_gallery(request):
-    page={'editor':0, 'breadcrumbs':[["/admin",u"Panel Administratora"],["",u"Overview"]], 'allerts':[]}
+    page = {'editor': 0, 'breadcrumbs': [["/admin", u"Panel Administratora"], ["", u"Overview"]], 'allerts': []}
     page.update(get_basic_account_info())
     logged_in = authenticated_userid(request)
-    page['logged_in']=logged_in
-    page['menu_top_list']=menu_top(request)
-    page['name']=username(logged_in)
+    page['logged_in'] = logged_in
+    page['menu_top_list'] = menu_top(request)
+    page['name'] = username(logged_in)
     return page
 
 
-@view_config(route_name='admin_lucky_number', renderer='admin_lucky_number.mak')
-def lucky_number(request):
-    page={'editor':0, 'breadcrumbs':[["/admin",u"Panel Administratora"],["",u"Overview"]], 'allerts':[]}
-    page.update(get_basic_account_info())
-    logged_in = authenticated_userid(request)
-    page['logged_in']=logged_in
-    page['menu_top_list']=menu_top(request)
-    page['name']=username(logged_in)
-    return page
-
-
-@view_config(route_name='admin_users', renderer='admin_jtable.mak')
-def admin_users(request):
-    page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["",u"Użytkownicy"]], 'allerts':[]}
-    page.update(get_basic_account_info())
-    logged_in = authenticated_userid(request)
-
-    page['name']=username(logged_in)
-    page['title']=u"Użytkownicy"
-    page['title_desc']= u"Poniżej możesz dodać nowych albo edyotwać istniejąch użytkowników. " \
-                        u"Jeśli to możliwe spróbuj jednak zasugerować im aby dokonali zmian samodzielnie."
-    page['table'] = u'{"messages": '+polishMessages+', '+\
-                           u'"title": "Użytkownicy", '+\
-                           u'"paging": true, '+\
-                           u'"pageSize": 10, '+\
-                           u'"sorting": true, '+\
-                           u'"selecting": true, '+\
-                           u'"defaultSorting": "user_id DESC", '+\
-                           u'"actions": {'+\
-                                        u'"listAction": "/api?format=jsonp&method=lerni.users.getList", ' +\
-                                        u'"deleteAction": "/api?format=jsonp&method=lerni.users.delete", ' +\
-                                        u'"updateAction": "/api?format=jsonp&method=lerni.users.edit", ' +\
-                                        u'"createAction": "/api?format=jsonp&method=lerni.users.add"}, ' +\
-                           u'"fields": {"user_id":{ "key": true, "create": false, "edit": false, "list": false},'+\
-                           u'"first_name": {"title": "Imię"},'+\
-                           u'"second_name": {"title": "Drugie Imię"},'+\
-                           u'"last_name": {"title": "Nazwisko"},'+\
-                           u'"pesel": {"title": "Pesel"},'+\
-                           u'"phone_number": {"title": "Numer telefonu"},'+\
-                           u'"birth_date": {"title": "Data urodzenia", "type": "date", "displayFormat": "dd.mm.yy"},'+\
-                           u'"email": {"title": "Email"},'+\
-                           u'"password": {"title": "Hasło"},'+\
-                           u'"group": {"title": "Grupa"} } }'
-    return page
-
-@view_config(route_name='admin_layouts', renderer='admin_layout_edit.mak')
+@view_config(route_name='admin', renderer='admin_layout_edit.mak', match_param='page=layouts')
 def admin_layouts(request):
-    page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["",u"Użytkownicy"]], 'allerts':[]}
+    page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Użytkownicy"]], 'allerts': []}
     page.update(get_basic_account_info())
     logged_in = authenticated_userid(request)
-
-    page['name']=username(logged_in)
-    page['title']=u"Użytkownicy"
-    page['title_desc']= u"Wybierz stonę, której layout chcesz edytować."
-    page['table_name']="table_layouts"
+    page['name'] = username(logged_in)
+    page['title'] = u"Użytkownicy"
+    page['title_desc'] = u"Wybierz stonę, której layout chcesz edytować."
+    page['table_name'] = "table_layouts"
     return page
+
+
+@view_config(route_name='admin', renderer='admin_jtable.mak', match_param='page=users')
+def admin_users(request):
+    page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Użytkownicy"]], 'allerts': []}
+    page.update(get_basic_account_info())
+    logged_in = authenticated_userid(request)
+    page['name'] = username(logged_in)
+    page['title'] = u"Użytkownicy"
+    page['title_desc'] = u'''Poniżej możesz dodać nowych albo edyotwać istniejąch użytkowników.
+                        Jeśli to możliwe spróbuj jednak zasugerować im aby dokonali zmian samodzielnie.'''
+    page['sorting'] = True
+    page['defaultSorting'] = "user_id DESC"
+    page['selecting'] = True
+    page['list'] = "/api?format=jsonp&method=lerni.users.getList"
+    page['delete'] = "/api?format=jsonp&method=lerni.users.delete"
+    page['update'] = "/api?format=jsonp&method=lerni.users.edit"
+    page['create'] = "/api?format=jsonp&method=lerni.users.add"
+    page['fields'] = [{'name': u"user_id", 'key': True, "list": False, "create": False, "edit": False}]
+    page['fields'].append({'name': u"first_name", "title": u"Imię"})
+    page['fields'].append({'name': u"second_name", "title": u"Drugie Imię"})
+    page['fields'].append({'name': u"last_name", "title": u"Nazwisko"})
+    page['fields'].append({'name': u"pesel", "title": u"Pesel"})
+    page['fields'].append({'name': u"phone_number", "title": u"Numer telefonu"})
+    page['fields'].append({'name': u"birth_date", "title": u"Data urodzenia", "type": "date",
+                           "displayFormat": "dd.mm.yy"})
+    page['fields'].append({'name': u"email", "title": u"Email"})
+    page['fields'].append({'name': u"password", "title": u"Hasło"})
+    page['fields'].append({'name': u"group", "title": u"Grupa"})
+    return page
+
 
 @view_config(route_name='admin_people', renderer='admin_people.mak')
 def admin_people(request):
     page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["","Nauczyciele"]], 'allerts':[], 'tables':[]}
     logged_in = authenticated_userid(request)
     page.update(get_basic_account_info())
-    page['name']=username(logged_in)
-    page['title']=u"Nauczyciele"
-    page['title_desc']=u"Tutaj możesz dodać lub usunąć nauczycieli."
-    can_teachers=[] #candidate
-    emp_teachers=[] #employed
-    ex_teachers=[]
+    page['name'] = username(logged_in)
+    page['title'] = u"Nauczyciele"
+    page['title_desc'] = u"Tutaj możesz dodać lub usunąć nauczycieli."
+    can_teachers = [] #candidate
+    emp_teachers = [] #employed
+    ex_teachers = []
     for position in DBSession.query(Teachers):
         if position.state==0: can_teachers.append([["",position.user.full_name],["hidden-phone", "x"],["hidden-phone","y"],["hidden-phone","z"],["","w"]])
         elif position.state==1: emp_teachers.append([["",position.user.full_name],["hidden-phone", "x"],["hidden-phone","y"],["hidden-phone","z"],["","w"]])
@@ -162,7 +114,7 @@ def admin_personel(request):
     page['tables'].append(["3",u"Byli",table_head, ex_teachers])
     return page
 
-@view_config(route_name='admin_log_years', renderer='admin_jtable.mak')
+@view_config(route_name='admin_log', renderer='admin_jtable.mak', match_param='page=years')
 def admin_log_years(request):
     page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["","Lata szkolne"]], 'allerts':[], 'tables':[]}
     page.update(get_basic_account_info())
@@ -170,26 +122,23 @@ def admin_log_years(request):
     page['name'] = username(logged_in)
     page['title'] = u"Lata szkolne"
     page['title_desc'] = u"Aby dodać nowy rok szkolny skorzystaj z formularza poniżej."
-    page['table'] = u'{"messages": '+polishMessages+', '+\
-                           u'"title": "Lata szkolne", '+\
-                           u'"paging": true, '+\
-                           u'"pageSize": 10, '+\
-                           u'"sorting": true, '+\
-                           u'"selecting": true, '+\
-                           u'"defaultSorting": "start DESC", '+\
-                           u'"actions": {'+\
-                                        u'"listAction": "/api?format=jsonp&method=lerni.years.getList", ' +\
-                                        u'"deleteAction": "/api?format=jsonp&method=lerni.years.delete", ' +\
-                                        u'"updateAction": "/api?format=jsonp&method=lerni.years.edit", ' +\
-                                        u'"createAction": "/api?format=jsonp&method=lerni.years.add"}, ' +\
-                           u'"fields": {"year_id":{ "key": true, "create": false, "edit": false, "list": false},'+\
-                           u'"start": {"title": "Początek roku szkolnego", "type": "date", "displayFormat": "dd.mm.yy"},'+\
-                           u'"end": {"title": "Koniec roku szkolnego", "type": "date", "displayFormat": "dd.mm.yy"},'+\
-                           u'"modification_date": { "title": "Data Modyfikacji", "type": "date", '+\
-                           u'"displayFormat": "dd.mm.yy", "create": "false", "edit": false, "sorting": false } } }'
+    page['sorting'] = True
+    page['defaultSorting'] = "start DESC"
+    page['selecting'] = True
+    page['list'] = "/api?format=jsonp&method=lerni.years.getList"
+    page['delete'] = "/api?format=jsonp&method=lerni.years.delete"
+    page['update'] = "/api?format=jsonp&method=lerni.years.edit"
+    page['create'] = "/api?format=jsonp&method=lerni.years.add"
+    page['fields'] = [{'name': "year_id", 'key': True, "list": False, "create": "true", "edit": False}]
+    page['fields'].append({'name': "start", "title": u"Początek roku szkolnego", "type": "date",
+                           "displayFormat": "dd.mm.yy"})
+    page['fields'].append({'name': "end", "title": u"Koniec roku szkolnego", "type": "date",
+                           "displayFormat": "dd.mm.yy"})
+    page['fields'].append({'name': "modification_date", "title": "Data Modyfikacji", "type": "date",
+                           "displayFormat": "dd.mm.yy", "create": False, "edit": False, "sorting": False})
     return page
 
-@view_config(route_name='admin_log_subjects', renderer='admin_jtable.mak')
+@view_config(route_name='admin_log', renderer='admin_jtable.mak', match_param='page=subjects')
 def admin_log_subjects(request):
     page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["","Przedmioty"]], 'allerts':[], 'tables':[]}
     page.update(get_basic_account_info())
@@ -197,58 +146,46 @@ def admin_log_subjects(request):
     page['name'] = username(logged_in)
     page['title'] = u"Przedmioty"
     page['title_desc'] = u"Utwórz listę przedmiotów nauczanych w twojej szkole."
-    page['table'] = u'{"messages": '+polishMessages+', '+\
-                           u'"title": "Przedmioty", '+\
-                           u'"paging": true, '+\
-                           u'"pageSize": 10, '+\
-                           u'"sorting": true, '+\
-                           u'"selecting": true, '+\
-                           u'"defaultSorting": "name ASC", '+\
-                           u'"actions": {'+\
-                                        u'"listAction": "/api?format=jsonp&method=lerni.subjects.getList", ' +\
-                                        u'"deleteAction": "/api?format=jsonp&method=lerni.subjects.delete", ' +\
-                                        u'"updateAction": "/api?format=jsonp&method=lerni.subjects.edit", ' +\
-                                        u'"createAction": "/api?format=jsonp&method=lerni.subjects.add"}, ' +\
-                           u'"fields": {"subject_id":{ "key": true, "create": false, "edit": false, "list": false},'+\
-                           u'"name": {"title": "Pełna nazwa"},'+\
-                           u'"short": {"title": "Skrócona nazwa"},'+\
-                           u'"modification_date": { "title": "Data Modyfikacji", "type": "date", '+\
-                           u'"displayFormat": "dd.mm.yy", "create": "false", "edit": false, "sorting": false } } }'
+    page['sorting'] = True
+    page['defaultSorting'] = "name ASC"
+    page['selecting'] = True
+    page['list'] = "/api?format=jsonp&method=lerni.subjects.getList"
+    page['delete'] = "/api?format=jsonp&method=lerni.subjects.delete"
+    page['update'] = "/api?format=jsonp&method=lerni.subjects.edit"
+    page['create'] = "/api?format=jsonp&method=lerni.subjects.add"
+    page['fields'] = [{'name': "subject_id", 'key': True, "list": False, "create": "true", "edit": False}]
+    page['fields'].append({'name': "name", "title": u"Pełna nazwa"})
+    page['fields'].append({'name': "short", "title": u"Skrócona nazwa"})
+    page['fields'].append({'name': "modification_date", "title": "Data Modyfikacji", "type": "date",
+                           "displayFormat": "dd.mm.yy", "create": False, "edit": False, "sorting": False})
     return page
 
-@view_config(route_name='admin_log_lucky', renderer='admin_jtable.mak')
-def admin_log_subjects(request):
+@view_config(route_name='admin_log', renderer='admin_jtable.mak', match_param='page=lucky')
+def admin_log_lucky(request):
     page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["",u"Szczęśliwe numerki"]], 'allerts':[], 'tables':[]}
     page.update(get_basic_account_info())
     logged_in = authenticated_userid(request)
     page['name'] = username(logged_in)
     page['title'] = u"Szczęśliwe numerki"
     page['title_desc'] = u"W poniższej tabeli znajdują się szczęśliwe numerki na poszczególne tygodnie."
-    page['table'] = u'{"messages": '+polishMessages+', '+\
-                           u'"title": "Przedmioty", '+\
-                           u'"paging": true, '+\
-                           u'"pageSize": 10, '+\
-                           u'"sorting": true, '+\
-                           u'"selecting": true, '+\
-                           u'"defaultSorting": "name ASC", '+\
-                           u'"actions": {'+\
-                                        u'"listAction": "/api?format=jsonp&method=lerni.lucky.getList", ' +\
-                                        u'"deleteAction": "/api?format=jsonp&method=lerni.lucky.delete", ' +\
-                                        u'"updateAction": "/api?format=jsonp&method=lerni.lucky.edit", ' +\
-                                        u'"createAction": "/api?format=jsonp&method=lerni.lucky.add"}, ' +\
-                           u'"fields": {"first_date":{ "title": "From", "key": true, "list": false, "type": "date", ' +\
-                           u'"displayFormat": "dd.mm.yy", "create": true, "edit": false, "sorting": false },' +\
-                           u'"0": {"title": "Pon"},'+\
-                           u'"1": {"title": "Wt"},'+\
-                           u'"2": {"title": "Sr"},'+\
-                           u'"3": {"title": "Czw"},'+\
-                           u'"4": {"title": "Pt"},'+\
-                           u'"5": {"title": "Sob"},'+\
-                           u'"6": {"title": "Ndz"},'+\
-                           u'"start": { "title": "start", "type": "date", '+\
-                           u'"displayFormat": "dd.mm.yy", "create": false, "edit": false, "sorting": false },' +\
-                           u'"end": { "title": "end", "type": "date", '+\
-                           u'"displayFormat": "dd.mm.yy", "create": false, "edit": false, "sorting": false } } }'
+    page['defaultSorting'] = "name ASC"
+    page['list'] = "/api?format=jsonp&method=lerni.lucky.getList"
+    page['delete'] = "/api?format=jsonp&method=lerni.lucky.delete"
+    page['update'] = "/api?format=jsonp&method=lerni.lucky.edit"
+    page['create'] = "/api?format=jsonp&method=lerni.lucky.add"
+    page['fields'] = [{'name': "first_date", "title": "From", 'key': True, "list": False, "type": "date",
+                       "displayFormat": "dd.mm.yy", "create": "true", "edit": "false", }]
+    page['fields'].append({'name': "0", "title": "Pon"})
+    page['fields'].append({'name': "1", "title": "Wt"})
+    page['fields'].append({'name': "2", "title": u"Śr"})
+    page['fields'].append({'name': "3", "title": "Czw"})
+    page['fields'].append({'name': "4", "title": "Pt"})
+    page['fields'].append({'name': "5", "title": "Sob"})
+    page['fields'].append({'name': "6", "title": "Ndz"})
+    page['fields'].append({'name': "start", "title": "start", "type": "date", "displayFormat": "dd.mm.yy",
+                           "create": "false", "edit": "false", "sorting": "false"})
+    page['fields'].append({'name': "end", "title": "end", "type": "date", "displayFormat": "dd.mm.yy",
+                           "create": "false", "edit": "false", "sorting": "false"})
     return page
 
 @view_config(route_name='admin_log_divisions_categories', renderer='admin_jtable.mak')
@@ -259,23 +196,16 @@ def admin_log_divisions_categories(request):
     page['name'] = username(logged_in)
     page['title'] = u"Kategorie klas"
     page['title_desc'] = u"Utwórz listę kategorii klas w twojej szkole."
-    page['table'] = u'{"messages": '+polishMessages+', '+\
-                           u'"title": "Kategorie klas", '+\
-                           u'"paging": true, '+\
-                           u'"pageSize": 10, '+\
-                           u'"sorting": true, '+\
-                           u'"selecting": true, '+\
-                           u'"defaultSorting": "name ASC", '+\
-                           u'"actions": {'+\
-                                        u'"listAction": "/api?format=jsonp&method=lerni.divisions.categories.getList", ' +\
-                                        u'"deleteAction": "/api?format=jsonp&method=lerni.divisions.categories.delete", ' +\
-                                        u'"updateAction": "/api?format=jsonp&method=lerni.divisions.categories.edit", ' +\
-                                        u'"createAction": "/api?format=jsonp&method=lerni.divisions.categories.add"}, ' +\
-                           u'"fields": {"subject_id":{ "key": true, "create": false, "edit": false, "list": false},'+\
-                           u'"name": {"title": "Pełna nazwa"},'+\
-                           u'"short": {"title": "Skrócona nazwa"},'+\
-                           u'"modification_date": { "title": "Data Modyfikacji", "type": "date", '+\
-                           u'"displayFormat": "dd.mm.yy", "create": "false", "edit": false, "sorting": false } } }'
+    page['defaultSorting'] = "name ASC"
+    page['list'] = "/api?format=jsonp&method=lerni.divisions.categories.getList"
+    page['delete'] = "/api?format=jsonp&method=lerni.divisions.categories.delete"
+    page['update'] = "/api?format=jsonp&method=lerni.divisions.categories.edit"
+    page['create'] = "/api?format=jsonp&method=lerni.divisions.categories.add"
+    page['fields'] = [{'name': 'subject_id', 'key': True, "create": False, "edit": False, "list": False}]
+    page['fields'].append({'name': "name", "title": "Pełna nazwa"})
+    page['fields'].append({'name': "short", "title": "Skrócona nazwa"})
+    page['fields'].append({'name': "modification_date", "title": "Data Modyfikacji", "type": "date",
+                           "displayFormat": "dd.mm.yy", "create": "false", "edit": "false", "sorting": "false"})
     return page
 
 @view_config(route_name='admin_log_years_groups', renderer='admin_log_groups.mak')
@@ -301,38 +231,36 @@ def admin_log_groups_students(request):
     page['title']=u"Lata szkolne"
     page['title_desc']=u"Aby dodać nowy rok szkolny skorzystaj z formularza poniżej."
     page['categories']=[]
-    for position in DBSession.query(DivisionsCategories):	page['categories'].append([position.name,position.short])
+    for position in DBSession.query(DivisionsCategories):
+        page['categories'].append([position.name,position.short])
     page['students_class']=[['','','Kamil Danak']]
     page['students_all']=[['','','Kamil Danak']]
     #for position in DBSession.query(Divisions):	page['students_class'].append(['',position.category.short,position.name])
     #for position in DBSession.query(Divisions):	page['students_all'].append(['',position.category.short,position.name])
     return page
 
-@view_config(route_name='admin_log_timetables', renderer='admin_jtable.mak')
+@view_config(route_name='admin_log', renderer='admin_jtable.mak', match_param='page=timetables')
 def admin_log_timetables(request):
-    page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["","Lata szkolne"]], 'allerts':[], 'tables':[]}
+    page = {'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["","Lata szkolne"]], 'allerts':[], 'tables':[]}
     page.update(get_basic_account_info())
     logged_in = authenticated_userid(request)
-    page['name']=username(logged_in)
-    page['title']=u"Plan lekcji"
-    page['title_desc']=u"Poniżej możesz dodać nowy albo edyować instniejący plan lekcji."
-    page['table'] = u'{"messages": '+polishMessages+', '+\
-                           u'"title": "Plany lekcji", '+\
-                           u'"paging": true, '+\
-                           u'"pageSize": 10, '+\
-                           u'"sorting": true, '+\
-                           u'"selecting": true, '+\
-                           u'"defaultSorting": "start DESC", '+\
-                           u'"actions": {'+\
-                                        u'"listAction": "/api?format=jsonp&method=lerni.timetables.getList", ' +\
-                                        u'"deleteAction": "/api?format=jsonp&method=lerni.timetables.delete", ' +\
-                                        u'"updateAction": "/api?format=jsonp&method=lerni.timetables.edit", ' +\
-                                        u'"createAction": "/api?format=jsonp&method=lerni.timetables.add"}, ' +\
-                           u'"fields": {"timetable_id":{ "key": true, "create": false, "edit": false, "list": false},'+\
-                           u'"start": {"title": "Początek planu lekcji", "type": "date", "displayFormat": "dd.mm.yy"},'+\
-                           u'"end": {"title": "Koniec planu lekcji", "type": "date", "displayFormat": "dd.mm.yy"},'+\
-                           u'"modification_date": { "title": "Data Modyfikacji", "type": "date", '+\
-                           u'"displayFormat": "dd.mm.yy", "create": "false", "edit": false, "sorting": false } } }'
+    page['name'] = username(logged_in)
+    page['title'] = u"Plan lekcji"
+    page['title_desc'] = u"Poniżej możesz dodać nowy albo edyować instniejący plan lekcji."
+    page['jtitle'] = u"Plany lekcji"
+    page['sorting'] = True
+    page['defaultSorting'] = "start DESC"
+    page['list'] = "/api?format=jsonp&method=lerni.timetables.getList"
+    page['delete'] = "/api?format=jsonp&method=lerni.timetables.delete"
+    page['update'] = "/api?format=jsonp&method=lerni.timetables.edit"
+    page['create'] = "/api?format=jsonp&method=lerni.timetables.add"
+    page['fields'] = [{'name': "timetable_id", 'key': True, "list": False, "create": False, "edit": False}]
+    page['fields'].append({'name': "start", "title": "start", "type": "date", "displayFormat": "dd.mm.yy",
+                           "create": "false", "edit": "false", "sorting": "false"})
+    page['fields'].append({'name': "end", "title": "end", "type": "date", "displayFormat": "dd.mm.yy",
+                           "create": "false", "edit": "false", "sorting": "false"})
+    page['fields'].append({'name': "modification_date", "title": "Data Modyfikacji", "type": "date",
+                           "displayFormat": "dd.mm.yy", "create": "false", "edit": "false", "sorting": "false"})
     return page
 
 @view_config(route_name='admin_log_timetables_edit', renderer='admin_log_timetables_edit.mak')
@@ -382,7 +310,7 @@ def my_view4(request):
        substitutions.append([position.id,date_for,link_view,link_edit,link_del])
 
 
-    return {'menu_top_list':menu_top_list, 'menu_left_list':menu_left_list,
+    return {'menu_top_list':menu_top_list,
     'substitutions':substitutions, 'logged_in':logged_in, 'breadcrumbs':[], 'name':'lol'}
 
 @view_config(route_name='admin_substitutions_view', renderer='admin_substitutions_view.mak')   #, permission='edit'

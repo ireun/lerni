@@ -43,42 +43,6 @@ def easy_link(request):
         return response
     return HTTPNotFound()
 
-@view_config(route_name='graduates', renderer='graduates.mak')
-def graduates(request):
-   page={'editor':0, 'breadcrumbs':[["",u"Absolwenci"]], 'allerts':[]}
-   logged_in = authenticated_userid(request)
-   page['logged_in']=logged_in
-   try:
-      page['menu_top_list']=[]
-      for position in DBSession.query(MenuTop):
-         page['menu_top_list'].append([position.link,position.name])
-      page['menu_left_list'] =[]
-      for position in DBSession.query(MenuLeft):
-            page['menu_left_list'].append([position.link,position.name])
-      page['name']=username(logged_in)
-   except DBAPIError:
-      return Response("Mysql connection error", content_type='text/plain', status_int=500)
-   return page
-
-
-@view_config(route_name='companionship', renderer='companionship.mak')
-def companionship(request):
-   page={'editor':0, 'breadcrumbs':[["",u"Towrzystwo Szkół Twórczych"]], 'allerts':[]}
-   logged_in = authenticated_userid(request)
-   page['logged_in']=logged_in
-   try:
-      page['menu_top_list']=[]
-      for position in DBSession.query(MenuTop):
-         page['menu_top_list'].append([position.link,position.name])
-      page['menu_left_list'] =[]
-      for position in DBSession.query(MenuLeft):
-            page['menu_left_list'].append([position.link,position.name])
-      page['name']=username(logged_in)
-   except DBAPIError:
-      return Response("Mysql connection error", content_type='text/plain', status_int=500)
-   return page
-
-
 
 @view_config(route_name='connection')
 def competitions(request):

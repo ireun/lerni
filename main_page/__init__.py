@@ -63,37 +63,30 @@ def main(global_config, **settings):
 
     config.add_route('jsonp_system_info', '/api/jsonp/system_info')
 
-    config.add_route('admin', '/admin')
-    config.add_route('admin_overview', '/admin/overview')
-    config.add_route('admin_articles', '/admin/articles')
+    config.add_route('admin_home', '/admin')
+    config.add_route('admin', '/admin/{page}')
+    config.add_route('admin_log', '/admin/log/{page}')
     config.add_route('admin_articles_add', '/admin/articles/add')
 
     config.add_route('admin_decretation_tweets', '/admin/dec/tweets')
 
-    config.add_route('admin_users', '/admin/users')
     config.add_route('admin_people', '/admin/teachers')
     config.add_route('admin_personel', '/admin/personel')
     config.add_route('admin_support', '/admin/support')
     config.add_route('admin_students', '/admin/students')
     config.add_route('admin_others', '/admin/others')
 
-    config.add_route('admin_log_subjects', '/admin/log/subjects')
-    config.add_route('admin_log_years', '/admin/log/years')
     config.add_route('admin_log_divisions_categories', '/admin/log/divisions_categories')
     config.add_route('admin_log_years_groups', '/admin/log/years/groups/{year}')
     config.add_route('admin_log_years_groups_students', '/admin/log/years/groups/{year}/{group}')
     config.add_route('admin_log_timetables', '/admin/log/timetables')
     config.add_route('admin_log_timetables_edit', '/admin/log/timetables/edit')
-    config.add_route('admin_log_lucky', '/admin/log/lucky')
-
-    config.add_route('admin_layouts', '/admin/layouts')
 
     config.add_route('admin_substitutions', '/admin/substitutions')
     config.add_route('admin_substitutions_add', '/admin/substitutions/add')
     config.add_route('admin_substitutions_view', '/admin/substitutions_view/{id}')
     config.add_route('admin_substitutions_edit', '/admin/substitutions_edit/{id}')
     config.add_route('admin_substitutions_del', '/admin/substitutions_del/{id}')
-    config.add_route('admin_lucky_number','/admin/lucky-number')
 
     config.add_route('account_folders', '/account/folders')
     config.add_route('account_entries', '/account/entries')
@@ -109,13 +102,8 @@ def main(global_config, **settings):
     config.add_route('support_ask_ticket', '/support/ticket-{id}')
     config.add_route('support_faq', '/support/faq')
 
-    config.add_route('graduates', '/absolwenci')
-
-    config.add_route('companionship', '/partnerzy')
-
     config.add_route('gallery', '/galeria')
 
-    config.add_route('admin_gallery', '/admin/gallery')
     config.add_route('file_upload', '/file-upload')
 
 

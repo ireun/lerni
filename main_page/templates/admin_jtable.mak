@@ -21,7 +21,7 @@
 	    </div>
         <div class="row-fluid">
             <div class="span12">
-                <div id="jtable">${table | n}</div>
+                <%include file="snippets/jtable.mak"/>
             </div>
         </div>
 	    <!--
