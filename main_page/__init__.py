@@ -65,18 +65,8 @@ def main(global_config, **settings):
 
     config.add_route('admin_home', '/admin')
     config.add_route('admin', '/admin/{page}')
-    config.add_route('admin_log', '/admin/log/{page}')
-    config.add_route('admin_articles_add', '/admin/articles/add')
+    config.add_route('admin_pp', '/admin/{pp}/{page}')
 
-    config.add_route('admin_decretation_tweets', '/admin/dec/tweets')
-
-    config.add_route('admin_people', '/admin/teachers')
-    config.add_route('admin_personel', '/admin/personel')
-    config.add_route('admin_support', '/admin/support')
-    config.add_route('admin_students', '/admin/students')
-    config.add_route('admin_others', '/admin/others')
-
-    config.add_route('admin_log_divisions_categories', '/admin/log/divisions_categories')
     config.add_route('admin_log_years_groups', '/admin/log/years/groups/{year}')
     config.add_route('admin_log_years_groups_students', '/admin/log/years/groups/{year}/{group}')
     config.add_route('admin_log_timetables', '/admin/log/timetables')
@@ -112,13 +102,12 @@ def main(global_config, **settings):
     config.add_route('entries', '/entries')
     config.add_route('entry_save', '/entry/save')
     config.add_route('page', '/p/{id}')
+    config.add_route('user', '/u/{id}')
     config.add_route('entry', '/entry/{id}')
     config.add_route('folder', '/folder/{id}')
     config.add_route('presentations', '/presentations')
     config.add_route('presentation', '/presentation/{id}')
     config.add_route('set', '/set/{id}')
-
-    config.add_route('user','/u/{user_name}')
 
     config.add_route('lucky', '/sis/lucky')
     config.add_route('sis_home', '/sis')

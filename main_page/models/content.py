@@ -254,10 +254,13 @@ class Tweets(Base):
     last_update = Column(DateTime)
     views = Column(Integer)
     state = Column(Boolean)
-    deleted=Column(Boolean)
-    text=Column(Text)
-    link=Column(Text)
-    link_name=Column(Text)
+    deleted = Column(Boolean)
+    text = Column(Text)
+    link = Column(Text)
+    link_name = Column(Text)
+    confirmed = Column(Boolean)
+    modification_date = Column(DateTime)
+    categories = relationship("TweetsCategories")
     def __init__(self, user_id, text, link, link_name):
         self.user_id = user_id
         self.date = datetime.datetime.now()
@@ -268,23 +271,26 @@ class Tweets(Base):
         self.text = text
         self.link = link
         self.link_name = link_name
-
-class TweetsMain(Base):
-    __tablename__ = 'tweets_main'
-    id = Column(Integer, primary_key=True)
-    tweet_id = Column(Integer, ForeignKey('tweets.id'))
-    tweet = relationship("Tweets")
-    category_id = Column(Integer, ForeignKey('tweets_categories.id'))
-    category = relationship("TweetsCategories")
-    #confirmed = Column(Boolean)
-    #confirmation_id
-    confirm = Column(Integer, ForeignKey('people.id'))
-    def __init__(self, tweet_id, category_id):
-        self.tweet_id = tweet_id
-        self.category_id = category_id
+        self.confirmed = True
+        self.modification_date = datetime.datetime.now()
 
 class TweetsCategories(Base):
     __tablename__ = 'tweets_categories'
+    id = Column(Integer, primary_key=True)
+    tweet_id = Column(Integer, ForeignKey('tweets.id'))
+    tweet = relationship("Tweets")
+    category_id = Column(Integer, ForeignKey('tweets_categories_list.id'))
+    category = relationship("TweetsCategoriesList")
+    confirmed = Column(Boolean)
+    confirm = Column(Integer, ForeignKey('people.id'))
+
+    def __init__(self, tweet_id, category_id, confirmed=False):
+        self.tweet_id = tweet_id
+        self.category_id = category_id
+        self.confirmed = confirmed
+
+class TweetsCategoriesList(Base):
+    __tablename__ = 'tweets_categories_list'
     id = Column(Integer, primary_key=True)
     name = Column(Text)
     maintener_id = Column(Integer, ForeignKey('people.id'))

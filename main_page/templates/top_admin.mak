@@ -82,10 +82,10 @@
                   </a>
                 </li>
                 <li class="accordion-group ">
-                  <a data-toggle="collapse" data-parent="#navigation" href="#submenu3"> <span class="icon icon-user"></span>
+                  <a data-toggle="collapse" data-parent="#navigation" href="#submenu1"> <span class="icon icon-user"></span>
                     <span class="text">Ludzie</span><span class="arrow icon-caret-down"></span>
                   </a>
-                  <ul id="submenu3" style="height: 0px;">
+                  <ul id="submenu1" style="height: 0px;">
                     <li class=""><a href="/admin/users"> <span class="icon icon-angle-right"></span>Lista użytkowników</a></li>
                     <li class=""><a href="/admin/teachers"> <span class="icon icon-angle-right"></span>Nauczyciele</a></li>
                     <li class=""><a href="/admin/personel"> <span class="icon icon-angle-right"></span>Personel</a></li>
@@ -93,12 +93,12 @@
                   </ul>
                 </li>
                 <li class="accordion-group ">
-                  <a data-toggle="collapse" data-parent="#navigation" href="#submenu4"> <span class="icon icon-th-list"></span>
+                  <a data-toggle="collapse" data-parent="#navigation" href="#submenu2"> <span class="icon icon-th-list"></span>
                     <span class="text">Dziennik</span><span class="arrow icon-caret-down"></span>
                   </a>
-                  <ul id="submenu4" style="height: 0px;">
+                  <ul id="submenu2" style="height: 0px;">
                     <li class=""><a href="/admin/log/subjects"> <span class="icon icon-angle-right"></span>Przedmioty</a></li>
-                    <li class=""><a href="/admin/log/divisions_categories"> <span class="icon icon-angle-right"></span>Kategorie klas</a></li>
+                    <li class=""><a href="/admin/log/divisions"> <span class="icon icon-angle-right"></span>Kategorie klas</a></li>
                     <li class=""><a href="/admin/log/years"> <span class="icon icon-angle-right"></span>Lata Szkolne</a></li>
                     <li class=""><a href="/admin/log/rooms"> <span class="icon icon-angle-right"></span>Sale lekcyjne</a></li>
                     <li class=""><a href="/admin/log/timetables"> <span class="icon icon-angle-right"></span>Plan lekcji</a></li>
@@ -107,10 +107,10 @@
                   </ul>
                 </li>
                 <li class="accordion-group ">
-                  <a data-toggle="collapse" data-parent="#navigation" href="#submenu2"> <span class="icon icon-paperclip "></span>
+                  <a data-toggle="collapse" data-parent="#navigation" href="#submenu3"> <span class="icon icon-paperclip "></span>
                     <span class="text">Dekretacja</span><span class="arrow icon-caret-down"></span>
                   </a>
-                  <ul id="submenu2" style="height: 0px;">
+                  <ul id="submenu3" style="height: 0px;">
                     <li class=""><a href="/admin/dec/tweets"> <span class="icon icon-angle-right"></span>Tweety</a></li>
                     <li class=""><a href="/admin/dec/registrations"> <span class="icon icon-angle-right"></span>Rejestracja</a></li>
                     <li class=""><a href="/admin/dec/petitions"> <span class="icon icon-angle-right"></span>Wnioski</a></li>
@@ -118,23 +118,23 @@
                   </ul>
                 </li>
                 <li class="accordion-group ">
-                  <a data-toggle="collapse" data-parent="#navigation" href="#submenu2"> <span class="icon icon-paperclip "></span>
+                  <a data-toggle="collapse" data-parent="#navigation" href="#submenu4"> <span class="icon icon-folder-open"></span>
                     <span class="text">Wszystkie Treści</span><span class="arrow icon-caret-down"></span>
                   </a>
-                  <ul id="submenu2" style="height: 0px;">
-                    <li class=""><a href="/admin/dec/tweets"> <span class="icon icon-angle-right"></span>Tweety</a></li>
-                    <li class=""><a href="/admin/dec/registrations"> <span class="icon icon-angle-right"></span>Rejestracja</a></li>
-                    <li class=""><a href="/admin/dec/petitions"> <span class="icon icon-angle-right"></span>Wnioski</a></li>
-                    <li class=""><a href="/admin/dec/competitions"> <span class="icon icon-angle-right"></span>Konkursy</a></li>
+                  <ul id="submenu4" style="height: 0px;">
+                    <li class=""><a href="/admin/all/tweets"> <span class="icon icon-angle-right"></span>Tweety</a></li>
+                    <li class=""><a href="/admin/all/folders"> <span class="icon icon-angle-right"></span>Foldery</a></li>
+                    <li class=""><a href="/admin/all/petitions"> <span class="icon icon-angle-right"></span>Wnioski</a></li>
+                    <li class=""><a href="/admin/all/competitions"> <span class="icon icon-angle-right"></span>Konkursy</a></li>
                   </ul>
                 </li>
                 <li class="accordion-group ">
                   <a data-toggle="collapse" data-parent="#navigation"
-                  href="#submenu7"> <span class="icon icon-list-alt"></span>
+                  href="#submenu5"> <span class="icon icon-list-alt"></span>
                     <span class="text">Ustawienia strony</span>                                                                                                                                                                             </span>
                     <span class="arrow icon-caret-down"></span>
                   </a>
-                  <ul id="submenu7" style="height: 0px;">
+                  <ul id="submenu5" style="height: 0px;">
                     <li class="">
                       <a href="/admin/layouts"> <span class="icon icon-angle-right"></span>Layout</a>
                     </li>
@@ -172,11 +172,11 @@
                 -->
                 <li class="accordion-group ">
                   <a data-toggle="collapse" data-parent="#navigation"
-                  href="#submenu11"> <span class="icon icon-folder-open"></span>
+                  href="#submenu6"> <span class="icon icon-folder-open"></span>
                     <span class="text">Moja praca</span>
                     <span class="arrow icon-caret-down"></span>
                   </a>
-                  <ul id="submenu11" style="height: 0px;">
+                  <ul id="submenu6" style="height: 0px;">
                     <li class=""><a href="/account/folders"> <span class="icon icon-angle-right"></span>Foldery</a></li>
                     <li class=""><a href="/account/entries"> <span class="icon icon-angle-right"></span>Wpisy</a></li>
                     <li class=""><a href="/account/presentations"> <span class="icon icon-angle-right"></span>Prezentacje</a></li>
@@ -187,11 +187,11 @@
                 </li>
                 <li class="accordion-group ">
                   <a data-toggle="collapse" data-parent="#navigation"
-                  href="#submenu8"> <span class="icon icon-cloud"></span>
+                  href="#submenu7"> <span class="icon icon-cloud"></span>
                     <span class="text">Chmura</span>
                     <span class="arrow icon-caret-down"></span>
                   </a>
-                  <ul id="submenu8" style="height: 0px;">
+                  <ul id="submenu7" style="height: 0px;">
                     <li class=""><a href="chart.html"> <span class="icon icon-angle-right"></span>Moje pliki</a></li>
                     <li class=""><a href="statistic.html"> <span class="icon icon-angle-right"></span>Moje programy</a></li>
                     <li class=""><a href="statistic.html"> <span class="icon icon-angle-right"></span>Pliki do wydrukowania</a></li>
@@ -199,11 +199,11 @@
                 </li>
                 <li class="accordion-group ">
                   <a data-toggle="collapse" data-parent="#navigation"
-                  href="#submenu9"> <span class="icon icon-cloud"></span>
+                  href="#submenu8"> <span class="icon icon-cloud"></span>
                     <span class="text">Moje konto</span>
                     <span class="arrow icon-caret-down"></span>
                   </a>
-                  <ul id="submenu9" style="height: 0px;">
+                  <ul id="submenu8" style="height: 0px;">
                     <li class=""><a href="chart.html"> <span class="icon icon-angle-right"></span>Dane personalne</a></li>
                     <li class=""><a href="statistic.html"> <span class="icon icon-angle-right"></span>Kursy</a></li>
                     <li class=""><a href="statistic.html"> <span class="icon icon-angle-right"></span>Bezpieczeństwo</a></li>

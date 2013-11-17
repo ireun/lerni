@@ -36,6 +36,18 @@ def entry(request):
         return response_pdf(request, unicode(render('content_text.mak', page, request)), filename=page['title']+"-"+page['subtitle'])
     return page
 
+@view_config(route_name='user', renderer='pages.mak', permission='view')
+def user(request):
+    page={'editor':0, 'allerts':[]}
+    logged_in = authenticated_userid(request)
+    page['logged_in']=logged_in
+    page['name']=username(logged_in)
+    page['banners']=[]
+    for position in DBSession.query(Banners).limit(6):
+        page['banners'].append([position.link,position.alternative])
+    page_user = DBSession.query(People).filter_by(url_name=request.matchdict['id']).first().full_name
+    page['rows']=[[["","12","", page_user]]]
+    return page
 #@view_config(route_name='entry_pdf', permission='view')
 #def entry_pdf(request):
 #	renderer_dict = {'editor':0, 'allerts':[]}

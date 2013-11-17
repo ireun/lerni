@@ -304,7 +304,20 @@ class LessonsLog(Base):
         self.start = start
         self.end = end
         self.updated = datetime.datetime.now()
-        
+
+
+class Rooms(Base):
+    __tablename__ = "log_rooms"
+    id = Column(Integer, primary_key=True)
+    number = Column(Text)
+    name = Column(Text)
+    description = Column(Text)
+
+    def __init__(self, number, name, description):
+        self.number = number
+        self.name = name
+        self.description = description
+
 
 class Settings(Base):
     __tablename__ = 'settings'

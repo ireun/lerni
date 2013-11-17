@@ -14,7 +14,7 @@ def admin_overview(request):
     page['rows'] = [[], [], [], [], [], [], [], [], [], []]
     for position in DBSession.query(Pages).filter_by(url_name='overview').first().widgets:
         soup = BeautifulSoup(position.data)
-        [s.extract() for s in soup(['script', 'iframe', 'img', 'object', 'embed', 'param'])];
+        [s.extract() for s in soup(['script', 'iframe', 'img', 'object', 'embed', 'param'])]
         data = parser.format(unicode(soup), somevar='somevalue')
         page['rows'][position.row].append(["", position.size_x, position.add_class, data])
     return page
@@ -64,7 +64,7 @@ def admin_users(request):
     return page
 
 
-@view_config(route_name='admin_people', renderer='admin_people.mak')
+@view_config(route_name='admin', renderer='admin_people.mak', match_param='page=people')
 def admin_people(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", "Nauczyciele"]], 'allerts': [],
             'tables': []}
@@ -75,16 +75,35 @@ def admin_people(request):
     emp_teachers = []
     ex_teachers = []
     for position in DBSession.query(Teachers):
-        if position.state==0: can_teachers.append([["",position.user.full_name],["hidden-phone", "x"],["hidden-phone","y"],["hidden-phone","z"],["","w"]])
-        elif position.state==1: emp_teachers.append([["",position.user.full_name],["hidden-phone", "x"],["hidden-phone","y"],["hidden-phone","z"],["","w"]])
-        elif position.state==2: ex_teachers.append([["",position.user.full_name],["hidden-phone", "x"],["hidden-phone","y"],["hidden-phone","z"],["","w"]])
-    table_head=[[u"",u"Imię i Nazwisko"],[u"hidden-phone",u"Przemiot"],[u"hidden-phone",u"Ilość uczonych klas"],[u"hidden-phone",u"Wychowawstwo"],[u"",u"Akcje"]]
+        if position.state==0:
+            can_teachers.append([["",position.user.full_name],
+                                 ["hidden-phone", "x"],
+                                 ["hidden-phone","y"],
+                                 ["hidden-phone","z"],
+                                 ["","w"]])
+        elif position.state==1:
+            emp_teachers.append([["",position.user.full_name],
+                                 ["hidden-phone", "x"],
+                                 ["hidden-phone","y"],
+                                 ["hidden-phone","z"],
+                                 ["","w"]])
+        elif position.state==2:
+            ex_teachers.append([["",position.user.full_name],
+                                ["hidden-phone", "x"],
+                                ["hidden-phone","y"],
+                                ["hidden-phone","z"],
+                                ["","w"]])
+    table_head=[[u"",u"Imię i Nazwisko"],
+                [u"hidden-phone",u"Przemiot"],
+                [u"hidden-phone",u"Ilość uczonych klas"],
+                [u"hidden-phone",u"Wychowawstwo"],
+                [u"",u"Akcje"]]
     page['tables'].append(["1", u"Zatrudnieni", table_head, emp_teachers])
     page['tables'].append(["2", u"Oczekujący", table_head, can_teachers])
     page['tables'].append(["3", u"Byli", table_head, ex_teachers])
     return page
 
-@view_config(route_name='admin_personel', renderer='admin_people.mak')
+@view_config(route_name='admin', renderer='admin_people.mak', match_param='page=personel')
 def admin_personel(request):
     page={'editor':0, 'allerts': [], 'tables': []}
     page.update(get_basic_account_info(request))
@@ -103,7 +122,7 @@ def admin_personel(request):
     page['tables'].append(["3",u"Byli",table_head, ex_teachers])
     return page
 
-@view_config(route_name='admin_log', renderer='admin_jtable.mak', match_param='page=years')
+@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=log', 'page=years'])
 def admin_log_years(request):
     page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["","Lata szkolne"]], 'allerts':[], 'tables':[]}
     page.update(get_basic_account_info(request))
@@ -126,7 +145,7 @@ def admin_log_years(request):
     return page
 
 
-@view_config(route_name='admin_log', renderer='admin_jtable.mak', match_param='page=subjects')
+@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=log', 'page=subjects'])
 def admin_log_subjects(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", "Przedmioty"]], 'allerts': [],
             'tables': []}
@@ -148,7 +167,57 @@ def admin_log_subjects(request):
     return page
 
 
-@view_config(route_name='admin_log', renderer='admin_jtable.mak', match_param='page=lucky')
+@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=all', 'page=tweets'])
+def admin_log_tweets(request):
+    page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", "Przedmioty"]], 'allerts': [],
+            'tables': []}
+    page.update(get_basic_account_info(request))
+    page['title'] = u"Wszystkie Tweety"
+    page['title_desc'] = u"Oto lista wszystkich tweetów w bazie danych twojej szkoły."
+    page['sorting'] = True
+    page['defaultSorting'] = "name ASC"
+    page['selecting'] = True
+    page['list'] = "/api?format=jsonp&method=lerni.tweets.getList"
+    page['delete'] = "/api?format=jsonp&method=lerni.tweets.delete"
+    page['update'] = "/api?format=jsonp&method=lerni.tweets.edit"
+    page['create'] = "/api?format=jsonp&method=lerni.tweets.add"
+    page['fields'] = [{'name': "tweet_id", 'key': True, "list": False, "create": "true", "edit": False}]
+    page['fields'].append({'name': "user", "title": u"Autor"})
+    page['fields'].append({'name': "text", "title": u"Text"})
+    page['fields'].append({'name': "link_name", "title": u"Text Linku"})
+    page['fields'].append({'name': "link", "title": u"Link"})
+    page['fields'].append({'name': "categories", "title": u"Kategorie"})
+    page['fields'].append({'name': "state", "title": u"Stan"})
+    page['fields'].append({'name': "modification_date", "title": "Data Modyfikacji", "type": "date",
+                           "displayFormat": "dd.mm.yy", "create": False, "edit": False, "sorting": False})
+    return page
+
+@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=all', 'page=folders'])
+def admin_log_folders(request):
+    page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Przedmioty"]], 'allerts': [],
+            'tables': []}
+    page.update(get_basic_account_info(request))
+    page['title'] = u"Wszystkie Foldery"
+    page['title_desc'] = u"Oto lista wszystkich folderów w bazie danych twojej szkoły."
+    page['sorting'] = True
+    page['defaultSorting'] = "name ASC"
+    page['selecting'] = True
+    page['list'] = "/api?format=jsonp&method=lerni.folders.getList"
+    page['delete'] = "/api?format=jsonp&method=lerni.folders.delete"
+    page['update'] = "/api?format=jsonp&method=lerni.folders.edit"
+    page['create'] = "/api?format=jsonp&method=lerni.folders.add"
+    page['fields'] = [{'name': "tweet_id", 'key': True, "list": False, "create": "true", "edit": False}]
+    page['fields'].append({'name': "user", "title": u"Autor"})
+    page['fields'].append({'name': "text", "title": u"Text"})
+    page['fields'].append({'name': "link_name", "title": u"Text Linku"})
+    page['fields'].append({'name': "link", "title": u"Link"})
+    page['fields'].append({'name': "categories", "title": u"Kategorie"})
+    page['fields'].append({'name': "state", "title": u"Stan"})
+    page['fields'].append({'name': "modification_date", "title": "Data Modyfikacji", "type": "date",
+                           "displayFormat": "dd.mm.yy", "create": False, "edit": False, "sorting": False})
+    return page
+
+@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=log', 'page=lucky'])
 def admin_log_lucky(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Szczęśliwe numerki"]], 'allerts': [],
             'tables': []}
@@ -176,22 +245,43 @@ def admin_log_lucky(request):
     return page
 
 
-@view_config(route_name='admin_log_divisions_categories', renderer='admin_jtable.mak')
-def admin_log_divisions_categories(request):
+@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=log', 'page=divisions'])
+def admin_log_divisions(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", "Kategorie klas"]], 'allerts': [],
             'tables': []}
     page.update(get_basic_account_info(request))
     page['title'] = u"Kategorie klas"
     page['title_desc'] = u"Utwórz listę kategorii klas w twojej szkole."
+    page['sorting'] = True
     page['defaultSorting'] = "name ASC"
     page['list'] = "/api?format=jsonp&method=lerni.divisions.categories.getList"
     page['delete'] = "/api?format=jsonp&method=lerni.divisions.categories.delete"
     page['update'] = "/api?format=jsonp&method=lerni.divisions.categories.edit"
     page['create'] = "/api?format=jsonp&method=lerni.divisions.categories.add"
     page['fields'] = [{'name': 'subject_id', 'key': True, "create": False, "edit": False, "list": False}]
-    page['fields'].append({'name': "name", "title": "Pełna nazwa"})
-    page['fields'].append({'name': "short", "title": "Skrócona nazwa"})
-    page['fields'].append({'name': "modification_date", "title": "Data Modyfikacji", "type": "date",
+    page['fields'].append({'name': u"name", "title": u"Pełna nazwa"})
+    page['fields'].append({'name': u"short", "title": u"Skrócona nazwa"})
+    page['fields'].append({'name': u"modification_date", "title": u"Data Modyfikacji", "type": "date",
+                           "displayFormat": "dd.mm.yy", "create": "false", "edit": "false", "sorting": "false"})
+    return page
+
+@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=log', 'page=rooms'])
+def admin_log_divisions(request):
+    page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", "Kategorie klas"]], 'allerts': [],
+            'tables': []}
+    page.update(get_basic_account_info(request))
+    page['title'] = u"Sale lekcyjne"
+    page['title_desc'] = u"Utwórz listę sal lekcyjnych w twojej szkole. (opcjonalne)"
+    page['sorting'] = True
+    page['defaultSorting'] = "name ASC"
+    page['list'] = "/api?format=jsonp&method=lerni.rooms.getList"
+    page['delete'] = "/api?format=jsonp&method=lerni.rooms.delete"
+    page['update'] = "/api?format=jsonp&method=lerni.rooms.edit"
+    page['create'] = "/api?format=jsonp&method=lerni.rooms.add"
+    page['fields'] = [{'name': 'subject_id', 'key': True, "create": False, "edit": False, "list": False}]
+    page['fields'].append({'name': u"name", "title": u"Pełna nazwa"})
+    page['fields'].append({'name': u"short", "title": u"Skrócona nazwa"})
+    page['fields'].append({'name': u"modification_date", "title": u"Data Modyfikacji", "type": "date",
                            "displayFormat": "dd.mm.yy", "create": "false", "edit": "false", "sorting": "false"})
     return page
 
@@ -202,9 +292,11 @@ def admin_log_groups(request):
     page['title']=u"Lata szkolne"
     page['title_desc']=u"Aby dodać nowy rok szkolny skorzystaj z formularza poniżej."
     page['categories']=[]
-    for position in DBSession.query(DivisionsCategories):	page['categories'].append([position.name,position.short])
+    for position in DBSession.query(DivisionsCategories):
+        page['categories'].append([position.name,position.short])
     page['groups']=[]
-    for position in DBSession.query(Divisions):	page['groups'].append(['',position.category.short,position.name])
+    for position in DBSession.query(Divisions):
+        page['groups'].append(['', position.category.short,position.name])
     return page
 
 @view_config(route_name='admin_log_years_groups_students', renderer='admin_log_groups.mak')
@@ -222,7 +314,7 @@ def admin_log_groups_students(request):
     #for position in DBSession.query(Divisions):	page['students_all'].append(['',position.category.short,position.name])
     return page
 
-@view_config(route_name='admin_log', renderer='admin_jtable.mak', match_param='page=timetables')
+@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=log', 'page=timetables'])
 def admin_log_timetables(request):
     page = {'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["","Lata szkolne"]], 'allerts':[], 'tables':[]}
     page.update(get_basic_account_info(request))

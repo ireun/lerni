@@ -42,8 +42,8 @@ from ..models import (
     Tags,
 
     Tweets,
-    TweetsMain,
     TweetsCategories,
+    TweetsCategoriesList,
     Videos,
     VideosMain,
     Banners,
@@ -299,16 +299,16 @@ def import_tweets():
         for x in dataMap['tweets']:
             session = DBSession()
             if not x['category'] in categories:
-                tweet_category = TweetsCategories(x['category'])
+                tweet_category = TweetsCategoriesList(x['category'])
                 session.add(tweet_category)
                 session.flush()
                 categories.append(x['category'])
             else:
-                tweet_category = DBSession.query(TweetsCategories).filter_by(name=x['category']).first()
+                tweet_category = DBSession.query(TweetsCategoriesList).filter_by(name=x['category']).first()
             tweet = Tweets(x['user_id'], x['text'], x['link'], x['link_name'])
             session.add(tweet)
             if x['main']:
-                tweet_main = TweetsMain(w,tweet_category.id)
+                tweet_main = TweetsCategories(w,tweet_category.id)
                 session.add(tweet_main)
             transaction.commit()
             w+=1

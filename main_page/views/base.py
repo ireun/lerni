@@ -38,8 +38,8 @@ from main_page.models import (
     Tags,
 
     Tweets,
-    TweetsMain,
     TweetsCategories,
+    TweetsCategoriesList,
     Videos,
     VideosMain,
     Banners,
@@ -133,17 +133,19 @@ def tempinput(data):
     os.unlink(temp.name)
     
 def pl_to_ascii(tekst):
-    pl = {ord(u'Ą'): u'A',ord(u'Ć'): u'C',ord(u'Ę'): u'E',ord(u'Ł'): u'L',ord(u'Ó'): u'O',ord(u'Ś'): u'S',ord(u'Ź'): u'Z',ord(u'Ż'): u'Z',
-    		ord(u'ą'): u'a',ord(u'ć'): u'c',ord(u'ę'): u'e',ord(u'ł'): u'l',ord(u'ó'): u'o',ord(u'ś'): u's',ord(u'ź'): u'z',ord(u'ż'): u'z'}
+    pl = {ord(u'Ą'): u'A', ord(u'Ć'): u'C', ord(u'Ę'): u'E', ord(u'Ł'): u'L', ord(u'Ó'): u'O', ord(u'Ś'): u'S',
+          ord(u'Ź'): u'Z', ord(u'Ż'): u'Z',
+          ord(u'ą'): u'a', ord(u'ć'): u'c', ord(u'ę'): u'e', ord(u'ł'): u'l', ord(u'ó'): u'o', ord(u'ś'): u's',
+          ord(u'ź'): u'z', ord(u'ż'): u'z'}
     return tekst.translate(pl)
 def response_pdf(request,html,filename):
     response = request.response
     with tempinput(html) as tempfilename:
         with tempinput("") as output_file:
-            wk = WKhtmlToPdf(tempfilename,output_file,dpi="300",screen_resolution=[1280, 1024])
+            wk = pdfkit.from_file(tempfilename, output_file) #,dpi="300",screen_resolution=[1280, 1024])
             response.body_file = pdfkit.from_file('test.html', False)
             response.content_type = 'application/pdf'
-            filename = (filename).replace(" ","_")
+            filename = filename.replace(" ","_")
             filename = pl_to_ascii(filename)
             filename = ''.join(c for c in filename if c in valid_chars).strip(".")
             response.headerlist.append(("Content-Disposition", "attachment; filename='"+str(filename)+".pdf'"))

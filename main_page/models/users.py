@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from .meta import *
-
+import re
 
 class People(Base):
     __tablename__ = 'people'
@@ -37,6 +37,7 @@ class People(Base):
     folders_css = relationship("FoldersCSS", lazy="dynamic")
     entries_css = relationship("EntriesCSS", lazy="dynamic")
     entries_likes = relationship("EntriesLikes", lazy="dynamic")
+    url_name = Column(Text)
 
     def _get_full_name(self):
         return self.first_name+" "+self.last_name
@@ -63,6 +64,20 @@ class People(Base):
         self.phone_confirmed = phone_confirmed
         self.is_male = True
         self.group_id = group_id
+        num = DBSession.query(People).filter_by(first_name=first_name).filter_by(last_name=last_name).count()
+        if not first_name:
+            first_name = ""
+        elif not last_name:
+            last_name = ""
+        d = {u'ą': 'a', u'ć': u'c', u'ę': u'e', u'ł': u'l', u'ó': u'o',
+             u'ś': u's', u'ż': u'z', u'ź': u'z', u'ń': u'n'}
+        first_name = reduce(lambda x, y: x.replace(y, d[y]), d, unicode(first_name).lower())
+        last_name = reduce(lambda x, y: x.replace(y, d[y]), d, unicode(last_name).lower())
+        if num:
+            self.url_name = first_name + "." + last_name + unicode(num)
+        else:
+            self.url_name = first_name + "." + last_name
+
 
     def check_password(self, passwd):
         return self.password == hashlib.sha512(unicode(passwd+str(self.registration_date)).encode('utf-8')).hexdigest()
