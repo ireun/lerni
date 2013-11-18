@@ -194,8 +194,8 @@ parser.add_formatter("last_video", last_video)
 
 def tweets(tag_name, value, options, parent, context):
     to_return=""
-    c = DBSession.query(TweetsCategories).filter_by(name=value).first()
-    for position in DBSession.query(TweetsMain).order_by('-id').filter_by(category=c).limit(8):
+    c = DBSession.query(TweetsCategoriesList).filter_by(name=value).first()
+    for position in DBSession.query(TweetsCategories).order_by('-id').filter_by(category=c).limit(8):
         to_return+="<div class='article'>"
         to_return+="<div class='author'>"+position.tweet.user.full_name+"</div>"
         to_return+="<div class='timeago' title='"+str(position.tweet.date)+"'></div> <br>"
