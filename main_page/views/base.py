@@ -175,6 +175,7 @@ def send_mail(request,subject,recipients,body,fingerprint=False):
 
 parser = bbcode.Parser(normalize_newlines=False, install_defaults=False, escape_html=False, replace_links=False, replace_cosmetic=False)
 parser.add_simple_formatter('hr', '<hr />', standalone=True)
+parser.add_simple_formatter('br', '<br />')
 parser.add_simple_formatter('p', '<p>%(value)s</p>')
 parser.add_simple_formatter('diagram', '<div class="diagram">%(value)s</div>')
 parser.add_simple_formatter('date', '<abbr class="timeago" title="%(value)s">%(value)s</abbr>')
