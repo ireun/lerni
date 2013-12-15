@@ -8,6 +8,7 @@ CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = [
     'pyramid',
+    'pyramid_mako',
     'SQLAlchemy',
     'transaction',
     'pyramid_tm',
@@ -31,7 +32,8 @@ requires = [
     'pdfkit',
     #Anki requipments
     'send2trash',
-    'httplib2'
+    'httplib2',
+    'pyaml'
     ]
 
 setup(name='main_page',

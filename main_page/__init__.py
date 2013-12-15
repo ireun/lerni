@@ -22,6 +22,7 @@ def main(global_config, **settings):
     authz_policy = ACLAuthorizationPolicy()
     config = Configurator(settings=settings, root_factory='main_page.models.RootFactory')
     config.include('pyramid_mailer')
+    config.include('pyramid_mako')
     config.registry['mailer'] = Mailer.from_settings(settings)
     config.set_authentication_policy(authn_policy)
     config.set_authorization_policy(authz_policy)
