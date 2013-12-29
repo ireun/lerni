@@ -11,6 +11,8 @@ from pyramid_mailer.mailer import Mailer
 from webassets import Bundle
 from pyramid_webassets import get_webassets_env
 import os
+
+
 extra_environ = {'HTTP_X_REQUESTED_WITH' : 'XMLHttpRequest'}
 
 def main(global_config, **settings):
@@ -162,4 +164,3 @@ def main(global_config, **settings):
     config.add_rewrite_rule(r'/(?P<path>.*)/', r'/%(path)s')
     config.scan()
     return config.make_wsgi_app()
-

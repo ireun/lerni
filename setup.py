@@ -33,7 +33,10 @@ requires = [
     #Anki requipments
     'send2trash',
     'httplib2',
-    'pyaml'
+    'pyaml',
+    'flickrapi',
+    'pyramid_celery',
+    'redis'
     ]
 
 setup(name='main_page',
