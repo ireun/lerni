@@ -1,7 +1,7 @@
 <%include file="top_new.mak"/>
 <%include file="snippets/header.mak"/>
-<div >
-	<div id="main" class="container-wrapper">
+<div id="main" class="container">
+	<div id="inner-wrapper" class="container">
 		%for box in boxes:
 		<div>
 			<a href="${box[1]}" class="athumbnail">
