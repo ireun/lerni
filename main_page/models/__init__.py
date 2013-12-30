@@ -10,3 +10,5 @@ from .files import *
 from .economy import *
 from .content import *
 from .apps import *
+from .tasks import *
+from .settings import *

@@ -45,7 +45,7 @@
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	      </button>
-          <a class="navbar-brand" href="/">ZSO nr 15 w Sosnowcu</a>
+          <a class="navbar-brand" href="/">${page_title}</a>
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">

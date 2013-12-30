@@ -317,8 +317,3 @@ class Rooms(Base):
         self.number = number
         self.name = name
         self.description = description
-
-
-class Settings(Base):
-    __tablename__ = 'settings'
-    id = Column(Integer, primary_key=True)

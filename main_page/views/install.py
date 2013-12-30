@@ -20,14 +20,26 @@ from pyramid.paster import (
     setup_logging,
     )
 from main_page.tasks import task
-
+import urllib2
+import celery
 @view_config(route_name='install', renderer='install/start.mak')
 def install(request):
-    page={'editor':False, 'allerts':'', 'banners': [['/static/images/lerni.png','position.alternative']]}
-    task1 = task.delay(4,4).id
-    time.sleep(1)
-    task2 = AsyncResult(task1)
-    print task2.result
+    page={'editor': False, 'allerts': '', 'banners': [['/static/images/lerni.png', 'Lerni Logo']]}
+    page['page_title'] = "Lerni - instalacja"  #ZSO nr 15 w Sosnowcu
+    page['internet_on'] = internet_on()
+    try:
+        page['celery'] = 8 == task.delay(4,4).wait(timeout=2, propagate=True, interval=0.5)
+    except celery.exceptions.TimeoutError:
+        page['celery'] = False
+    try:
+        gnupg.GPG(gnupghome='GPG')
+        page['gpg'] = True
+    except ValueError:
+        page['gpg'] = False
+    page['update_available'] = False
+    #time.sleep(1)
+    #task2 = AsyncResult(task1)
+    #print task2.result
     if False:
         config_uri = "development.ini"
         setup_logging(config_uri)
@@ -41,3 +53,10 @@ def install(request):
 #def install(request):
 #    page={'editor':False, 'allerts':'', 'banners': [['/static/images/lerni.png','position.alternative']]}
 #    return page
+
+def internet_on():
+    try:
+        response=urllib2.urlopen('http://74.125.228.100',timeout=1)
+        return True
+    except urllib2.URLError as err: pass
+    return False

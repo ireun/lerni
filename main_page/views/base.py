@@ -110,7 +110,7 @@ recaptcha_public = "6Lfz3OUSAAAAACtP35cn21roRF4k9eS5Tw6c6ik2"
 import os
 import gnupg
 from pprint import pprint
-gpg = gnupg.GPG(gnupghome='GPG')
+#gpg = gnupg.GPG(gnupghome='GPG')
 
 
 from BeautifulSoup import BeautifulSoup

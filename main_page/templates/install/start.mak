@@ -2,20 +2,78 @@
 <%include file="../snippets/header.mak"/>
 <div id="main" class="container">
 	<div id="inner-wrapper" class="container">
-        <h2>Witaj w procesie konfiguracji lerni.</h2>
-        <h4>Jeśli robiłeś to już wcześniej możesz chcieć wczytać starą <a href="/uploaddb">bazę danych.</a></h4>
-        <h4>W przeciwnym wypadku uzupełnij poniższy formularz.</h4>
-        <form role="form">
-          <div class="form-group">
-            <label for="pageTitle">Tytuł strony</label>
-            <input type="text" class="form-control" id="pageTitle" placeholder="Tytuł strony">
-          </div>
-          <div class="form-group">
-            <label for="exampleInputEmail1">Adres email</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Adres email">
-          </div>
-          <button type="submit" class="btn btn-default">Wyślij</button>
-        </form>
+        <div class="row">
+            <div class="col-md-8">
+                <h2>Witaj w procesie konfiguracji lerni.</h2>
+                <h4>Aby móc kontynuować następujące wymagania muszą zostać spełnione.</h4>
+                <table class="table table-bordered">
+                    <tr>
+                        %if internet_on:
+                        <td class="success">Komputer jest podłączony do internetu.</td>
+                        %else:
+                        <td class="warning">Nie wykryto połączenia z internetem.
+                            Jeśli jesteś pewien, że jest ono dostępne nie przejmuj się tym komunikatem.</td>
+                        %endif
+                    </tr>
+                    <tr>
+                        %if celery:
+                        <td class="success">W sieci obecny jest prawidłowo skonfigurowany serwer Celery.</td>
+                        %else:
+                        <td class="danger">Połączenie z serwerem Celery nie powiodło się.
+                            Instalacja nie może być kontynuowana.</td>
+                        %endif
+                    </tr>
+                    <tr>
+                      <td class="warning">Prawidłowo skonfigurowano wysyłkę maili. [niesprawdzono]</td>
+                    </tr>
+                    <tr>
+                      <td class="warning">Wkhtmltopdf jest zainstalowany. [niesprawdzono]</td>
+                    </tr>
+                    <tr>
+                        %if gpg:
+                        <td class="success">GnuPG jest zainstalowane.</td>
+                        %else:
+                        <td class="warning">GnuPG nie jest zainstalowane. Część funkcji może być niedostępna.</td>
+                        %endif
+                    </tr>
+                    <tr>
+                        %if update_available:
+                        <td class="warning">Nowa wersja Lerni jest dostępna.</td>
+                        %else:
+                        <td class="success">Instalowana wersja jest najnowszą dostępną wersją Lerni.</td>
+                        %endif
+                    </tr>
+                </table>
+                <a href="?s=1" class="btn btn-default pull-right" role="button">Dalej <i class="icon-white icon-chevron-right"></i></a>
+
+                <!--
+                <form role="form">
+                  <div class="form-group">
+                    <label for="pageTitle">Tytuł strony</label>
+                    <input type="text" class="form-control" id="pageTitle" placeholder="Tytuł strony">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Adres email</label>
+                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Adres email">
+                  </div>
+                  <button type="submit" class="btn btn-default">Wyślij</button>
+                </form>
+                -->
+            </div>
+
+            <div class="col-md-4">
+                <h3>Postęp instalacji</h3>
+                <ul class="list-group no-padding">
+                    <a class="list-group-item active">Wymagania systemowe</a>
+                    <a class="list-group-item">Ustawienia bazy danych</a>
+                    <a class="list-group-item">Morbi leo risus</a>
+                    <a class="list-group-item">Porta ac consectetur ac</a>
+                    <a class="list-group-item">Vestibulum at eros</a>
+                </ul>
+
+            </div>
+        </div>
+
     </div>
 </div>
 <%include file="../bottom_new.mak"/>
