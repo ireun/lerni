@@ -22,8 +22,17 @@ from pyramid.paster import (
 from main_page.tasks import task
 import urllib2
 import celery
+
+
+@view_config(route_name='install', renderer='install/upload.mak', request_param='s=1')
+def install_upload(request):
+    page={'editor': False, 'allerts': '', 'banners': [['/static/images/lerni.png', 'Lerni Logo']]}
+    page['page_title'] = "Lerni - instalacja"
+    return page
+
+
 @view_config(route_name='install', renderer='install/start.mak')
-def install(request):
+def install_start(request):
     page={'editor': False, 'allerts': '', 'banners': [['/static/images/lerni.png', 'Lerni Logo']]}
     page['page_title'] = "Lerni - instalacja"  #ZSO nr 15 w Sosnowcu
     page['internet_on'] = internet_on()
@@ -48,7 +57,6 @@ def install(request):
         DBSession.configure(bind=engine)
         Base.metadata.create_all(engine)
     return page
-
 #@view_config(route_name='install', renderer='install/start.mak')
 #def install(request):
 #    page={'editor':False, 'allerts':'', 'banners': [['/static/images/lerni.png','position.alternative']]}

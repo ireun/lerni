@@ -76,6 +76,7 @@ from main_page.models import (
     CompetitorsTutors,
     CompetitorsTypes,
     CompetitorsGroups,
+    Files,
     )
     
 #import re

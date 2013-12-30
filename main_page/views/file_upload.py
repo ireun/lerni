@@ -7,14 +7,15 @@ import md5   #Zastapic hashlib
 import random
 import time
 
-filepath="/home/kamil/test_upload/"
+filepath="main_page/uploads/"
 packet_size=512*512
 store_files=True
 
 @view_config(route_name='file_upload', renderer='jsonp')
 def store_mp3_view(request):
+    print request.POST.mixed()
     if len(request.POST) == 0 and len(request.GET) == 0:
-        return {"error":"No post request"}
+        return {"error": "No post request"}
     if len(request.GET) == 0:
         if request.POST.has_key('totalSize') and request.POST.has_key('type') and request.POST.has_key('fileName') and request.POST.has_key('totalSize'): #is_numeric($_POST['totalSize']))
             return newUpload(request)
@@ -36,7 +37,7 @@ def newUpload(request):
     with transaction.manager:
         DBSession.add_all([Files(fileData, fileid, token, originalFileName, "", datetime.datetime.now()) ])
     return {"action":"new_upload","fileid":fileid,"token":token}
-  
+
 def getPacket(request):
     if DBSession.query(Files).filter_by(fileid=request.GET['fileid']).filter_by(token=request.GET['token']).count()!=0:
         if store_files:
@@ -54,7 +55,7 @@ def getPacket(request):
             output_file.close()
             os.rename(temp_file_path, file_path)
         return {"action":"new_packet","result":"success","packet":request.GET['packet']}
-        
+
 def mergeFiles(request):
     if DBSession.query(Files).filter_by(fileid=request.POST['fileid']).filter_by(token=request.POST['token']).count()==0:
         return {"error":"No file found in the database for the provided ID / token"}
@@ -78,10 +79,10 @@ def mergeFiles(request):
             except IOError:
                 exists=0
             if not exists:
-                return {"error":"Missing package #"+package}
-                
+                return {"error":"Missing package #"+str(package)}
+
         output_file = open(filepath+request.POST['fileid'], 'ab') ## Wyjątki dorobić throwError("Unable to create new file for merging");
-        
+
         file_hash = md5.new()
         for package in range(int(totalPackages)):
             input_file=open(filepath+request.POST['fileid']+"-"+str(package),'rb')
@@ -90,13 +91,12 @@ def mergeFiles(request):
             file_hash.update(input_data)
             input_file.close()
             os.remove(filepath+request.POST['fileid']+"-"+str(package))
-        output_file.close()    
+        output_file.close()
         DBSession.query(Files).filter_by(fileid=request.POST['fileid']).filter_by(token=request.POST['token']).first().add_time=datetime.datetime.now()
         DBSession.query(Files).filter_by(fileid=request.POST['fileid']).filter_by(token=request.POST['token']).first().md5_hash=file_hash.hexdigest()
 
     return {"action":"complete","file":request.POST['fileid']}
-    
-    
-    
-    
-    
+
+
+
+

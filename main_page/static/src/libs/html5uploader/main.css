@@ -1,0 +1,187 @@
+#root-container {
+	width: 600px;
+	min-height:100%;
+	margin: 0 auto;
+	padding-top: 1em;
+	position: relative;
+	overflow: hidden;
+	background: #303030 url(bottom.gif) no-repeat center bottom;
+
+}
+
+#sharing {
+	position: absolute;
+	top: 0;
+	right: 0;
+	z-index: 100;
+	width: 170px; 
+	margin: 2em auto;
+}
+
+#sharing ul {
+	list-style-type: none;
+}
+
+#sharing ul li {
+	float: left;
+	padding-left: 20px;
+}
+
+#sharing .first {
+	padding-left: 0px;
+}
+
+
+#welcome {
+	font-size:1.2em;
+	text-align: center;
+	letter-spacing: 0.05em;
+	text-shadow: 1px 1px 15px #888888;
+	margin-top: 5em;
+}
+
+#browser-warning {
+	display: none;
+	padding: 1em;
+	text-align: center;
+	color: #666;
+	font-weight:bold;
+	background-color: #FFDAD9;
+	border: 2px solid #FF0700;
+	-moz-border-radius: 4px 4px;
+	-webkit-border-radius: 4px 4px;
+	border-bottom-left-radius: 4px 4px;
+	border-bottom-right-radius: 4px 4px;
+	border-top-left-radius: 4px 4px;
+	border-top-right-radius: 4px 4px;
+	margin-bottom: 1em;
+}
+
+#browser-warning a {
+	color: #222;
+}
+
+
+#filepicker-input{
+    -moz-opacity: 0;
+    filter:alpha(opacity: 0);
+    opacity: 0; 
+    position:absolute; 
+    top:0px; left:0px; 
+    z-index:-100;
+}
+#direct-upload-text{
+    color: #2222EE
+}
+#direct-upload-text:hover{
+	cursor:pointer;
+	color: #8888FF;
+}
+
+
+#more-info-link{
+	cursor:pointer;
+}
+
+#more-info{
+	display:none;
+	width: 250px;
+	padding: 0px 20px 15px 20px;
+	margin: 20px auto 10px auto;
+	background-color: #222;
+	border-radius: 10px;
+}
+
+#more-info ul li{
+	padding-top: 10px;
+}
+
+
+#preview{
+	display:block;
+	color:#bbb;
+	/*background-color:#FFBF00;*/
+	margin: 10px auto;
+	margin-bottom:200px;
+	border-radius: 20px;" 
+}
+
+#dropped-files {
+	list-style: none;
+}
+
+#preview li {
+	display: block;
+	min-height: 64px;
+	background-color: #222;
+	padding: 15px 15px 15px 15px;
+	margin-top: 10px;
+	border-radius: 5px;
+}
+#preview li .filename {
+}
+
+#preview li .pauseButton {
+	float: right;
+}
+
+#preview li .progressbar {
+	margin-top: 1em;
+	height: 5px;
+	width: 300px;
+}
+
+#preview li .log-link {
+	display:none;
+	width: 70px;
+	font-size: 0.9em;
+	margin-top: 1em;
+	cursor: pointer;
+}
+
+#preview li:hover .log-link {
+	display: block;
+}
+
+#preview li:hover .log-link:hover {
+	color: #FFEEEE;
+}
+
+#preview li .log {
+	max-height: 300px;
+	overflow:auto;
+	padding: 10px;
+	margin-top: 1em;
+	color: lime;
+	background-color: #121212;
+	border-radius: 5px;
+	border: 10px solid #121212;
+}
+
+#preview .downloadLink {
+	padding-left: 2em;
+	color:  #ffbf00; /*#33FF05;*/
+	text-decoration: none;
+}
+
+#preview .downloadLink:hover {
+	text-decoration: underline;
+}
+
+#uploadbutton {
+	display:none;
+	margin: 0 auto;
+	margin-top: 2em; 
+	margin-bottom: 20px;
+}
+
+#ajax-loader {
+	display:none;
+	margin-bottom: 5px;
+	vertical-align: middle;
+}
+
+noscript {
+	color: #BBBBBB;
+	text-align: center;
+}
