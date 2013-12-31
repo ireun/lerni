@@ -1,102 +1,87 @@
 # -*- coding: utf-8 -*-
 from base import *
 import os
-import uuid
 import re
-import md5   #Zastapic hashlib
+import hashlib
 import random
 import time
 
-filepath="main_page/uploads/"
-packet_size=512*512
-store_files=True
+upload_path = "main_page/uploads/"
+packet_size = 512*512
 
-@view_config(route_name='file_upload', renderer='jsonp')
-def store_mp3_view(request):
-    print request.POST.mixed()
-    if len(request.POST) == 0 and len(request.GET) == 0:
-        return {"error": "No post request"}
-    if len(request.GET) == 0:
-        if request.POST.has_key('totalSize') and request.POST.has_key('type') and request.POST.has_key('fileName') and request.POST.has_key('totalSize'): #is_numeric($_POST['totalSize']))
-            return newUpload(request)
-        elif request.POST['fileid'] and request.POST['token']: # && preg_match('/[A-Za-z0-9]/', $_POST['token'])
-            return mergeFiles(request)
-    else:
-        if request.GET['fileid'] and request.GET['token'] and request.GET['packet']: #type(request.GET['packet']): is_numeric($_GET['packet']) && is_numeric($_GET['fileid'])) {
-            return getPacket(request)
 
-def newUpload(request):
-    fileData = str(request.POST['totalSize'])+"|"+re.sub('/[^A-Za-z0-9\/]/', '', request.POST['type'])+"|"+re.sub('/[^A-Za-z0-9\/]/', '', request.POST['fileName'])
-    originalFileName = request.POST['fileName'];
-    token = md5.new(fileData).hexdigest()
-    x=1
-    while x:
-        fileid=str(time.time())+str(random.randint(5, pow(2, 31) - 1))
-        if DBSession.query(Files).filter_by(fileid=fileid).count()==0:
-            x=0
+@view_config(route_name='file_upload', renderer='jsonp', request_param=['totalSize', 'type', 'fileName', 'totalSize'])
+def new_upload(request):
+    file_data = str(request.POST['totalSize']) + "|" + re.sub('/[^A-Za-z0-9/]/', '', request.POST['type']) +\
+        "|" + re.sub('/[^A-Za-z0-9/]/', '', request.POST['fileName'])
+    original_file_name = request.POST['fileName']
+    token = hashlib.md5(file_data).hexdigest()
+    fileid = str(time.time())+str(random.randint(5, pow(2, 31) - 1))
+    while DBSession.query(Files).filter_by(fileid=fileid).count() != 0:
+        fileid = str(time.time())+str(random.randint(5, pow(2, 31) - 1))
     with transaction.manager:
-        DBSession.add_all([Files(fileData, fileid, token, originalFileName, "", datetime.datetime.now()) ])
-    return {"action":"new_upload","fileid":fileid,"token":token}
+        DBSession.add_all([Files(file_data, fileid, token, original_file_name, "", datetime.datetime.now())])
+    return {"action": "new_upload", "fileid": fileid, "token": token}
 
-def getPacket(request):
-    if DBSession.query(Files).filter_by(fileid=request.GET['fileid']).filter_by(token=request.GET['token']).count()!=0:
-        if store_files:
-            filename = request.GET['fileid']+"-"+request.GET['packet']
-            input_file = request.POST['data'].file
-            file_path = filepath+filename
-            temp_file_path = file_path + '~'
-            output_file = open(temp_file_path, 'wb')
-            input_file.seek(0)
-            while True:
-                data = input_file.read(2<<16)
-                if not data:
-                    break
-                output_file.write(data)
-            output_file.close()
-            os.rename(temp_file_path, file_path)
-        return {"action":"new_packet","result":"success","packet":request.GET['packet']}
 
-def mergeFiles(request):
-    if DBSession.query(Files).filter_by(fileid=request.POST['fileid']).filter_by(token=request.POST['token']).count()==0:
-        return {"error":"No file found in the database for the provided ID / token"}
-    exists=1
-    try:
-        with open(filepath+request.POST['fileid']): pass
-    except IOError:
-        exists=0
-    if not exists:
-        fileDataList=DBSession.query(Files).filter_by(fileid=request.POST['fileid']).filter_by(token=request.POST['token']).first().fileData.split("|")
-        fileSize=fileDataList[0]
-        fileType=fileDataList[1]
-        fileName=fileDataList[2]
+@view_config(route_name='file_upload', renderer='jsonp', request_param=['fileid', 'token', 'packet'])
+def get_packet(request):
+    fileid = request.POST['fileid']
+    token = request.POST['token']
+    if DBSession.query(Files).filter_by(fileid=fileid).filter_by(token=token).count() != 0:
+        filename = request.GET['fileid']+"-"+request.GET['packet']
+        input_file = request.POST['data'].file
+        file_path = upload_path+filename
+        temp_file_path = file_path + '~'
+        output_file = open(temp_file_path, 'wb')
+        input_file.seek(0)
+        while True:
+            data = input_file.read(2 << 16)
+            if not data:
+                break
+            output_file.write(data)
+        output_file.close()
+        os.rename(temp_file_path, file_path)
+        return {"action": "new_packet", "result": "success", "packet": request.GET['packet']}
+    ## Return no such file error
 
-        totalPackages = ceil(float(fileSize)/packet_size);
 
-        for package in range(int(totalPackages)):
-            exists=1
+@view_config(route_name='file_upload', renderer='jsonp', request_param=['fileid', 'token'])
+def merge_files(request):
+    fileid = request.POST['fileid']
+    token = request.POST['token']
+    if DBSession.query(Files).filter_by(fileid=fileid).filter_by(token=token).count() == 0:
+        return {"error": "No file found in the database for the provided ID / token"}
+    else:
+        f = DBSession.query(Files).filter_by(fileid=fileid).filter_by(token=token).first()
+    if not f.uploaded:
+        file_data_list = f.fileData.split("|")
+        file_size = file_data_list[0]
+        #file_type = file_data_list[1]
+        #file_name = file_data_list[2]
+
+        total_packages = ceil(float(file_size)/packet_size)
+        for package in range(int(total_packages)):
             try:
-                with open(filepath+request.POST['fileid']+"-"+str(package)): pass
+                with open(upload_path+request.POST['fileid']+"-"+str(package)):
+                    pass
             except IOError:
-                exists=0
-            if not exists:
-                return {"error":"Missing package #"+str(package)}
+                return {"error": "Missing package #"+str(package)}
+        try:
+            output_file = open(upload_path+request.POST['fileid'], 'ab')
+        except IOError:
+            return {"error": "Unable to create new file for merging"}
 
-        output_file = open(filepath+request.POST['fileid'], 'ab') ## Wyjątki dorobić throwError("Unable to create new file for merging");
-
-        file_hash = md5.new()
-        for package in range(int(totalPackages)):
-            input_file=open(filepath+request.POST['fileid']+"-"+str(package),'rb')
-            input_data=input_file.read()
+        file_hash = hashlib.md5()
+        for package in range(int(total_packages)):
+            input_file = open(upload_path+fileid+"-"+str(package), 'rb')
+            input_data = input_file.read()
             output_file.write(input_data)
             file_hash.update(input_data)
             input_file.close()
-            os.remove(filepath+request.POST['fileid']+"-"+str(package))
+            os.remove(upload_path+fileid+"-"+str(package))
         output_file.close()
-        DBSession.query(Files).filter_by(fileid=request.POST['fileid']).filter_by(token=request.POST['token']).first().add_time=datetime.datetime.now()
-        DBSession.query(Files).filter_by(fileid=request.POST['fileid']).filter_by(token=request.POST['token']).first().md5_hash=file_hash.hexdigest()
-
-    return {"action":"complete","file":request.POST['fileid']}
-
-
-
-
+        f.add_time = datetime.datetime.now()
+        f.md5_hash = file_hash.hexdigest()
+        f.uploaded = True
+    return {"action": "complete", "file": request.POST['fileid']}
