@@ -6,6 +6,9 @@ here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.md')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
+dependency_links = [
+    'https://github.com/sontek/pyramid_celery/tarball/master#egg=pyramid_celery-1.3']
+
 requires = [
     'pyramid',
     'pyramid_mako',
@@ -35,20 +38,18 @@ requires = [
     'httplib2',
     'pyaml',
     'flickrapi',
-    'pyramid_celery',
-    'redis'
-    ]
+    'pyramid_celery==1.3',
+    'redis']
 
 setup(name='main_page',
       version='0.0',
       description='main_page',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
-        "Programming Language :: Python",
-        "Framework :: Pyramid",
-        "Topic :: Internet :: WWW/HTTP",
-        "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
-        ],
+          "Programming Language :: Python",
+          "Framework :: Pyramid",
+          "Topic :: Internet :: WWW/HTTP",
+          "Topic :: Internet :: WWW/HTTP :: WSGI :: Application"],
       author='',
       author_email='',
       url='',
@@ -58,6 +59,7 @@ setup(name='main_page',
       zip_safe=False,
       test_suite='main_page',
       install_requires=requires,
+      dependency_links=dependency_links,
       entry_points="""\
       [paste.app_factory]
       main = main_page:main
