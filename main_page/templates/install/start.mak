@@ -30,6 +30,9 @@
                       <td class="warning">Wkhtmltopdf jest zainstalowany. [niesprawdzono]</td>
                     </tr>
                     <tr>
+                      <td class="warning">Serwer cups jest dostępny. [niesprawdzono]</td>
+                    </tr>
+                    <tr>
                         %if gpg:
                         <td class="success">GnuPG jest zainstalowane.</td>
                         %else:
