@@ -63,18 +63,7 @@
                 </form>
                 -->
             </div>
-
-            <div class="col-md-4">
-                <h3>Postęp instalacji</h3>
-                <ul class="list-group no-padding">
-                    <a href="/install" class="list-group-item active">Wymagania systemowe</a>
-                    <a href="/install?s=1" class="list-group-item">Upload dodatkowych plików</a>
-                    <a class="list-group-item">Ustawienia bazy danych</a>
-                    <a class="list-group-item">Porta ac consectetur ac</a>
-                    <a class="list-group-item">Vestibulum at eros</a>
-                </ul>
-
-            </div>
+            <%include file="installation_progress.mak"/>
         </div>
 
     </div>
