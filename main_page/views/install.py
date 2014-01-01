@@ -22,6 +22,8 @@ from pyramid.paster import (
 from main_page.tasks import task
 import urllib2
 import celery
+from socket import error as socket_error
+import errno
 
 
 @view_config(route_name='install', renderer='install/upload.mak', request_param='s=1')
@@ -40,6 +42,9 @@ def install_start(request):
         page['celery'] = 8 == task.delay(4,4).wait(timeout=2, propagate=True, interval=0.5)
     except celery.exceptions.TimeoutError:
         page['celery'] = False
+    except socket_error as serr:
+        if serr.args[0][0] != errno.ECONNREFUSED:
+            raise serr
     try:
         gnupg.GPG(gnupghome='GPG')
         page['gpg'] = True
