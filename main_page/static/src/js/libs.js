@@ -19,6 +19,8 @@ autosize = {autosize: "/static/libs/jquery.autosize/jquery.autosize.min.js"}
 footable = {footable: "/static/libs/footable/footable.min.js"}
 footable_filter = {footable_fitler: "/static/libs/footable/footable.filter.min.js"}
 
+footable_sort = {footable_sort: "/static/libs/footable/footable.sort.min.js"}
+
 uiji = {uiji: "/static/libs/uiji/uiji.min.js"}
 raptor = {raptor: "/static/libs/raptor/default.min.js"}
 raptor2 = {ratpor2: "/static/libs/raptor/tags.min.js"}

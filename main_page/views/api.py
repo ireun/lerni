@@ -4,6 +4,88 @@ import psutil
 from pyramid.security import authenticated_userid
 import datetime
 
+#################
+# Competitors   #
+#################
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.competitors.getList',
+                                                                'jtStartIndex','jtPageSize'])
+def jsonp_competitors_list(request):
+    page = {"Result":"OK","Records":[]}
+    start_index = request.params['jtStartIndex']
+    page_size = request.params['jtPageSize']
+    sorting = request.params['jtSorting'].split(" ")
+    print sorting
+    query = DBSession.query(Competitors).offset(int(start_index)).limit(int(page_size))
+    for position in query:
+        page['Records'].append({u"competitor_id": position.id,
+                                u"first_name": position.first_name,
+                                u"last_name": position.last_name,
+                                u"competition_group_id": position.competition_group_id,
+                                u"competition_id": position.competition_id,
+                                u"competitor_type_id": position.competitor_type_id,
+                                u"competitor_tutor_id": position.competitor_tutor_id,
+                                u"year": position.start_year,
+                                u"group": 1})
+    page['TotalRecordCount'] = DBSession.query(Competitors).count()
+    return page
+
+#options: "/api?format=jsonp&method=lerni.teachers.getList"
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.competitors.delete',
+                                                                'first_date'])
+def jsonp_competitors_delete(request):
+    session = DBSession()
+    date = datetime.datetime(*(time.strptime(request.params['first_date'], "%Y-%m-%d")[0:6])).date()
+    week = get_week(date+datetime.timedelta(1))
+    query = DBSession.query(LuckyNumbers).filter(LuckyNumbers.date.between(week[0], week[1]))
+    for x in query:
+        session.delete(x)
+    transaction.commit()
+    return {"Result":"OK"}
+
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.competitors.edit',
+                                                                'first_date', '0', '1', '2', '3', '4', '5', '6'])
+def jsonp_competitors_edit(request):
+    session = DBSession()
+    date = datetime.datetime(*(time.strptime(request.params['first_date'], "%Y-%m-%d")[0:6])).date()
+    week = get_week(date+datetime.timedelta(1))
+    for x in range(7):
+        date2 = week[0]+datetime.timedelta(x)
+        number = DBSession.query(LuckyNumbers).filter_by(date=date2).first()
+        if number and request.params[str(x)]:
+            number.number = request.params[str(x)]
+        elif number and not request.params[str(x)]:
+            session.delete(number)
+        elif request.params[str(x)]:
+            number = LuckyNumbers(date2,request.params[str(x)])
+            session.add(number)
+    transaction.commit()
+    return {"Result":"OK"}
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.competitors.add', 'first_date'])
+def jsonp_competitors_create(request):
+    page={"Result":"OK","Record":{}}
+    session = DBSession()
+    date = datetime.datetime(*(time.strptime(request.params['first_date'], "%Y-%m-%d")[0:6])).date()
+    week = get_week(date+datetime.timedelta(1))
+    record = {"first_date": str(week[0]), "0": " ", "1": " ", "2": " ", "3": " ", "4": " ", "5": " ", "6": " ",
+              "start" : str(week[0]), "end" : str(week[1])}
+    for x in range(7):
+        date2 = week[0]+datetime.timedelta(x)
+        number = DBSession.query(LuckyNumbers).filter_by(date=date2).first()
+        if number:
+            number.number = request.params[str(x)]
+        elif number and not request.params[str(x)]:
+            session.delete(number)
+        elif request.params[str(x)]:
+            number = LuckyNumbers(date2, request.params[str(x)])
+            session.add(number)
+        record[str(x)]=request.params[str(x)]
+    transaction.commit()
+    page['Record'] = record
+    return page
+
+
 
 def get_week(day):
     start = day-datetime.timedelta(day.weekday())
@@ -88,7 +170,9 @@ def jsonp_lucky_create(request):
     transaction.commit()
     page['Record'] = record
     return page
-
+################
+################
+################
 @view_config(route_name='jsonp_mobile_login', renderer='jsonp')
 def my_view4(request):
     #code = request.POST['code']

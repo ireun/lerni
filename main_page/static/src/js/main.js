@@ -1,7 +1,7 @@
 head.js(jquery, autosize, function (){
    $(document).ready(function(){ $('textarea').autosize(); });
 });
-head.js(jquery, footable, footable_filter, function (){
+head.js(jquery, footable, footable_filter, footable_sort, function (){
     $('.footable').footable();
 })
 head.js(jquery, jflickrfeed, owl, function (){

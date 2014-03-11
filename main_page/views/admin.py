@@ -192,6 +192,30 @@ def admin_log_tweets(request):
                            "displayFormat": "dd.mm.yy", "create": False, "edit": False, "sorting": False})
     return page
 
+@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=all', 'page=competitors'])
+def admin_log_competitors(request):
+    page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Użytkownicy"]], 'allerts': []}
+    page.update(get_basic_account_info(request))
+    page['title'] = u"Konkursowicze"
+    page['title_desc'] = u'''Poniżej możesz dodać nowych albo edyotwać istniejąch konkursowiczów.'''
+    page['sorting'] = True
+    page['defaultSorting'] = "user_id DESC"
+    page['selecting'] = True
+    page['list'] = "/api?format=jsonp&method=lerni.competitors.getList"
+    page['delete'] = "/api?format=jsonp&method=lerni.competitors.delete"
+    page['update'] = "/api?format=jsonp&method=lerni.competitors.edit"
+    page['create'] = "/api?format=jsonp&method=lerni.competitors.add"
+    page['fields'] = [{'name': u"user_id", 'key': True, "list": False, "create": False, "edit": False}]
+    page['fields'].append({'name': u"first_name", "title": u"Imię"})
+    page['fields'].append({'name': u"last_name", "title": u"Nazwisko"})
+
+    page['fields'].append({'name': u"competition_group_id", "title": u"Poziom"})
+    page['fields'].append({'name': u"competition_id", "title": u"Konkurs"})
+    page['fields'].append({'name': u"competitor_type_id", "title": u"Osiągnięcie"})
+    page['fields'].append({'name': u"competitor_tutor_id", "title": u"Opiekun"})
+    page['fields'].append({'name': u"year", "title": u"Rok szkolny"})
+    return page
+
 @view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=all', 'page=folders'])
 def admin_log_folders(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Przedmioty"]], 'allerts': [],

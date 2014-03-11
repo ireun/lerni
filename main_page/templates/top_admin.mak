@@ -126,6 +126,7 @@
                     <li class=""><a href="/admin/all/folders"> <span class="icon icon-angle-right"></span>Foldery</a></li>
                     <li class=""><a href="/admin/all/petitions"> <span class="icon icon-angle-right"></span>Wnioski</a></li>
                     <li class=""><a href="/admin/all/competitions"> <span class="icon icon-angle-right"></span>Konkursy</a></li>
+                    <li class=""><a href="/admin/all/competitors"> <span class="icon icon-angle-right"></span>Konkursowicze</a></li>
                   </ul>
                 </li>
                 <li class="accordion-group ">

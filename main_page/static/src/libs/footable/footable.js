@@ -1,15 +1,15 @@
 ﻿/*!
  * FooTable - Awesome Responsive Tables
- * Version : 2.0.1.2
+ * Version : 2.0.1.4
  * http://fooplugins.com/plugins/footable-jquery/
  *
  * Requires jQuery - http://jquery.com/
  *
- * Copyright 2013 Steven Usher & Brad Vincent
+ * Copyright 2014 Steven Usher & Brad Vincent
  * Released under the MIT license
  * You are free to use FooTable in commercial projects as long as this copyright header is left intact.
  *
- * Date: 21 Sep 2013
+ * Date: 16 Feb 2014
  */
 (function ($, w, undefined) {
     w.footable = {
@@ -612,8 +612,10 @@
 
                     selector += ', > thead > tr[data-group-row="true"] > th[data-group="' + data.group + '"]';
                     var $column = $table.find(selector).add(this);
-                    if (data.hide[breakpointName] === false) $column.show();
-                    else $column.hide();
+                    if (breakpointName !== '') {
+                      if (data.hide[breakpointName] === false) $column.addClass('footable-visible').show();
+                      else $column.removeClass('footable-visible').hide();
+                    }
 
                     if ($table.find('> thead > tr.footable-group-row').length === 1) {
                         var $groupcols = $table.find('> thead > tr:last-child > th[data-group="' + data.group + '"]:visible, > thead > tr:last-child > th[data-group="' + data.group + '"]:visible'),
@@ -646,10 +648,10 @@
             $table.find('> thead > tr > th.footable-last-column, > tbody > tr > td.footable-last-column').removeClass('footable-last-column');
             $table.find('> thead > tr > th.footable-first-column, > tbody > tr > td.footable-first-column').removeClass('footable-first-column');
             $table.find('> thead > tr, > tbody > tr')
-                .find('> th:visible:last, > td:visible:last')
+                .find('> th.footable-visible:last, > td.footable-visible:last')
                 .addClass('footable-last-column')
                 .end()
-                .find('> th:visible:first, > td:visible:first')
+                .find('> th.footable-visible:first, > td.footable-visible:first')
                 .addClass('footable-first-column');
 
             ft.raise(evt.redrawn);

@@ -6,6 +6,7 @@ import pyramid
 def successes(request):
     page={'editor':0, 'allerts':[]}
     logged_in = authenticated_userid(request)
+    page['page_title']="ZSO nr 15 w Sosnowcu"
     page['logged_in']=logged_in
     page['name']=username(logged_in)
     page['banners']=[]
@@ -24,6 +25,7 @@ def successes(request):
 def set(request):
     page={'editor':0, 'allerts':[]}
     page['boxes']=[]
+    page['page_title']="ZSO nr 15 w Sosnowcu"
     for position in DBSession.query(Sets).filter_by(id=request.matchdict['id']).first().items:
         page['boxes'].append([position.name,position.link])
     page['banners']=[]

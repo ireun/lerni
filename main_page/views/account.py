@@ -60,7 +60,7 @@ def account_phone_app(request):
 @view_config(route_name='account_folders', renderer='admin_jtable.mak')
 def account_folders(request):
     page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["",u"Moje konto"],["",u"Foldery"]], 'allerts':[]}
-    page.update(get_basic_account_info())
+    page.update(get_basic_account_info(request))
     logged_in = authenticated_userid(request)
     page['name']=username(logged_in)
     page['title']=u"Foldery"
@@ -72,7 +72,7 @@ def account_folders(request):
 @view_config(route_name='account_entries', renderer='admin_jtable.mak')
 def account_entries(request):
     page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["",u"Moje konto"],["",u"Wpisy"]], 'allerts':[]}
-    page.update(get_basic_account_info())
+    page.update(get_basic_account_info(request))
     logged_in = authenticated_userid(request)
     page['name']=username(logged_in)
     page['title']=u"Wpisy"
@@ -83,7 +83,7 @@ def account_entries(request):
 @view_config(route_name='account_presentations', renderer='admin_jtable.mak')
 def account_presentations(request):
     page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["",u"Moje konto"],["",u"Prezentacje"]], 'allerts':[]}
-    page.update(get_basic_account_info())
+    page.update(get_basic_account_info(request))
     logged_in = authenticated_userid(request)
     page['name']=username(logged_in)
     page['title']=u"Prezentacje"
@@ -94,7 +94,7 @@ def account_presentations(request):
 @view_config(route_name='account_tasks_sets', renderer='admin_jtable.mak')
 def account_tasks_sets(request):
     page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["",u"Moje konto"],["",u"Foldery"]], 'allerts':[]}
-    page.update(get_basic_account_info())
+    page.update(get_basic_account_info(request))
     logged_in = authenticated_userid(request)
     page['name']=username(logged_in)
     page['title']=u"Zestawy zadań"
@@ -105,7 +105,7 @@ def account_tasks_sets(request):
 #@view_config(route_name='account_competitions', renderer='admin_jtable.mak')
 #def account_tasks_sets(request):
 #    page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["",u"Moje konto"],["",u"Konkursy"]], 'allerts':[]}
-#    page.update(get_basic_account_info())
+#    page.update(get_basic_account_info(request))
 #    logged_in = authenticated_userid(request)
 #    page['name']=username(logged_in)
 #    page['title']=u"Foldery"

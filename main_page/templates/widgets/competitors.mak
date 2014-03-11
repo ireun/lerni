@@ -1,5 +1,6 @@
 <p>
 Search: <input id="filter" type="text">
+    <!--
 Status: <select class="filter-status">
 <option></option>
 <option value="active">Active</option>
@@ -8,11 +9,12 @@ Status: <select class="filter-status">
 </select>
 <a href="#clear" class="clear-filter" title="clear filter">[clear]</a>
 <a href="#api" class="filter-api" title="Filter using the Filter API">[filter API]</a>
+-->
 </p>
-<table class="footable table" data-filter="#filter" data-filter-text-only="true">
+<table class="footable table" data-filter="#filter" data-filter-text-only="true" data-sort="true">
 <thead>
 <tr>
-  <th>
+  <th data-ignore="true" data-hide="all">>
     ID
   </th>
   <th>
@@ -20,6 +22,9 @@ Status: <select class="filter-status">
   </th>
   <th>
     Rodzaj konkursu
+  </th>
+  <th>
+    Przedmiot
   </th>
   <th>
     Opiekun
@@ -33,7 +38,8 @@ Status: <select class="filter-status">
     % for row in competitors:
         <tr>
             <td></span>${row[0]}</td>
-            <td>${row[1]}</td>
+            <td data-value="${row[1]}">${row[1]}</td>
+            <td>${row[2]}</td>
             <td>${row[2]}</td>
             <td>${row[4]}</td>
             <td>${row[5]}</td>

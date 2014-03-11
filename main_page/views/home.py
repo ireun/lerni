@@ -3,6 +3,7 @@ from base import *
 @view_config(route_name='home', renderer='pages.mak')
 def home(request):
     page={'editor':False, 'allerts':''}
+    page['page_title']="ZSO nr 15 w Sosnowcu"
     page['css_url']=""
     breadcrumbs=[]
     editor=0
