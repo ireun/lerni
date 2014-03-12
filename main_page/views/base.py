@@ -214,8 +214,17 @@ def successes(tag_name, value, options, parent, context):
     i=0
     for x in DBSession.query(Competitors):
         i+=1
-        competitors.append([i,x.first_name+" "+x.last_name,x.competition.name,x.competitor_type.name,x.competitor_tutor.name,str(x.start_year)+"/"+str(x.end_year)])
-    to_return = render('widgets/competitors.mak', {'competitors':competitors})
+        try:
+            subject = x.competition_subject.name
+        except AttributeError:
+            subject = "nieznany"
+        try:
+            tutor = x.competitor_tutor.name
+        except AttributeError:
+            tutor = "nieznany"
+        competitors.append([i,x.first_name+" "+x.last_name, x.competition.name, x.competitor_type.name, subject,
+                            tutor, str(x.start_year)+"/"+str(x.end_year)])
+    to_return = render('widgets/competitors.mak', {'competitors': competitors})
     return to_return
 parser.add_formatter("successes", successes)
 

@@ -40,9 +40,9 @@ Status: <select class="filter-status">
             <td></span>${row[0]}</td>
             <td data-value="${row[1]}">${row[1]}</td>
             <td>${row[2]}</td>
-            <td>${row[2]}</td>
             <td>${row[4]}</td>
             <td>${row[5]}</td>
+            <td>${row[6]}</td>
         </tr>
     % endfor
 </tbody>

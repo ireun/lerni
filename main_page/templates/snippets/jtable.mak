@@ -88,10 +88,10 @@ head.js(jquery, jtable, function(){
                     list: false,
                 % endif
                 % if 'title' in x:
-                    title: '${x['title'] | n}'
+                    title: '${x['title'] | n}',
                 % endif
                 % if 'options' in x:
-                    options: '${x['options'] | n}'
+                    options: '${x['options'] | n}',
                 % endif
             },
         % endfor

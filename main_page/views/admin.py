@@ -199,20 +199,22 @@ def admin_log_competitors(request):
     page['title'] = u"Konkursowicze"
     page['title_desc'] = u'''Poniżej możesz dodać nowych albo edyotwać istniejąch konkursowiczów.'''
     page['sorting'] = True
-    page['defaultSorting'] = "user_id DESC"
+    page['defaultSorting'] = "competitor_id DESC"
     page['selecting'] = True
     page['list'] = "/api?format=jsonp&method=lerni.competitors.getList"
     page['delete'] = "/api?format=jsonp&method=lerni.competitors.delete"
     page['update'] = "/api?format=jsonp&method=lerni.competitors.edit"
     page['create'] = "/api?format=jsonp&method=lerni.competitors.add"
-    page['fields'] = [{'name': u"user_id", 'key': True, "list": False, "create": False, "edit": False}]
+    page['fields'] = [{'name': u"competitor_id", 'key': True, "list": False, "create": False, "edit": False}]
     page['fields'].append({'name': u"first_name", "title": u"Imię"})
     page['fields'].append({'name': u"last_name", "title": u"Nazwisko"})
 
-    page['fields'].append({'name': u"competition_group_id", "title": u"Poziom"})
-    page['fields'].append({'name': u"competition_id", "title": u"Konkurs"})
-    page['fields'].append({'name': u"competitor_type_id", "title": u"Osiągnięcie"})
-    page['fields'].append({'name': u"competitor_tutor_id", "title": u"Opiekun"})
+    page['fields'].append({'name': u"competition_group_id", "title": u"Poziom", "options": "/api?format=jsonp&method=lerni.competitors.groups.getList"})
+    page['fields'].append({'name': u"competition_id", "title": u"Konkurs", "options": "/api?format=jsonp&method=lerni.competitors.competitions.getList"})
+    page['fields'].append({'name': u"subject_id", "title": u"Przedmiot", "options": "/api?format=jsonp&method=lerni.subjects.getList"})
+    page['fields'].append({'name': u"competitor_type_id", "title": u"Osiągnięcie", "options": "/api?format=jsonp&method=lerni.competitors.types.getList"})
+    page['fields'].append({'name': u"competitor_tutor_id", "title": u"Opiekun",
+                           "options": "/api?format=jsonp&method=lerni.competitors.tutors.getList"})
     page['fields'].append({'name': u"year", "title": u"Rok szkolny"})
     return page
 
