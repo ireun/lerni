@@ -218,6 +218,24 @@ def admin_log_competitors(request):
     page['fields'].append({'name': u"year", "title": u"Rok szkolny"})
     return page
 
+@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=all', 'page=competitions'])
+def admin_log_competitions(request):
+    page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Użytkownicy"]], 'allerts': []}
+    page.update(get_basic_account_info(request))
+    page['title'] = u"Konkursy"
+    page['title_desc'] = u'''Poniżej możesz dodać i usuwać konkursy.'''
+    page['sorting'] = True
+    page['defaultSorting'] = "competition_id DESC"
+    page['selecting'] = True
+    page['list'] = "/api?format=jsonp&method=lerni.competitions.getList"
+    page['delete'] = "/api?format=jsonp&method=lerni.competitions.delete"
+    page['update'] = "/api?format=jsonp&method=lerni.competitions.edit"
+    page['create'] = "/api?format=jsonp&method=lerni.competitions.add"
+    page['fields'] = [{'name': u"competition_id", 'key': True, "list": False, "create": False, "edit": False}]
+    page['fields'].append({'name': u"name", "title": u"Nazwa"})
+    page['fields'].append({'name': u"subject_id", "title": u"Przedmiot", "options": "/api?format=jsonp&method=lerni.subjects.getList"})
+    return page
+
 @view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=all', 'page=folders'])
 def admin_log_folders(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Przedmioty"]], 'allerts': [],

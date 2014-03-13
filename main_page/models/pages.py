@@ -49,20 +49,17 @@ class Competitors(Base):
     competition = relationship("CompetitorsCompetitions")
     competitor_type_id = Column(Integer, ForeignKey('competitors_types.id'))
     competitor_type = relationship("CompetitorsTypes")
-    competition_subject_id = Column(Integer, ForeignKey('log_subjects.id'))
-    competition_subject = relationship("Subjects")
     competitor_tutor_id = Column(Integer, ForeignKey('competitors_tutors.id'))
     competitor_tutor = relationship("CompetitorsTutors")
     start_year = Column(Integer)
     end_year = Column(Integer)
     
-    def __init__(self, first_name, last_name, competition_id, competitor_type_id, competition_subject_id,
+    def __init__(self, first_name, last_name, competition_id, competitor_type_id,
                  competitor_tutor_id, start_year, end_year, competition_group_id):
         self.first_name = first_name
         self.last_name = last_name
         self.competition_id = competition_id
         self.competitor_type_id = competitor_type_id
-        self.competition_subject_id = competition_subject_id
         self.competitor_tutor_id = competitor_tutor_id
         self.start_year = start_year
         self.end_year = end_year
@@ -83,10 +80,13 @@ class CompetitorsCompetitions(Base):
     __tablename__ = 'competitors_competitions'
     id = Column(Integer, primary_key=True)
     name = Column(Text)
+    subject_id = Column(Integer, ForeignKey('log_subjects.id'))
+    subject = relationship("Subjects")
     competitors = relationship("Competitors")
 
-    def __init__(self, name):
+    def __init__(self, name, subject_id):
         self.name = name
+        self.subject_id = subject_id
 
         
 class CompetitorsTypes(Base):

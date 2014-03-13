@@ -122,7 +122,63 @@ def jsonp_competitors_create(request):
         return {"Result":"ERROR","Message":"Nieprawidłowa data urodzenia :/"}
     return page
 
+#################
+# Competitions  #
+#################
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.competitions.getList',
+                                                                'jtStartIndex','jtPageSize'])
+def jsonp_competitions_list(request):
+    page = {"Result":"OK","Records":[]}
+    start_index = request.params['jtStartIndex']
+    page_size = request.params['jtPageSize']
+    sorting = request.params['jtSorting'].split(" ")
+    query = DBSession.query(CompetitorsCompetitions).order_by(CompetitorsCompetitions.id.desc()).offset(int(start_index)).limit(int(page_size))
+    for position in query:
+        page['Records'].append({u"competition_id": position.id,
+                                u"name": position.name,
+                                u"subject_id": position.subject_id})
+    page['TotalRecordCount'] = DBSession.query(CompetitorsCompetitions).count()
+    return page
 
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.competitions.delete',
+                                                                'competition_id'])
+def jsonp_competitions_delete(request):
+    session = DBSession()
+    competition = DBSession.query(CompetitorsCompetitions).filter_by(id=request.params['competition_id']).first()
+    if not competitor:
+        return {"Result":"ERROR","Message":"Coś poszło nie tak :/"}
+    else:
+        session.delete(competition)
+        transaction.commit()
+        return {"Result":"OK"}
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.competitions.edit',
+                                                                'competition_id'])
+def jsonp_competitions_edit(request):
+    session = DBSession()
+    competition = DBSession.query(CompetitorsCompetitions).filter_by(id=request.params['competition_id']).first()
+    if not competition:
+        return {"Result": "ERROR", "Message": "Coś poszło nie tak :/"}
+    competition.name = request.params["name"]
+    competition.subject_id = request.params["subject_id"]
+    transaction.commit()
+    return {"Result":"OK"}
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.competitions.add',
+                                                                'first_name'])
+def jsonp_competitions_create(request):
+    page={"Result": "OK", "Record": []}
+    try:
+        session = DBSession()
+        competition = Competitors(request.params["name"], request.params["subject_id"])
+        session.add(competition)
+        page['Record'].append({u"competition_id": competition.id,
+                               u"first_name": competition.name,
+                               u"subject_id": competition.subject_id})
+        transaction.commit()
+    except DBAPIError:
+        return {"Result":"ERROR","Message":"Form is not valid! Please correct it and try again."}
+    return page
 
 def get_week(day):
     start = day-datetime.timedelta(day.weekday())

@@ -215,7 +215,7 @@ def successes(tag_name, value, options, parent, context):
     for x in DBSession.query(Competitors):
         i+=1
         try:
-            subject = x.competition_subject.name
+            subject = x.competition.subject.name
         except AttributeError:
             subject = "nieznany"
         try:
