@@ -222,8 +222,8 @@ def successes(tag_name, value, options, parent, context):
             tutor = x.competitor_tutor.name
         except AttributeError:
             tutor = "nieznany"
-        competitors.append([i,x.first_name+" "+x.last_name, x.competition.name, x.competitor_type.name, subject,
-                            tutor, str(x.start_year)+"/"+str(x.end_year)])
+        competitors.append([i,x.first_name+" "+x.last_name, x.competition.name, x.competition_group.name,
+                            x.competitor_type.name, subject, tutor, str(x.start_year)+"/"+str(x.end_year)])
     to_return = render('widgets/competitors.mak', {'competitors': competitors})
     return to_return
 parser.add_formatter("successes", successes)
@@ -243,6 +243,7 @@ def get_basic_account_info(request):
     return page
 
 def timetable(tag_name, value, options, parent, context):
+    return u'<table class="table table-striped"><tr><td> Plan lekcji pojawi się, gdy uzupełnisz swoje dane (klasa,lektorat/uczone klasy) </tr></td></table>'
     page = {}
     page['lessons'] = [['1', [], [], [], [], []],['2', [], [], [], [], []],
                        ['3', [], [], [], [], []],['4', [], [], [], [], []],

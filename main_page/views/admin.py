@@ -105,7 +105,7 @@ def admin_people(request):
 
 @view_config(route_name='admin', renderer='admin_people.mak', match_param='page=personel')
 def admin_personel(request):
-    page={'editor':0, 'allerts': [], 'tables': []}
+    page={'editor':0, 'breadcrumbs':[["/admin/overview",u"Dashboard"],["","Personel"]], 'allerts': [], 'tables': []}
     page.update(get_basic_account_info(request))
     page['title']=u"Personel"
     page['title_desc']=u"Tutaj możesz dodać lub usunąć personel."

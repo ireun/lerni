@@ -18,8 +18,8 @@ select2 = {select2: "//cdnjs.cloudflare.com/ajax/libs/select2/3.4.1/select2.min.
 autosize = {autosize: "/static/libs/jquery.autosize/jquery.autosize.min.js"}
 footable = {footable: "/static/libs/footable/footable.min.js"}
 footable_filter = {footable_fitler: "/static/libs/footable/footable.filter.min.js"}
-
 footable_sort = {footable_sort: "/static/libs/footable/footable.sort.min.js"}
+footable_paginate = {footable_paginate : "/static/libs/footable/footable.paginate.min.js"}
 
 uiji = {uiji: "/static/libs/uiji/uiji.min.js"}
 raptor = {raptor: "/static/libs/raptor/default.min.js"}
