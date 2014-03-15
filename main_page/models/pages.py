@@ -27,7 +27,6 @@ class Widgets(Base):
     data = Column(Text)
     add_class = Column(Text)
 
-
     def __init__(self, page_id, column, row, size_x, size_y, data, add_class=""):
         self.page_id = page_id
         self.column = column
@@ -37,7 +36,20 @@ class Widgets(Base):
         self.data = data
         self.add_class = add_class
 
-        
+
+class Graduates(Base):
+    __tablename__ = 'graduates'
+    id = Column(Integer, primary_key=True)
+    name = Column(Text)
+    graduation = Column(Text)
+    about = Column(Text)
+
+    def __init__(self, name, graduation, about):
+        self.name = name
+        self.graduation = graduation
+        self.about = about
+
+
 class Competitors(Base):
     __tablename__ = 'competitors'
     id = Column(Integer, primary_key=True)

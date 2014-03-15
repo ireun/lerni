@@ -72,6 +72,7 @@ from main_page.models import (
     SupportQuestions,
     Pages,
     Widgets,
+    Graduates,
     Competitors,
     CompetitorsCompetitions,
     CompetitorsTutors,
@@ -211,23 +212,14 @@ parser.add_formatter("tweets", tweets)
 
 
 def successes(tag_name, value, options, parent, context):
-    competitors=[]
-    i=0
-    for x in DBSession.query(Competitors):
-        i+=1
-        try:
-            subject = x.competition.subject.name
-        except AttributeError:
-            subject = "nieznany"
-        try:
-            tutor = x.competitor_tutor.name
-        except AttributeError:
-            tutor = "nieznany"
-        competitors.append([i,x.first_name+" "+x.last_name, x.competition.name, x.competition_group.name,
-                            x.competitor_type.name, subject, tutor, str(x.start_year)+"/"+str(x.end_year)])
-    to_return = render('widgets/competitors.mak', {'competitors': competitors})
+    to_return = render('widgets/competitors.mak',{})
     return to_return
 parser.add_formatter("successes", successes)
+
+def graduates(tag_name, value, options, parent, context):
+    to_return = render('widgets/graduates.mak',{})
+    return to_return
+parser.add_formatter("graduates", graduates)
 
 def get_basic_account_info(request):
     page = {}

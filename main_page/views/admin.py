@@ -192,6 +192,25 @@ def admin_log_tweets(request):
                            "displayFormat": "dd.mm.yy", "create": False, "edit": False, "sorting": False})
     return page
 
+@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=all', 'page=graduates'])
+def admin_log_graduates(request):
+    page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Absolwenci"]], 'allerts': []}
+    page.update(get_basic_account_info(request))
+    page['title'] = u"Absolwenci"
+    page['title_desc'] = u'''Poniżej możesz edytować listę absolwentów.'''
+    page['sorting'] = True
+    page['defaultSorting'] = "id DESC"
+    page['selecting'] = True
+    page['list'] = "/api?format=jsonp&method=lerni.graduates.getList"
+    page['delete'] = "/api?format=jsonp&method=lerni.graduatess.delete"
+    page['update'] = "/api?format=jsonp&method=lerni.graduates.edit"
+    page['create'] = "/api?format=jsonp&method=lerni.graduates.add"
+    page['fields'] = [{'name': u"id", 'key': True, "list": False, "create": False, "edit": False}]
+    page['fields'].append({'name': u"name", "title": u"Imię i nazwisko"})
+    page['fields'].append({'name': u"graduation", "title": u"Matura"})
+    page['fields'].append({'name': u"about", "title": u"O absolwencie"})
+    return page
+
 @view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=all', 'page=competitors'])
 def admin_log_competitors(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Użytkownicy"]], 'allerts': []}

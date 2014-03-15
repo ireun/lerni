@@ -39,6 +39,36 @@ def api_jsonp_lerni_competitors_tutors_getlist(request):
         page['Options'].append({"DisplayText": position.name,"Value": position.id})
     return page
 #################
+# Graduates   #
+#################
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.graduates.getList',
+                                                                'jtStartIndex','jtPageSize'])
+def jsonp_graduates_list(request):
+    page = {"Result":"OK","Records":[]}
+    start_index = request.params['jtStartIndex']
+    page_size = request.params['jtPageSize']
+    sorting = request.params['jtSorting'].split(" ")
+
+    query = DBSession.query(Graduates)
+    query = query.order_by(eval("Graduates."+sorting[0]+{"ASC": ".asc()", "DESC":".desc()"}[sorting[1]]))
+    if "name" in request.params:
+        names = request.params['name'].split(" ")
+        for name in names:
+            query = query.filter(or_(Graduates.name.like("%"+name+"%"),
+                                     Graduates.graduation.like("%"+name+"%"),
+                                     Graduates.about.like("%"+name+"%")))
+    page['TotalRecordCount'] = query.count()
+    query = query.offset(int(start_index)).limit(int(page_size))
+
+    for position in query:
+        page['Records'].append({u"id": position.id,
+                                u"name": position.name,
+                                u"graduation": position.graduation,
+                                u"about": position.about})
+    return page
+
+
+#################
 # Competitors   #
 #################
 @view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.competitors.getList',

@@ -9,7 +9,6 @@ Search: <input id="filter" type="text">
 </p>
 <div id="jtable"></div>
 <script>
-
 head.js(jquery, jquery_ui, jtable, jtable_pl, function(){
         $('#jtable').jtable({
             title: "Olimpijczycy - Gimnazjum",
@@ -74,58 +73,3 @@ head.js(jquery, jquery_ui, jtable, jtable_pl, function(){
     search_competitors();
 });
 </script>
-
-<!--
-<table class="footable table" data-filter-text-only="true" data-sort="true" data-page-size="20">
-<thead>
-<tr>
-  <th data-ignore="true" data-hide="all">
-    ID
-  </th>
-  <th>
-    Imię i Nazwisko
-  </th>
-  <th>
-    Nazwa konkursu/olimiady
-  </th>
-  <th data-ignore="true" data-hide="all">
-    Typ konkursu
-  </th>
-  <th>
-    Stopień
-  </th>
-  <th>
-    Przedmiot
-  </th>
-  <th>
-    Opiekun
-  </th>
-  <th>
-    Rok szkolny
-  </th>
-</tr>
-</thead>
-<tbody>
-    % for row in competitors:
-        <tr>
-            <td></span>${row[0]}</td>
-            <td data-value="${row[1]}">${row[1]}</td>
-            <td>${row[2]}</td>
-            <td>${row[3]}</td>
-            <td>${row[4]}</td>
-            <td>${row[5]}</td>
-            <td>${row[6]}</td>
-            <td>${row[7]}</td>
-        </tr>
-    % endfor
-</tbody>
-<tfoot>
-    <tr>
-        <td colspan="5" style="text-align: center">
-            <div class="paginate"></div>
-        </td>
-    </tr>
-</tfoot>
-</table>
-
--->
