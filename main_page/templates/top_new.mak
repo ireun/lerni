@@ -26,8 +26,8 @@
   <link href="/static/libs/bootstrap/bootstrap.min.css"  rel="stylesheet">
   <link href="/static/libs/typeahead/typeahead.js-bootstrap.min.css"  rel="stylesheet">
   <link href="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/css/base/jquery.ui.all.min.css"  rel="stylesheet">
-  <link href="/static/libs/jtable/jtable_metro_base.min.css"  rel="stylesheet">
-  <link href="/static/libs/jtable/blue/jtable.min.css"  rel="stylesheet">
+  <link href="/static/libs/jtable/themes/staszic/jtable_staszic_base.min.css"  rel="stylesheet">
+  <link href="/static/libs/jtable/themes/staszic/lightgray/jtable.min.css"  rel="stylesheet">
   <link href="/static/libs/owl-carousel/owl.carousel.min.css" rel="stylesheet">
   <link href="/static/libs/owl-carousel/owl.theme.min.css" rel="stylesheet">
   <link href="/static/libs/progression/progression.min.css" rel="stylesheet">

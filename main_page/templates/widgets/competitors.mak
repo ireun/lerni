@@ -6,17 +6,73 @@ Search: <input id="filter" type="text">
   <option value="liceum_olimpiady">Liceum Olimpiady</option>
   <option value="liceum_konkursy">Liceum Konkursy</option>
 </select>
-    <!--
-Status: <select class="filter-status">
-<option></option>
-<option value="active">Active</option>
-<option value="disabled">Disabled</option>
-<option value="suspended">Suspended</option>
-</select>
-<a href="#clear" class="clear-filter" title="clear filter">[clear]</a>
-<a href="#api" class="filter-api" title="Filter using the Filter API">[filter API]</a>
--->
 </p>
+<div id="jtable"></div>
+<script>
+
+head.js(jquery, jquery_ui, jtable, jtable_pl, function(){
+        $('#jtable').jtable({
+            title: "Olimpijczycy - Gimnazjum",
+            paging: true,
+            pageSize: 10,
+            selecting: true,
+            sorting: true,
+            defaultSorting: 'id DESC',
+        actions: {
+            listAction: '/api?format=jsonp&method=lerni.competitors.getList'
+        },
+        fields: {
+            id: {
+                    key: true,
+                    list: false,
+            },
+            first_name: {
+                    title: 'Imię',
+                    width: '10%'
+            },
+            last_name: {
+                    title: 'Nazwisko',
+                    width: '10%'
+            },
+            competition_id: {
+                    title: 'Nazwa konkursu/olimpiady',
+                    options: '/api?format=jsonp&method=lerni.competitors.competitions.nameList',
+                    width: '30%'
+            },
+            competitor_type_id: {
+                    title: 'Stopień',
+                    options: '/api?format=jsonp&method=lerni.competitors.types.nameList',
+                    width: '10%'
+            },
+            subject_id: {
+                    title: 'Przedmiot',
+                    options: '/api?format=jsonp&method=lerni.subjects.nameList',
+                    width: '10%'
+            },
+            competitor_tutor_id: {
+                    title: 'Opiekun',
+                    options: '/api?format=jsonp&method=lerni.competitors.tutors.nameList',
+                    width: '20%'
+            },
+            year: {
+                    title: 'Rok szkolny',
+                    width: '10%'
+            },
+        }
+    });
+    var search_competitors = function(){
+            $('#jtable').jtable('load', {
+                name: $("#filter").val(),
+                competitionGroupId: $("#competition_group_select option:selected").val()
+            });
+    }
+    $("#competition_group_select").change(search_competitors);
+    $("#filter").on('input', search_competitors);
+    search_competitors();
+});
+</script>
+
+<!--
 <table class="footable table" data-filter-text-only="true" data-sort="true" data-page-size="20">
 <thead>
 <tr>
@@ -68,3 +124,5 @@ Status: <select class="filter-status">
     </tr>
 </tfoot>
 </table>
+
+-->

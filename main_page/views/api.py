@@ -4,35 +4,35 @@ import psutil
 from pyramid.security import authenticated_userid
 import datetime
 
-@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.competitors.competitions.getList'])
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.competitors.competitions.nameList'])
 def api_jsonp_lerni_competitors_competitions_getlist(request):
     page={"Result":"OK","Options":[]}
     for position in DBSession.query(CompetitorsCompetitions):
         page['Options'].append({"DisplayText":position.name,"Value":position.id})
     return page
 
-@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.competitors.groups.getList'])
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.competitors.groups.nameList'])
 def api_jsonp_lerni_competitors_groups_getlist(request):
     page={"Result":"OK","Options":[]}
     for position in DBSession.query(CompetitorsGroups):
         page['Options'].append({"DisplayText":position.name,"Value":position.id})
     return page
 
-@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.competitors.types.getList'])
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.competitors.types.nameList'])
 def api_jsonp_lerni_competitors_types_getlist(request):
     page={"Result":"OK","Options":[]}
     for position in DBSession.query(CompetitorsTypes):
         page['Options'].append({"DisplayText": position.name,"Value": position.id})
     return page
 
-@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.subjects.getList'])
-def api_jsonp_lerni_subjects_getlist(request):
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.subjects.nameList'])
+def api_jsonp_lerni_subjects_namelist(request):
     page={"Result":"OK","Options":[]}
     for position in DBSession.query(Subjects):
         page['Options'].append({"DisplayText": position.name,"Value": position.id})
     return page
 
-@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.competitors.tutors.getList'])
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.competitors.tutors.nameList'])
 def api_jsonp_lerni_competitors_tutors_getlist(request):
     page={"Result":"OK","Options":[]}
     for position in DBSession.query(CompetitorsTutors):
@@ -48,20 +48,42 @@ def jsonp_competitors_list(request):
     start_index = request.params['jtStartIndex']
     page_size = request.params['jtPageSize']
     sorting = request.params['jtSorting'].split(" ")
-    print sorting
-    query = DBSession.query(Competitors).order_by(Competitors.id.desc()).offset(int(start_index)).limit(int(page_size))
+
+    query = DBSession.query(Competitors).join(CompetitorsCompetitions).join(Subjects).join(CompetitorsGroups)\
+        .join(CompetitorsTypes).join(CompetitorsTutors)
+    if sorting[0]=="year": sorting[0]="start_year"
+    if sorting[0]=="subject_id" and sorting[1]=="DESC":
+        query = query.order_by(Subjects.name.desc())
+    elif sorting[0]=="subject_id" and sorting[1]=="ASC":
+        query = query.order_by(Subjects.name.asc())
+    else:
+        query = query.order_by(eval("Competitors."+sorting[0]+{"ASC": ".asc()", "DESC":".desc()"}[sorting[1]]))
+    if "competitionGroupId" in request.params:
+        query = query.filter(CompetitorsGroups.name.in_([request.params['competitionGroupId']]))
+    if "name" in request.params:
+        names = request.params['name'].split(" ")
+        for name in names:
+            query = query.filter(or_(Competitors.first_name.like("%"+name+"%"),
+                                     Competitors.last_name.like("%"+name+"%"),
+                                     CompetitorsCompetitions.name.like("%"+name+"%"),
+                                     CompetitorsTypes.name.like("%"+name+"%"),
+                                     CompetitorsTutors.name.like("%"+name+"%"),
+                                     Subjects.name.like("%"+name+"%"), Competitors.start_year.like("%"+name+"%"),
+                                     Competitors.end_year.like("%"+name+"%")))
+    page['TotalRecordCount'] = query.count()
+    query = query.offset(int(start_index)).limit(int(page_size))
+
     for position in query:
-        page['Records'].append({u"competitor_id": position.id,
+        page['Records'].append({u"id": position.id,
                                 u"first_name": position.first_name,
                                 u"last_name": position.last_name,
                                 u"competition_group_id": position.competition_group_id,
                                 u"competition_id": position.competition_id,
                                 u"competitor_type_id": position.competitor_type_id,
-                                u"subject_id": position.competition_subject_id,
+                                u"subject_id": position.competition.subject_id,
                                 u"competitor_tutor_id": position.competitor_tutor_id,
-                                u"year": position.start_year,
+                                u"year": str(position.start_year)+"/"+str(position.end_year),
                                 u"group": 1})
-    page['TotalRecordCount'] = DBSession.query(Competitors).count()
     return page
 
 

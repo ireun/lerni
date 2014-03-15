@@ -8,6 +8,7 @@ tagsinput = {tagsinput: "/static/libs/jquery.tagsinput/jquery.tagsinput.min.js"}
 filtertable = {filtertable: "/static/libs/jquery.filtertable/jquery.filtertable.min.js"}
 nanoscroller = {nanoscroller: "/static/libs/nanoscroller/jquery.nanoscroller.min.js"}
 jtable = {jtable: "/static/libs/jtable/jquery.jtable.min.js"}
+jtable_pl = {jtable_pl: "/static/libs/jtable/localization/jquery.jtable.pl.min.js"}
 jflickrfeed = {jflickrfeed: "/static/js/jflickrfeed.min.js"}
 owl = {owl: "/static/libs/owl-carousel/owl.carousel.min.js"}
 progression = {progression: "/static/libs/progression/progression.min.js"}

@@ -53,7 +53,7 @@ class Competitors(Base):
     competitor_tutor = relationship("CompetitorsTutors")
     start_year = Column(Integer)
     end_year = Column(Integer)
-    
+
     def __init__(self, first_name, last_name, competition_id, competitor_type_id,
                  competitor_tutor_id, start_year, end_year, competition_group_id):
         self.first_name = first_name

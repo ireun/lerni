@@ -14,28 +14,9 @@ var add_jtable_button = function(table, button_id, button_text, func){
     });
     $(button).click(func);
 };
-var polishMessages = {"serverCommunicationError": "Próba połączenia z serwerem zakończona niepowodzeniem.",
-"loadingMessage": "Ładowanie...",
-"noDataAvailable": "Brak danych do wyświetlenia",
-"addNewRecord": "Dodaj nowy rekord",
-"editRecord": "Edytuj",
-"areYouSure": "Czy jesteś pewien?",
-"deleteConfirmation": "Czy jesteś pewien, że chcesz usunąć wybrany rekord?",
-"save": "Zapisz",
-"saving": "Zapisywanie",
-"cancel": "Anuluj",
-"deleteText": "Usuń",
-"deleting": "Usuwanie",
-"error": "Błąd",
-"close": "Zamknij",
-"cannotLoadOptionsFor": "{0} cannotLoadOptionsFor!",
-"pagingInfo": "Rekordy od {0} do {1} / {2}",
-"canNotDeletedRecords": "Nie można usunąć {1} kayıttan {0}",
-"deleteProggress": "{1} usuwanie {0} adedi silindi, devam ediliyor..."}
 
-head.js(jquery, jtable, function(){
+head.js(jquery, jquery_ui, jtable, jtable_pl, function(){
         $('#jtable').jtable({
-        messages: polishMessages,
         % if title:
             title: "${title}",
         % else:

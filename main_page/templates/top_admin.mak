@@ -22,8 +22,8 @@
   <link href="/static/libs/bootstrap/bootstrap.min.css"  rel="stylesheet">
   <link href="/static/libs/typeahead/typeahead.js-bootstrap.min.css"  rel="stylesheet">
   <link href="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/css/base/jquery.ui.all.min.css"  rel="stylesheet">
-  <link href="/static/libs/jtable/jtable_metro_base.min.css"  rel="stylesheet">
-  <link href="/static/libs/jtable/blue/jtable.min.css"  rel="stylesheet">
+  <link href="/static/libs/jtable/themes/metro/jtable_metro_base.min.css"  rel="stylesheet">
+  <link href="/static/libs/jtable/themes/metro/blue/jtable.min.css"  rel="stylesheet">
   <link href="/static/libs/gridster/jquery.gridster.min.css" rel="stylesheet">
   <link href="//cdnjs.cloudflare.com/ajax/libs/select2/3.4.1/select2.min.css"  rel="stylesheet">
 </head>
@@ -87,9 +87,11 @@
                   </a>
                   <ul id="submenu1" style="height: 0px;">
                     <li class=""><a href="/admin/users"> <span class="icon icon-angle-right"></span>Lista użytkowników</a></li>
+                    <!--
                     <li class=""><a href="/admin/teachers"> <span class="icon icon-angle-right"></span>Nauczyciele</a></li>
                     <li class=""><a href="/admin/personel"> <span class="icon icon-angle-right"></span>Personel</a></li>
                     <li class=""><a href="/admin/studnets"> <span class="icon icon-angle-right"></span>Uczniowie</a></li>
+                    -->
                   </ul>
                 </li>
                 <li class="accordion-group ">

@@ -12,6 +12,7 @@ import hashlib
 from recaptcha.client import captcha
 
 from sqlalchemy.exc import DBAPIError
+from sqlalchemy import or_
 import locale
 from sqlalchemy import desc    ######################################
 from main_page.models import (

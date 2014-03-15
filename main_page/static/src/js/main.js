@@ -2,18 +2,7 @@ head.js(jquery, autosize, function (){
    $(document).ready(function(){ $('textarea').autosize(); });
 });
 
-var search_competitors = function(){
-        var value = $("#competition_group_select option:selected").val()+" "+$("#filter").val()
-        var footableFilter = $('table').data('footable-filter');
-        footableFilter.filter(value);
-        console.log(value);
-}
-head.js(jquery, footable, footable_filter, footable_sort, footable_paginate, function (){
-    $('.footable').footable();
-    if ($("#competition_group_select").length) {search_competitors();};
-    $("#competition_group_select").change(search_competitors);
-    $("#filter").on('input', search_competitors);
-})
+
 head.js(jquery, jflickrfeed, owl, function (){
     $(document).ready(function() {
       $("#owlCarousel").owlCarousel({

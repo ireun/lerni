@@ -209,12 +209,11 @@ def admin_log_competitors(request):
     page['fields'].append({'name': u"first_name", "title": u"Imię"})
     page['fields'].append({'name': u"last_name", "title": u"Nazwisko"})
 
-    page['fields'].append({'name': u"competition_group_id", "title": u"Poziom", "options": "/api?format=jsonp&method=lerni.competitors.groups.getList"})
-    page['fields'].append({'name': u"competition_id", "title": u"Konkurs", "options": "/api?format=jsonp&method=lerni.competitors.competitions.getList"})
-    page['fields'].append({'name': u"subject_id", "title": u"Przedmiot", "options": "/api?format=jsonp&method=lerni.subjects.getList"})
-    page['fields'].append({'name': u"competitor_type_id", "title": u"Osiągnięcie", "options": "/api?format=jsonp&method=lerni.competitors.types.getList"})
+    page['fields'].append({'name': u"competition_group_id", "title": u"Poziom", "options": "/api?format=jsonp&method=lerni.competitors.groups.nameList"})
+    page['fields'].append({'name': u"competition_id", "title": u"Konkurs", "options": "/api?format=jsonp&method=lerni.competitors.competitions.nameList"})
+    page['fields'].append({'name': u"competitor_type_id", "title": u"Osiągnięcie", "options": "/api?format=jsonp&method=lerni.competitors.types.nameList"})
     page['fields'].append({'name': u"competitor_tutor_id", "title": u"Opiekun",
-                           "options": "/api?format=jsonp&method=lerni.competitors.tutors.getList"})
+                           "options": "/api?format=jsonp&method=lerni.competitors.tutors.nameList"})
     page['fields'].append({'name': u"year", "title": u"Rok szkolny"})
     return page
 
@@ -233,7 +232,7 @@ def admin_log_competitions(request):
     page['create'] = "/api?format=jsonp&method=lerni.competitions.add"
     page['fields'] = [{'name': u"competition_id", 'key': True, "list": False, "create": False, "edit": False}]
     page['fields'].append({'name': u"name", "title": u"Nazwa"})
-    page['fields'].append({'name': u"subject_id", "title": u"Przedmiot", "options": "/api?format=jsonp&method=lerni.subjects.getList"})
+    page['fields'].append({'name': u"subject_id", "title": u"Przedmiot", "options": "/api?format=jsonp&method=lerni.subjects.nameList"})
     return page
 
 @view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=all', 'page=folders'])
