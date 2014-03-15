@@ -72,6 +72,8 @@ from main_page.models import (
     SupportQuestions,
     Pages,
     Widgets,
+    Bells,
+    BellsTypes,
     Graduates,
     Competitors,
     CompetitorsCompetitions,
@@ -220,6 +222,15 @@ def graduates(tag_name, value, options, parent, context):
     to_return = render('widgets/graduates.mak',{})
     return to_return
 parser.add_formatter("graduates", graduates)
+
+def bells(tag_name, value, options, parent, context):
+    c = DBSession.query(Bells).join(BellsTypes).filter(BellsTypes.name.in_([value]))
+    bl=[]
+    for position in c:
+        bl.append([position.order, position.start.strftime("%H:%M"), position.end.strftime("%H:%M")])
+    to_return = render('widgets/bells.mak',{'bl': bl})
+    return to_return
+parser.add_formatter("bells", bells)
 
 def get_basic_account_info(request):
     page = {}

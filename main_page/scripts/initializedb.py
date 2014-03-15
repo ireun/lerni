@@ -101,49 +101,49 @@ def main(argv=sys.argv):
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
     Base.metadata.create_all(engine)
-    import_users()
-    import_sets()
-    import_folders()
-    import_tweets()
-    import_easy_links()
-    import_banners()
-    date_now=datetime.datetime.today()
-    with transaction.manager:
-        DBSession.add_all([
-        Videos(2, 2, "68137365"),
-        VideosMain(1),
-        AppCodes(63, "some_text", u"some_text", u"some_text"),
-        Association(63,16,1,0),
-        Association(63,29,0,1),
-        Association(63,20,1,0),
-        Absent(8, "", True, True, True, True, True, True, True, True, 1),
-        Absent(56, "", True, True, True, True, True, True, True, True, 1),
-        Absent(20, "", True, True, True, True, True, True, True, True, 1),
-        Absent(6, "", True, True, True, True, True, True, True, True, 1),
-        Replace(56, 2, 2, 1, 0, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1),
-        Replace(20, 2, 2, 1, 0, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1),
-        Shift(u"pierwsza zmiana"),
-        Shift(u"druga zmiana"),
-        Places(u"minus pierwsze piętro"),
-        Places(u"parter"),
-        Places(u"pierwsze piętro"),
-        Places(u"drugie piętro"),
-        Duty(1,1,1,1,1),
-        Duty(2,2,2,2,1)])
-    import_subjects()
-    with transaction.manager:
-        import_competitors()
-        DBSession.add_all([
-        SchoolYears(datetime.date(2013, 9, 3),datetime.date(2014, 6, 28)),
-        Terms(1,datetime.date(2013,9,3),datetime.date(2014,2,1)),
-        Terms(1,datetime.date(2014,2,2),datetime.date(2014,6,28)),
-        Schedules(datetime.date(2013,9,3),datetime.date(2014,2,1))])
-        #Lessons(1, teacher_subject_id, group_id, part_1, part_2, day, order, room)
-        import_pages()
-        import_competitors()
-        import_support()
-        import_lucky_numbers()
-        import_schedules()
+    #import_users()
+    #import_sets()
+    #import_folders()
+    #import_tweets()
+    #import_easy_links()
+    #import_banners()
+    #date_now=datetime.datetime.today()
+    #with transaction.manager:
+    #    DBSession.add_all([
+    #    Videos(2, 2, "68137365"),
+    #    VideosMain(1),
+    #    AppCodes(63, "some_text", u"some_text", u"some_text"),
+    #    Association(63,16,1,0),
+    #    Association(63,29,0,1),
+    #    Association(63,20,1,0),
+    #    Absent(8, "", True, True, True, True, True, True, True, True, 1),
+    #    Absent(56, "", True, True, True, True, True, True, True, True, 1),
+    #    Absent(20, "", True, True, True, True, True, True, True, True, 1),
+    #    Absent(6, "", True, True, True, True, True, True, True, True, 1),
+    #    Replace(56, 2, 2, 1, 0, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1),
+    #    Replace(20, 2, 2, 1, 0, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 1, 1, 1),
+    #    Shift(u"pierwsza zmiana"),
+    #    Shift(u"druga zmiana"),
+    #    Places(u"minus pierwsze piętro"),
+    #    Places(u"parter"),
+    #    Places(u"pierwsze piętro"),
+    #    Places(u"drugie piętro"),
+    #    Duty(1,1,1,1,1),
+    #    Duty(2,2,2,2,1)])
+    #import_subjects()
+    #with transaction.manager:
+    #    import_competitors()
+    #    DBSession.add_all([
+    #    SchoolYears(datetime.date(2013, 9, 3),datetime.date(2014, 6, 28)),
+    #    Terms(1,datetime.date(2013,9,3),datetime.date(2014,2,1)),
+    #    Terms(1,datetime.date(2014,2,2),datetime.date(2014,6,28)),
+    #    Schedules(datetime.date(2013,9,3),datetime.date(2014,2,1))])
+    #    #Lessons(1, teacher_subject_id, group_id, part_1, part_2, day, order, room)
+    #    import_pages()
+    #    import_competitors()
+    #    import_support()
+    #    import_lucky_numbers()
+    #    import_schedules()
 
 def import_competitors():
     mypath="main_page/data/competitors/"

@@ -37,6 +37,37 @@ class Widgets(Base):
         self.add_class = add_class
 
 
+class Bells(Base):
+    __tablename__ = 'bells'
+    id = Column(Integer, primary_key=True)
+    name = Column(Text)
+    order = Column(Integer)
+    start = Column(Time)
+    start_len = Column(Integer)
+    end = Column(Time)
+    end_len = Column(Integer)
+    type_id = Column(Integer, ForeignKey('bells_types.id'))
+    type = relationship("BellsTypes")
+
+    def __init__(self, name, order, start, start_len, end, end_len, type_id):
+        self.name = name
+        self.order = order
+        self.start = start
+        self.start_len = start_len
+        self.end = end
+        self.end_len = end_len
+        self.type_id = type_id
+
+
+class BellsTypes(Base):
+    __tablename__ = 'bells_types'
+    id = Column(Integer, primary_key=True)
+    name = Column(Text)
+
+    def __init__(self, name):
+        self.name = name
+
+
 class Graduates(Base):
     __tablename__ = 'graduates'
     id = Column(Integer, primary_key=True)

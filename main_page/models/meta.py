@@ -5,6 +5,7 @@ from sqlalchemy import (
     Text,
     Date,
     DateTime,
+    Time,
     Boolean,
     )
 

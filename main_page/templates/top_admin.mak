@@ -147,6 +147,12 @@
                     <li class="">
                       <a href="widget-draggable.html"> <span class="icon icon-angle-right"></span>Ostatnie video</a>
                     </li>
+                    <li class="">
+                      <a href="/admin/bells_types"> <span class="icon icon-angle-right"></span>Rodzaje dzwonków</a>
+                    </li>
+                    <li class="">
+                      <a href="/admin/bells"> <span class="icon icon-angle-right"></span>Dzwonki</a>
+                    </li>
                   </ul>
                 </li>
                 <li class="divider">Nauka</li>

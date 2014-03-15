@@ -38,8 +38,149 @@ def api_jsonp_lerni_competitors_tutors_getlist(request):
     for position in DBSession.query(CompetitorsTutors):
         page['Options'].append({"DisplayText": position.name,"Value": position.id})
     return page
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.bells.types.nameList'])
+def api_jsonp_lerni_competitors_tutors_getlist(request):
+    page={"Result":"OK","Options":[]}
+    for position in DBSession.query(BellsTypes):
+        page['Options'].append({"DisplayText": position.name,"Value": position.id})
+    return page
 #################
-# Graduates   #
+# Bells_Types   #
+#################
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.bells.types.getList',
+                                                                'jtStartIndex','jtPageSize'])
+def jsonp_bells_types_list(request):
+    page = {"Result":"OK","Records":[]}
+    start_index = request.params['jtStartIndex']
+    page_size = request.params['jtPageSize']
+    sorting = request.params['jtSorting'].split(" ")
+    query = DBSession.query(BellsTypes).order_by(BellsTypes.id.desc()).offset(int(start_index)).limit(int(page_size))
+    for position in query:
+        page['Records'].append({u"competition_id": position.id,
+                                u"name": position.name})
+    page['TotalRecordCount'] = DBSession.query(CompetitorsCompetitions).count()
+    return page
+
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.bells.types.delete',
+                                                                'id'])
+def jsonp_bells_types_delete(request):
+    session = DBSession()
+    bell = DBSession.query(BellsTypes).filter_by(id=request.params['id']).first()
+    if not bell:
+        return {"Result": "ERROR", "Message": "Coś poszło nie tak :/"}
+    else:
+        session.delete(competition)
+        transaction.commit()
+        return {"Result":"OK"}
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.bells.types.edit',
+                                                                'id'])
+def jsonp_bells_types_edit(request):
+    session = DBSession()
+    bell = DBSession.query(BellsTypes).filter_by(id=request.params['id']).first()
+    if not bell:
+        return {"Result": "ERROR", "Message": "Coś poszło nie tak :/"}
+    bell.name = request.params["name"]
+    transaction.commit()
+    return {"Result":"OK"}
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.bells.types.add',
+                                                                'name'])
+def jsonp_bells_types_create(request):
+    page={"Result": "OK", "Record": []}
+    try:
+        session = DBSession()
+        bell = BellsTypes(request.params["name"])
+        session.add(bell)
+        page['Record'].append({u"id": bell.id, u"name": bell.name})
+        transaction.commit()
+    except DBAPIError:
+        return {"Result":"ERROR","Message":"Form is not valid! Please correct it and try again."}
+    return page
+
+#################
+# Bells         #
+#################
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.bells.getList',
+                                                                'jtStartIndex','jtPageSize'])
+def jsonp_bells_list(request):
+    page = {"Result":"OK","Records":[]}
+    start_index = request.params['jtStartIndex']
+    page_size = request.params['jtPageSize']
+    sorting = request.params['jtSorting'].split(" ")
+
+    query = DBSession.query(Bells)
+    query = query.order_by(eval("Bells."+sorting[0]+{"ASC": ".asc()", "DESC":".desc()"}[sorting[1]]))
+    if "name" in request.params:
+        names = request.params['name'].split(" ")
+        for name in names:
+            query = query.filter(or_(Bells.name.like("%"+name+"%"),
+                                     Bells.start.like("%"+name+"%"),
+                                     Bells.end.like("%"+name+"%")))
+    page['TotalRecordCount'] = query.count()
+    query = query.offset(int(start_index)).limit(int(page_size))
+
+    for position in query:
+        page['Records'].append({u"id": position.id, u"name": position.name, u"order": str(position.order),
+                                u"start": position.start.strftime("%H:%M"), u"start_len": position.start_len,
+                                u"end": position.end.strftime("%H:%M"), u"end_len": position.end_len,
+                                u"type_id": position.type_id})
+    return page
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.bells.delete',
+                                                                'id'])
+def jsonp_bells_delete(request):
+    session = DBSession()
+    bell = DBSession.query(Bells).filter_by(id=request.params['id']).first()
+    if not bell:
+        return {"Result":"ERROR","Message":"Coś poszło nie tak :/"}
+    else:
+        session.delete(bell)
+        transaction.commit()
+        return {"Result":"OK"}
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.bells.edit',
+                                                                'id'])
+def jsonp_bells_edit(request):
+    session = DBSession()
+    bell = DBSession.query(Bells).filter_by(id=request.params['competition_id']).first()
+    if not bell:
+        return {"Result": "ERROR", "Message": "Coś poszło nie tak :/"}
+    bell.name = request.params["name"]
+    bell.start = datetime.datetime.strptime(request.params["start"], "%H:%M").time()
+    bell.start_len = request.params["start_len"]
+    bell.end = datetime.datetime.strptime(request.params["end"], "%H:%M").time()
+    bell.end_len = request.params["end_len"]
+    transaction.commit()
+    return {"Result":"OK"}
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.bells.add',
+                                                                'name'])
+def jsonp_bells_create(request):
+    page = {"Result": "OK", "Record": []}
+    try:
+        session = DBSession()
+        bell = Bells(request.params["name"],
+                            request.params["order"],
+                            datetime.datetime.strptime(request.params["start"], "%H:%M").time(),
+                            request.params["start_len"],
+                            datetime.datetime.strptime(request.params["end"], "%H:%M").time(),
+                            request.params["end_len"],
+                            request.params["type_id"])
+        session.add(bell)
+        page['Record'].append({u"id": bell.id, u"name": bell.name, u"order": str(bell.order),
+                               u"start": bell.start.strftime("%H:%M"),
+                               u"start_len": bell.start_len,
+                               u"end": bell.end.strftime("%H:%M"),
+                               u"end_len": bell.end_len,
+                               u"type_id": bell.type_id})
+        transaction.commit()
+    except DBAPIError:
+        return {"Result": "ERROR", "Message": "Form is not valid! Please correct it and try again."}
+    return page
+
+#################
+# Graduates     #
 #################
 @view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.graduates.getList',
                                                                 'jtStartIndex','jtPageSize'])
@@ -198,8 +339,8 @@ def jsonp_competitions_list(request):
 def jsonp_competitions_delete(request):
     session = DBSession()
     competition = DBSession.query(CompetitorsCompetitions).filter_by(id=request.params['competition_id']).first()
-    if not competitor:
-        return {"Result":"ERROR","Message":"Coś poszło nie tak :/"}
+    if not competition:
+        return {"Result": "ERROR", "Message": "Coś poszło nie tak :/"}
     else:
         session.delete(competition)
         transaction.commit()

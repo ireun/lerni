@@ -35,6 +35,45 @@ def admin_layouts(request):
     page['title_desc'] = u"Wybierz stonę, której layout chcesz edytować."
     return page
 
+@view_config(route_name='admin', renderer='admin_jtable.mak', match_param='page=bells_types')
+def admin_bells_types(request):
+    page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Dzwonki"]], 'allerts': []}
+    page.update(get_basic_account_info(request))
+    page['title'] = u"Rodzaje dzwonków"
+    page['title_desc'] = u'''Poniżej możesz edytować rodzaje dzwonków. (podstawowy, soboty, niedziele, dzień sportu)'''
+    page['sorting'] = True
+    page['defaultSorting'] = "id DESC"
+    page['selecting'] = True
+    page['list'] = "/api?format=jsonp&method=lerni.bells.types.getList"
+    page['delete'] = "/api?format=jsonp&method=lerni.bells.types.delete"
+    page['update'] = "/api?format=jsonp&method=lerni.bells.types.edit"
+    page['create'] = "/api?format=jsonp&method=lerni.bells.types.add"
+    page['fields'] = [{'name': u"id", 'key': True, "list": False, "create": False, "edit": False}]
+    page['fields'].append({'name': u"name", "title": u"Nazwa zestawu dzwonków"})
+    return page
+
+@view_config(route_name='admin', renderer='admin_jtable.mak', match_param='page=bells')
+def admin_bells(request):
+    page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Dzwonki"]], 'allerts': []}
+    page.update(get_basic_account_info(request))
+    page['title'] = u"Dzwonki"
+    page['title_desc'] = u'''Poniżej możesz edytować listę dzwonków.'''
+    page['sorting'] = True
+    page['defaultSorting'] = "id DESC"
+    page['selecting'] = True
+    page['list'] = "/api?format=jsonp&method=lerni.bells.getList"
+    page['delete'] = "/api?format=jsonp&method=lerni.bells.delete"
+    page['update'] = "/api?format=jsonp&method=lerni.bells.edit"
+    page['create'] = "/api?format=jsonp&method=lerni.bells.add"
+    page['fields'] = [{'name': u"id", 'key': True, "list": False, "create": False, "edit": False}]
+    page['fields'].append({'name': u"name", "title": u"Nazwa lekcji (np. Lekcja 1)"})
+    page['fields'].append({'name': u"order", "title": u"Numer lekcji (1,2,...)"})
+    page['fields'].append({'name': u"start", "title": u"Początek"})
+    page['fields'].append({'name': u"start_len", "title": u"Czas trwania"})
+    page['fields'].append({'name': u"end", "title": u"Koniec"})
+    page['fields'].append({'name': u"end_len", "title": u"Czas trwania"})
+    page['fields'].append({'name': u"type_id", "title": u"Typ", "options": "/api?format=jsonp&method=lerni.bells.types.nameList"})
+    return page
 
 @view_config(route_name='admin', renderer='admin_jtable.mak', match_param='page=users')
 def admin_users(request):
