@@ -65,6 +65,9 @@ head.js(jquery, jquery_ui, jtable, jtable_pl, function(){
                 name: $("#filter").val(),
                 competitionGroupId: $("#competition_group_select option:selected").val()
             });
+            var a = {"gimnazjum_olimpiady":"Olimpijczycy - Gimnazjum", "gimnazjum_konkursy":"Konkursowicze - Gimnazjum",
+                     "liceum_olimpiady":"Olimpijczycy - Liceum", "liceum_konkursy":"Konkursowicze - Liceum"};
+            $('#jtable .jtable-title-text').html(a[$("#competition_group_select option:selected").val()])
     }
     $("#competition_group_select").change(search_competitors);
     $("#filter").on('input', search_competitors);
