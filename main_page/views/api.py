@@ -22,6 +22,11 @@ def api_jsonp_lucky_random(request):
         else:
             all_numbers = range(37)
             all_numbers.remove(0)
+    while len(all_numbers)<5:
+        rand = random.randint(1,36)
+        if not rand in all_numbers:
+            all_numbers.append(rand)
+
     rand = random.sample(all_numbers, 5)
     page['mon'] = rand[0]
     page['tue'] = rand[1]
