@@ -8,6 +8,7 @@ import time
 import linecache
 import uuid
 import hashlib
+import random
 
 from recaptcha.client import captcha
 

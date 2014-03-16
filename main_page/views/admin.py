@@ -394,6 +394,28 @@ def admin_log_lucky(request):
     page['delete'] = "/api?format=jsonp&method=lerni.lucky.delete"
     page['update'] = "/api?format=jsonp&method=lerni.lucky.edit"
     page['create'] = "/api?format=jsonp&method=lerni.lucky.add"
+    page['selecting'] = True
+    page['toolbar'] = [{'tooltip' :'Click here to export this table to excel', 'icon': '/Content/images/Misc/excel.png',
+                        'text' : u'Losuj szczęśliwy numerek',
+                        'click': '''var start = $("td", $('#jtable').jtable('selectedRows')).eq(7).text();
+                                    var end = $("td", $('#jtable').jtable('selectedRows')).eq(8).text();
+                                    $.get("/api?format=jsonp&method=lerni.lucky.random", function(data) {
+                                        $('#jtable').jtable('addRecord', {
+                                            record: {
+                                                0: data.mon,
+                                                1: data.tue,
+                                                2: data.wed,
+                                                3: data.thu,
+                                                4: data.fri,
+                                                5: data.sat,
+                                                6: data.sun,
+                                                first_date: start,
+                                                start: start,
+                                                end: end
+                                            }
+                                        });
+                                    });
+                                    '''}]
     page['fields'] = [{'name': "first_date", "title": "From", 'key': True, "list": False, "type": "date",
                        "displayFormat": "dd.mm.yy", "create": "true", "edit": "false", }]
     page['fields'].append({'name': "0", "title": "Pon"})

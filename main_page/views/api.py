@@ -11,6 +11,27 @@ def api_jsonp_lerni_competitors_competitions_getlist(request):
         page['Options'].append({"DisplayText":position.name, "Value":position.id})
     return page
 
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.lucky.random'])
+def api_jsonp_lucky_random(request):
+    page = {}
+    all_numbers = range(37)
+    all_numbers.remove(0)
+    for x in DBSession.query(LuckyNumbers).order_by(asc(LuckyNumbers.date)):
+        if x.number in all_numbers:
+            all_numbers.remove(x.number)
+        else:
+            all_numbers = range(37)
+            all_numbers.remove(0)
+    rand = random.sample(all_numbers, 5)
+    page['mon'] = rand[0]
+    page['tue'] = rand[1]
+    page['wed'] = rand[2]
+    page['thu'] = rand[3]
+    page['fri'] = rand[4]
+    page['sat'] = ""
+    page['sun'] = ""
+    return page
+
 @view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.competitors.groups.nameList'])
 def api_jsonp_lerni_competitors_groups_getlist(request):
     page = {"Result": "OK", "Options": []}

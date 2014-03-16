@@ -53,6 +53,19 @@ head.js(jquery, jquery_ui, jtable, jtable_pl, function(){
             updateAction: '${update | n}',
             createAction: '${create | n}'
         },
+        %if toolbar:
+        toolbar: {
+            items: [
+                %for item in toolbar:
+                {tooltip: '${item['tooltip']}',
+                icon: '${item['icon']}',
+                text: '${item['text']}',
+                click: function () { ${item['click'] |n} }
+                }
+                %endfor
+            ]
+        },
+        %endif
         fields: {
         % for x in fields:
             ${x['name'] |n}: {
