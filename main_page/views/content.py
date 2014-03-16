@@ -10,8 +10,11 @@ def entry(request):
     page['page_title']="ZSO nr 15 w Sosnowcu"
     page['banners']=[]
     logged_in = authenticated_userid(request)
-    try: user = DBSession.query(People).filter_by(email=logged_in).first()
-    except DBAPIError: return Response("Mysql connection error", content_type='text/plain', status_int=500)
+    page['logged_in'] = logged_in
+    try:
+        user = DBSession.query(People).filter_by(email=logged_in).first()
+    except DBAPIError:
+        return Response("Mysql connection error", content_type='text/plain', status_int=500)
     entry = DBSession.query(Entries).filter_by(id=request.matchdict['id']).first()
     #if not entry:#
     #	return notfound#
@@ -28,6 +31,7 @@ def entry(request):
     page['share_title']="LOOL"
     page['leaves']=True
     page['snow']=True
+    page['edit'] = 'edit' in request.params and logged_in
 
     words = len(entry.last_version.text.split(" "))
     page['time'] = words/200
@@ -75,8 +79,11 @@ def folder(request):
    page['page_title']="ZSO nr 15 w Sosnowcu"
    page['banners']=[]
    logged_in = authenticated_userid(request)
-   try: user = DBSession.query(People).filter_by(email=logged_in).first()
-   except DBAPIError: return Response("Mysql connection error", content_type='text/plain', status_int=500)   
+   page['logged_in'] = logged_in
+   try:
+       user = DBSession.query(People).filter_by(email=logged_in).first()
+   except DBAPIError:
+       return Response("Mysql connection error", content_type='text/plain', status_int=500)
    folder = DBSession.query(Folders).filter_by(id=request.matchdict['id']).first()
    page['lang']='pl_PL'
    page['title']=folder.last_version.title
@@ -99,15 +106,21 @@ def folder(request):
 
 @view_config(route_name='entry_save', renderer='jsonp')
 def entries_save(request):
-    try: user = DBSession.query(People).filter_by(email=logged_in).first()
-    except DBAPIError: return Response("Mysql connection error", content_type='text/plain', status_int=500)
-    if 'raptor-content' in request.params:
-        pairs = [(k, v) for (k, v) in json.loads(request.params['raptor-content']).iteritems()]
+    l = json.loads
+    d = json.dumps
+    logged_in = authenticated_userid(request)
+    try:
+        user = DBSession.query(People).filter_by(email=logged_in).first()
+    except DBAPIError:
+        return Response("Mysql connection error", content_type='text/plain', status_int=500)
+    if 'text' in request.params:
+        a = l(request.params['text'])
+        pairs = [(k, v) for (k, v) in a.iteritems()]
         entry_id=pairs[0][0]
         data=pairs[0][1]
-        #request.params['postName']
-        #request.params['id']
-        #request.params['email']
+        entry = DBSession.query(Entries).filter_by(id=entry_id).first().last_version
+        entry.text = data
+        transaction.commit()
         return{'status':True}
     return{'status':False}
 

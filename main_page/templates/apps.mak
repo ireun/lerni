@@ -8,7 +8,7 @@
         <link href="/static/libs/raptor/raptor.min.css" rel="stylesheet"> <!-- Very ugly hack starts here -->
         <link href="/static/libs/raptor/raptor-front-end.min.css" rel="stylesheet">
         <link href="/static/libs/raptor/theme.min.css" rel="stylesheet">
-        "<link href="/static/libs/raptor/theme-icons.min.css" rel="stylesheet">
+        <link href="/static/libs/raptor/theme-icons.min.css" rel="stylesheet">
 
         <link href="/static/libs/reveal/reveal.min.css" rel="stylesheet">
 	</head>

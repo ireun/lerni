@@ -2,7 +2,6 @@ head.js(jquery, autosize, function (){
    $(document).ready(function(){ $('textarea').autosize(); });
 });
 
-
 head.js(jquery, jflickrfeed, owl, function (){
     $(document).ready(function() {
       $("#owlCarousel").owlCarousel({

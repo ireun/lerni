@@ -3,6 +3,24 @@
 <link href="/static/libs/socialcount/socialcount-icons.min.css" rel="stylesheet">
 <link href="/static/css/social.min.css" rel="stylesheet">
 <link href="/static/css/entries.min.css" rel="stylesheet">
+
+<link href="/static/libs/raptor/raptor.min.css" rel="stylesheet"> <!-- Very ugly hack starts here -->
+<link href="/static/libs/raptor/raptor-front-end.min.css" rel="stylesheet">
+<link href="/static/libs/raptor/theme.min.css" rel="stylesheet">
+<link href="/static/libs/raptor/theme-icons.min.css" rel="stylesheet">
+% if edit:
+    <script>
+        head.js(raptor, raptor2, raptor3, function(){
+            $('#text').raptor({
+                enablePlugins: true,
+                plugins:{
+                    save: { plugin: 'saveJson'},
+                    saveJson: {url: '/entry/save', postName: 'text', id: function() { return ${id}} }
+                }
+            });
+        });
+    </script>
+% endif
 <!---
 <script src="/static/js/content.min.js"></script>
 <link href="/static/css/content.min.css" rel="stylesheet">
@@ -28,7 +46,9 @@
             %endif
         </span></h2>
         <a class="pull-left header-nav" href="${back}">Wstecz</a>
-        <a class="pull-right header-nav" href="?edit">Edytuj</a>
+        %if logged_in:
+            <a class="pull-right header-nav" href="?edit">Edytuj</a>
+        %endif
     </div>
 </header>
 <div id="main" class="container">
