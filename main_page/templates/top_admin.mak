@@ -126,7 +126,9 @@
                   <ul id="submenu4" style="height: 0px;">
                     <li class=""><a href="/admin/all/tweets"> <span class="icon icon-angle-right"></span>Tweety</a></li>
                     <li class=""><a href="/admin/all/folders"> <span class="icon icon-angle-right"></span>Foldery</a></li>
+                    <!--
                     <li class=""><a href="/admin/all/petitions"> <span class="icon icon-angle-right"></span>Wnioski</a></li>
+                    -->
                     <li class=""><a href="/admin/all/competitions"> <span class="icon icon-angle-right"></span>Konkursy</a></li>
                     <li class=""><a href="/admin/all/competitors"> <span class="icon icon-angle-right"></span>Konkursowicze</a></li>
                   </ul>
@@ -138,18 +140,14 @@
                     <span class="arrow icon-caret-down"></span>
                   </a>
                   <ul id="submenu5" style="height: 0px;">
-                    <li class="">
-                      <a href="/admin/layouts"> <span class="icon icon-angle-right"></span>Layout</a>
-                    </li>
-                    <li class="">
-                      <a href="widget-default.html"> <span class="icon icon-angle-right"></span>Galeria</a>
-                    </li>
-                    <li class="">
-                      <a href="widget-draggable.html"> <span class="icon icon-angle-right"></span>Ostatnie video</a>
-                    </li>
-                    <li class="">
-                      <a href="/admin/bells_types"> <span class="icon icon-angle-right"></span>Rodzaje dzwonków</a>
-                    </li>
+                    <li class=""><a href="/admin/pages"> <span class="icon icon-angle-right"></span>Podstrony</a></li>
+                    <li class=""><a href="/admin/easy_links"> <span class="icon icon-angle-right"></span>Proste linki</a></li>
+                    <!--
+                    <li class=""><a href="/admin/layouts"> <span class="icon icon-angle-right"></span>Layout</a></li>
+                    -->
+                    <li class=""><a href="widget-default.html"> <span class="icon icon-angle-right"></span>Galeria</a></li>
+                    <li class=""><a href="widget-draggable.html"> <span class="icon icon-angle-right"></span>Ostatnie video</a></li>
+                    <li class=""><a href="/admin/bells_types"> <span class="icon icon-angle-right"></span>Rodzaje dzwonków</a></li>
                     <li class="">
                       <a href="/admin/bells"> <span class="icon icon-angle-right"></span>Dzwonki</a>
                     </li>

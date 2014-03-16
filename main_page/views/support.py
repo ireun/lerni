@@ -6,6 +6,7 @@ from base import *
              request_param=['action', 'topic', 'email'])
 def support_ticket_send(request):
     page = {'editor': 0, 'allerts': [], 'recaptcha_public': recaptcha_public}
+    page['page_title']="ZSO nr 15 w Sosnowcu"
     page['banners'] = []
     for position in DBSession.query(Banners).limit(6):
         page['banners'].append([position.link, position.alternative])
@@ -49,6 +50,7 @@ def support_ticket_send(request):
 def support_ask(request):
     page = {'recaptcha_public': recaptcha_public}
     page['banners'] = []
+    page['page_title']="ZSO nr 15 w Sosnowcu"
     for position in DBSession.query(Banners).limit(6):
         page['banners'].append([position.link,position.alternative])
     logged_in = authenticated_userid(request)
@@ -77,6 +79,7 @@ def support_ask_ticket_anser(request):
 @view_config(route_name='support_ask_ticket', renderer='support_ask_ticket.mak')
 def support_ask_ticket(request):
     page = {'editor': 0, 'allerts': [], 'recaptcha_public': recaptcha_public}
+    page['page_title']="ZSO nr 15 w Sosnowcu"
     page['banners'] = []
     for position in DBSession.query(Banners).limit(6):
         page['banners'].append([position.link, position.alternative])

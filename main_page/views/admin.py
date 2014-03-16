@@ -35,6 +35,44 @@ def admin_layouts(request):
     page['title_desc'] = u"Wybierz stonę, której layout chcesz edytować."
     return page
 
+@view_config(route_name='admin', renderer='admin_jtable.mak', match_param='page=easy_links')
+def admin_easy_links(request):
+    page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Proste linki"]], 'allerts': []}
+    page.update(get_basic_account_info(request))
+    page['title'] = u"Proste linki"
+    page['title_desc'] = u'''Poniżej możesz dodawać proste do zapamiętania linki.'''
+    page['sorting'] = True
+    page['defaultSorting'] = "id DESC"
+    page['selecting'] = True
+    page['list'] = "/api?format=jsonp&method=lerni.easy_links.getList"
+    page['delete'] = "/api?format=jsonp&method=lerni.easy_links.delete"
+    page['update'] = "/api?format=jsonp&method=lerni.easy_links.edit"
+    page['create'] = "/api?format=jsonp&method=lerni.easy_links.add"
+    page['fields'] = [{'name': u"id", 'key': True, "list": False, "create": False, "edit": False}]
+    page['fields'].append({'name': u"name", "title": u"Krótki link"})
+    page['fields'].append({'name': u"path", "title": u"Pełny link"})
+    return page
+
+@view_config(route_name='admin', renderer='admin_jtable.mak', match_param='page=pages')
+def admin_pages(request):
+    page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Podstrony"]], 'allerts': []}
+    page.update(get_basic_account_info(request))
+    page['title'] = u"Podstrony"
+    page['title_desc'] = u'''Poniżej możesz dodawać oraz edytować podstrony.'''
+    page['sorting'] = True
+    page['defaultSorting'] = "id DESC"
+    page['selecting'] = True
+    page['list'] = "/api?format=jsonp&method=lerni.pages.getList"
+    page['delete'] = "/api?format=jsonp&method=lerni.pages.delete"
+    page['update'] = "/api?format=jsonp&method=lerni.pages.edit"
+    page['create'] = "/api?format=jsonp&method=lerni.pages.add"
+    page['fields'] = [{'name': u"id", 'key': True, "list": False, "create": False, "edit": False}]
+    page['fields'].append({'name': u"name", "title": u"Nazwa"})
+    page['fields'].append({'name': u"url_name", "title": u"Link"})
+    page['fields'].append({'name': u"pre", "title": u"pre"})
+    return page
+
+
 @view_config(route_name='admin', renderer='admin_jtable.mak', match_param='page=bells_types')
 def admin_bells_types(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Dzwonki"]], 'allerts': []}

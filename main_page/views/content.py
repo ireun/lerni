@@ -7,6 +7,8 @@ def entries(request):
 @view_config(route_name='entry', renderer='content_text.mak', permission='view')  
 def entry(request):
     page = {'editor':0, 'allerts': []} #referrer #
+    page['page_title']="ZSO nr 15 w Sosnowcu"
+    page['banners']=[]
     logged_in = authenticated_userid(request)
     try: user = DBSession.query(People).filter_by(email=logged_in).first()
     except DBAPIError: return Response("Mysql connection error", content_type='text/plain', status_int=500)
@@ -26,6 +28,9 @@ def entry(request):
     page['share_title']="LOOL"
     page['leaves']=True
     page['snow']=True
+
+    words = len(entry.last_version.text.split(" "))
+    page['time'] = words/200
     soup = BeautifulSoup(entry.last_version.text)
     [s.extract() for s in soup(['script','iframe','img','object','embed','param'])];
     page['content'] = parser.format(unicode(soup), somevar='somevalue')
@@ -39,6 +44,7 @@ def entry(request):
 @view_config(route_name='user', renderer='pages.mak', permission='view')
 def user(request):
     page={'editor':0, 'allerts':[]}
+    page['page_title']="ZSO nr 15 w Sosnowcu"
     logged_in = authenticated_userid(request)
     page['logged_in']=logged_in
     page['name']=username(logged_in)
@@ -66,6 +72,8 @@ def user(request):
 @view_config(route_name='folder', renderer='content_text.mak', permission='view')
 def folder(request):
    page={'editor':0, 'allerts':[]}
+   page['page_title']="ZSO nr 15 w Sosnowcu"
+   page['banners']=[]
    logged_in = authenticated_userid(request)
    try: user = DBSession.query(People).filter_by(email=logged_in).first()
    except DBAPIError: return Response("Mysql connection error", content_type='text/plain', status_int=500)   

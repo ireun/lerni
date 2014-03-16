@@ -98,6 +98,132 @@ def jsonp_bells_types_create(request):
     except DBAPIError:
         return {"Result":"ERROR","Message":"Form is not valid! Please correct it and try again."}
     return page
+#################
+# Pages    #
+#################
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.pages.getList',
+                                                                'jtStartIndex','jtPageSize'])
+def jsonp_pages_list(request):
+    page = {"Result":"OK","Records":[]}
+    start_index = request.params['jtStartIndex']
+    page_size = request.params['jtPageSize']
+    sorting = request.params['jtSorting'].split(" ")
+
+    query = DBSession.query(Pages)
+    query = query.order_by(eval("Pages."+sorting[0]+{"ASC": ".asc()", "DESC":".desc()"}[sorting[1]]))
+    if "name" in request.params:
+        names = request.params['name'].split(" ")
+        for name in names:
+            query = query.filter(or_(Pages.name.like("%"+name+"%"),
+                                     Pages.pre.like("%"+name+"%"),
+                                     Pages.url_name.like("%"+name+"%")))
+    page['TotalRecordCount'] = query.count()
+    query = query.offset(int(start_index)).limit(int(page_size))
+    for position in query:
+        page['Records'].append({u"id": position.id, u"name": position.name, u"url_name": str(position.url_name),
+                                u"pre": position.pre})
+    return page
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.pages.delete',
+                                                                'id'])
+def jsonp_pages_delete(request):
+    session = DBSession()
+    page_r = DBSession.query(Pages).filter_by(id=request.params['id']).first()
+    if not page_r:
+        return {"Result":"ERROR","Message":"Coś poszło nie tak :/"}
+    else:
+        session.delete(page_r)
+        transaction.commit()
+        return {"Result":"OK"}
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.pages.edit',
+                                                                'id'])
+def jsonp_pages_edit(request):
+    session = DBSession()
+    page_r = DBSession.query(Pages).filter_by(id=request.params['id']).first()
+    if not page_r:
+        return {"Result": "ERROR", "Message": "Coś poszło nie tak :/"}
+    page_r.url_name = request.params["url_name"]
+    page_r.name = request.params["name"]
+    page_r.pre = request.params["pre"]
+    transaction.commit()
+    return {"Result":"OK"}
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.pages.add',
+                                                                'name'])
+def jsonp_pages_create(request):
+    page = {"Result": "OK", "Record": []}
+    try:
+        session = DBSession()
+        page_r = Pages(request.params["url_name"], request.params["name"], request.params["pre"])
+        session.add(page_r)
+        page['Record'].append({u"id": page_r.id, u"url_name": page_r.url_name, u"name": page_r.name,
+                               u"pre": page_r.pre})
+        transaction.commit()
+    except DBAPIError:
+        return {"Result": "ERROR", "Message": "Form is not valid! Please correct it and try again."}
+    return page
+
+#################
+# Easy_links    #
+#################
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.easy_links.getList',
+                                                                'jtStartIndex','jtPageSize'])
+def jsonp_easy_links_list(request):
+    page = {"Result":"OK","Records":[]}
+    start_index = request.params['jtStartIndex']
+    page_size = request.params['jtPageSize']
+    sorting = request.params['jtSorting'].split(" ")
+
+    query = DBSession.query(EasyLinks)
+    query = query.order_by(eval("EasyLinks."+sorting[0]+{"ASC": ".asc()", "DESC":".desc()"}[sorting[1]]))
+    if "name" in request.params:
+        names = request.params['name'].split(" ")
+        for name in names:
+            query = query.filter(or_(Bells.name.like("%"+name+"%"),
+                                     Bells.path.like("%"+name+"%")))
+    page['TotalRecordCount'] = query.count()
+    query = query.offset(int(start_index)).limit(int(page_size))
+    for position in query:
+        page['Records'].append({u"id": position.id, u"name": position.name, u"path": str(position.path)})
+    return page
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.easy_links.delete',
+                                                                'id'])
+def jsonp_easy_links_delete(request):
+    session = DBSession()
+    easy = DBSession.query(EasyLinks).filter_by(id=request.params['id']).first()
+    if not easy:
+        return {"Result":"ERROR","Message":"Coś poszło nie tak :/"}
+    else:
+        session.delete(easy)
+        transaction.commit()
+        return {"Result":"OK"}
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.easy_links.edit',
+                                                                'id'])
+def jsonp_easy_links_edit(request):
+    session = DBSession()
+    easy = DBSession.query(EasyLinks).filter_by(id=request.params['competition_id']).first()
+    if not bell:
+        return {"Result": "ERROR", "Message": "Coś poszło nie tak :/"}
+    easy.name = request.params["name"]
+    easy.path = request.params["start_len"]
+    transaction.commit()
+    return {"Result":"OK"}
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.easy_links.add',
+                                                                'name'])
+def jsonp_easy_links_create(request):
+    page = {"Result": "OK", "Record": []}
+    try:
+        session = DBSession()
+        easy = EasyLinks(request.params["name"], request.params["path"])
+        session.add(easy)
+        page['Record'].append({u"id": easy.id, u"name": easy.name, u"path": easy.path})
+        transaction.commit()
+    except DBAPIError:
+        return {"Result": "ERROR", "Message": "Form is not valid! Please correct it and try again."}
+    return page
 
 #################
 # Bells         #
