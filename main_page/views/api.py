@@ -40,7 +40,7 @@ def api_jsonp_lerni_competitors_tutors_getlist(request):
     return page
 
 @view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.bells.types.nameList'])
-def api_jsonp_lerni_competitors_tutors_getlist(request):
+def api_jsonp_lerni_bells_types_getlist(request):
     page={"Result":"OK","Options":[]}
     for position in DBSession.query(BellsTypes):
         page['Options'].append({"DisplayText": position.name,"Value": position.id})
@@ -215,9 +215,14 @@ def jsonp_easy_links_edit(request):
                                                                 'name'])
 def jsonp_easy_links_create(request):
     page = {"Result": "OK", "Record": []}
+    logged_in = authenticated_userid(request)
+    try:
+        user = DBSession.query(People).filter_by(email=logged_in).first()
+    except DBAPIError:
+        return Response("Mysql connection error", content_type='text/plain', status_int=500)
     try:
         session = DBSession()
-        easy = EasyLinks(request.params["name"], request.params["path"])
+        easy = EasyLinks(user.id, request.params["name"], request.params["path"])
         session.add(easy)
         page['Record'].append({u"id": easy.id, u"name": easy.name, u"path": easy.path})
         transaction.commit()
