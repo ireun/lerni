@@ -126,6 +126,7 @@
                   <ul id="submenu4" style="height: 0px;">
                     <li class=""><a href="/admin/all/tweets"> <span class="icon icon-angle-right"></span>Tweety</a></li>
                     <li class=""><a href="/admin/all/folders"> <span class="icon icon-angle-right"></span>Foldery</a></li>
+                    <li class=""><a href="/admin/all/entries"> <span class="icon icon-angle-right"></span>Wpisy</a></li>
                     <!--
                     <li class=""><a href="/admin/all/petitions"> <span class="icon icon-angle-right"></span>Wnioski</a></li>
                     -->

@@ -15,7 +15,7 @@
 	    <div class="row-fluid">
             <div class="span12">
 	            <div class="page-header line1">
-	                <h4>${title}<small>${title_desc}</small></h4>
+	                <h4>${title} <small>${title_desc}</small></h4>
 	            </div>
 	        </div>
 	    </div>

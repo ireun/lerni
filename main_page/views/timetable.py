@@ -68,17 +68,12 @@ def lucky(request):
         page['numbers'].append([x.date, x.number])
     all_numbers = range(37)
     all_numbers.remove(0)
-    numbers = []
-    for x in DBSession.query(LuckyNumbers).order_by(desc(LuckyNumbers.date)):
-        if x.number and not x.number in numbers:
-            numbers.append(x.number)
-        elif not x.number:
-            pass
+    for x in DBSession.query(LuckyNumbers).order_by(asc(LuckyNumbers.date)):
+        if x.number in all_numbers:
+            all_numbers.remove(x.number)
         else:
-            break
-    print numbers
-    for x in numbers:
-        all_numbers.remove(int(x))
+            all_numbers = range(37)
+            all_numbers.remove(0)
     page['left'] = sorted(all_numbers)
     return page
 

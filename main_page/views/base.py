@@ -14,7 +14,8 @@ from recaptcha.client import captcha
 from sqlalchemy.exc import DBAPIError
 from sqlalchemy import or_
 import locale
-from sqlalchemy import desc    ######################################
+from sqlalchemy import desc
+from sqlalchemy import asc
 from main_page.models import (
     DBSession,
     MenuTop,
@@ -168,8 +169,8 @@ def username(logged_in):
 
 
 def send_mail(request,subject,recipients,body,fingerprint=False):
-    if fingerprint:
-        body=str(gpg.encrypt(body, fingerprint, always_trust=True))
+    #if fingerprint:
+    #    body=str(gpg.encrypt(body, fingerprint, always_trust=True))
     mailer = request.registry['mailer']
     message = Message(subject=subject,
                       sender="mailer.staszic@gmail.com",
@@ -231,6 +232,40 @@ def bells(tag_name, value, options, parent, context):
     to_return = render('widgets/bells.mak',{'bl': bl})
     return to_return
 parser.add_formatter("bells", bells)
+
+
+def get_week(day):
+    start = day-datetime.timedelta(day.weekday())
+    end = day+datetime.timedelta(6-day.weekday())
+    return start, end
+
+
+def lucky_numbers(tag_name, value, options, parent, context):
+    page={}
+    lucky_number = DBSession.query(LuckyNumbers).filter_by(date=datetime.datetime.now().date()+datetime.timedelta(1))
+    lucky_number = lucky_number.first()
+    try:
+        page['lucky_number'] = lucky_number.number
+        page['lucky_number_date'] = lucky_number.date
+    except AttributeError:
+        page['lucky_number'] = "??"
+        page['lucky_number_date'] = ""
+    week = get_week(datetime.datetime.now().date()+datetime.timedelta(1))
+    page['numbers'] = []
+    for x in DBSession.query(LuckyNumbers).filter(LuckyNumbers.date.between(week[0], week[1])):
+        page['numbers'].append([x.date, x.number])
+    all_numbers = range(37)
+    all_numbers.remove(0)
+    for x in DBSession.query(LuckyNumbers).order_by(asc(LuckyNumbers.date)):
+        if x.number in all_numbers:
+            all_numbers.remove(x.number)
+        else:
+            all_numbers = range(37)
+            all_numbers.remove(0)
+    page['left'] = sorted(all_numbers)
+    to_return = render('widgets/lucky.mak',page)
+    return to_return
+parser.add_formatter("lucky_numbers", lucky_numbers)
 
 def get_basic_account_info(request):
     page = {}

@@ -52,19 +52,6 @@ def main(global_config, **settings):
     config.add_route('jsonp_groups', '/api/jsonp/groups')
     config.add_route('jsonp_mobile_login', '/api/jsonp/mobile_login')
 
-    config.add_route('options_teacher_list','/api/jsonp/options-teacher-list')
-    config.add_route('options_subjects_list','/api/jsonp/options-subjects-list')
-    config.add_route('options_groups_list','/api/jsonp/options-groups-list/{term_id}')
-
-    config.add_route('options_folders_list','/api/jsonp/options-folders-list')
-    config.add_route('options_folders_css_list','/api/jsonp/options-folders-css-list')
-    config.add_route('entry_list','/api/jsonp/entry-list')
-    config.add_route('delete_entry','/api/jsonp/delete-entry')
-    config.add_route('update_entry','/api/jsonp/update-entry')
-    config.add_route('create_entry','/api/jsonp/create-entry')
-    config.add_route('options_entries_css_list','/api/jsonp/options-entries-css-list')
-
-
     config.add_route('jsonp_system_info', '/api/jsonp/system_info')
 
     config.add_route('admin_home', '/admin')

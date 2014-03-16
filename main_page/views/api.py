@@ -6,44 +6,51 @@ import datetime
 
 @view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.competitors.competitions.nameList'])
 def api_jsonp_lerni_competitors_competitions_getlist(request):
-    page={"Result":"OK","Options":[]}
+    page = {"Result": "OK", "Options": []}
     for position in DBSession.query(CompetitorsCompetitions):
-        page['Options'].append({"DisplayText":position.name,"Value":position.id})
+        page['Options'].append({"DisplayText":position.name, "Value":position.id})
     return page
 
 @view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.competitors.groups.nameList'])
 def api_jsonp_lerni_competitors_groups_getlist(request):
-    page={"Result":"OK","Options":[]}
+    page = {"Result": "OK", "Options": []}
     for position in DBSession.query(CompetitorsGroups):
-        page['Options'].append({"DisplayText":position.name,"Value":position.id})
+        page['Options'].append({"DisplayText":position.name, "Value":position.id})
     return page
 
 @view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.competitors.types.nameList'])
 def api_jsonp_lerni_competitors_types_getlist(request):
-    page={"Result":"OK","Options":[]}
+    page = {"Result": "OK", "Options": []}
     for position in DBSession.query(CompetitorsTypes):
-        page['Options'].append({"DisplayText": position.name,"Value": position.id})
+        page['Options'].append({"DisplayText": position.name, "Value": position.id})
     return page
 
 @view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.subjects.nameList'])
 def api_jsonp_lerni_subjects_namelist(request):
-    page={"Result":"OK","Options":[]}
+    page = {"Result": "OK", "Options": []}
     for position in DBSession.query(Subjects):
-        page['Options'].append({"DisplayText": position.name,"Value": position.id})
+        page['Options'].append({"DisplayText": position.name, "Value": position.id})
     return page
 
 @view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.competitors.tutors.nameList'])
 def api_jsonp_lerni_competitors_tutors_getlist(request):
-    page={"Result":"OK","Options":[]}
+    page = {"Result": "OK", "Options": []}
     for position in DBSession.query(CompetitorsTutors):
-        page['Options'].append({"DisplayText": position.name,"Value": position.id})
+        page['Options'].append({"DisplayText": position.name, "Value": position.id})
     return page
 
 @view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.bells.types.nameList'])
 def api_jsonp_lerni_bells_types_getlist(request):
-    page={"Result":"OK","Options":[]}
+    page = {"Result": "OK", "Options": []}
     for position in DBSession.query(BellsTypes):
-        page['Options'].append({"DisplayText": position.name,"Value": position.id})
+        page['Options'].append({"DisplayText": position.name, "Value": position.id})
+    return page
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.folders.nameList'])
+def api_jsonp_lerni_bells_types_getlist(request):
+    page = {"Result": "OK", "Options": []}
+    for position in DBSession.query(Folders):
+        page['Options'].append({"DisplayText": position.last_version.title, "Value": position.id})
     return page
 #################
 # Bells_Types   #
@@ -51,7 +58,7 @@ def api_jsonp_lerni_bells_types_getlist(request):
 @view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.bells.types.getList',
                                                                 'jtStartIndex','jtPageSize'])
 def jsonp_bells_types_list(request):
-    page = {"Result":"OK","Records":[]}
+    page={"Result": "OK", "Options": []}
     start_index = request.params['jtStartIndex']
     page_size = request.params['jtPageSize']
     sorting = request.params['jtSorting'].split(" ")
@@ -71,7 +78,7 @@ def jsonp_bells_types_delete(request):
     if not bell:
         return {"Result": "ERROR", "Message": "Coś poszło nie tak :/"}
     else:
-        session.delete(competition)
+        session.delete(bell)
         transaction.commit()
         return {"Result":"OK"}
 
@@ -205,7 +212,7 @@ def jsonp_easy_links_delete(request):
 def jsonp_easy_links_edit(request):
     session = DBSession()
     easy = DBSession.query(EasyLinks).filter_by(id=request.params['competition_id']).first()
-    if not bell:
+    if not easy:
         return {"Result": "ERROR", "Message": "Coś poszło nie tak :/"}
     easy.name = request.params["name"]
     easy.path = request.params["start_len"]
@@ -1023,21 +1030,14 @@ def jsonp_years_create(request):
 #########
 # Other #
 #########
-@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp','method=lerni.teachers.getList'])
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp','method=lerni.teachers.nameList'])
 def api_jsonp_lerni_teachers_getlist(request):
     page={"Result": "OK","Options": []}
     for position in DBSession.query(Teachers):
         page['Options'].append({"DisplayText": position.user.full_name, "Value":position.id})
     return page
 
-@view_config(route_name='options_subjects_list', renderer='jsonp')
-def options_subjects_list(request):
-    page = {"Result": "OK","Options": []}
-    for position in DBSession.query(Subjects):
-        page['Options'].append({"DisplayText": position.name, "Value":position.id})
-    return page
-
-@view_config(route_name='options_groups_list', renderer='jsonp')
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp','method=lerni.groups.nameList'])
 def options_groups_list(request):
     page={"Result": "OK","Options": []}
     for position in DBSession.query(Groups):
@@ -1059,8 +1059,8 @@ def jsonp_folders_get_list(request):
     sorting = request.params['jtSorting'].split(" ")
     page_size = request.params['jtPageSize']
     user = DBSession.query(People).filter_by(email=logged_in).first()
-    query = DBSession.query(Folders).filter_by(user=user).filter_by(deleted=False)\
-        .offset(int(start_index)).limit(int(page_size))
+    query = DBSession.query(Folders).offset(int(start_index)).limit(int(page_size))
+    #.filter_by(user=user).filter_by(deleted=False)
     for position in query:
         folder_data = DBSession.query(FoldersVersions).filter_by(folder_id=position.id).order_by('-id').first()
         try:
@@ -1141,17 +1141,12 @@ def jsonp_folders_add(request):
     transaction.commit()
     return page
 
-@view_config(route_name='options_folders_list', renderer='jsonp')
-def options_folders_list(request):
-    page={"Result":"OK","Options":[]}
-    for position in DBSession.query(Folders):
-        page['Options'].append({"DisplayText":position.last_version.title,"Value":position.id})
-    return page
 
 ############
 # Entries ##
 ############
-@view_config(route_name='entry_list', renderer='jsonp')
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.entries.getList', 'jtStartIndex','jtPageSize', 'jtSorting'])
 def entry_list(request):
     logged_in = authenticated_userid(request)
     if not logged_in:
@@ -1160,18 +1155,19 @@ def entry_list(request):
     startIndex=request.params['jtStartIndex']
     sorting=request.params['jtSorting'].split(" ")
     user = DBSession.query(People).filter_by(email=logged_in).first()
-    query = DBSession.query(Entries).filter_by(user_id=user.id).filter_by(deleted=False)
+    query = DBSession.query(Entries).filter_by(deleted=False) #.filter_by(user_id=user.id)
     for position in query:
         entry_data = position.last_version
         try:
-            page['Records'].append({"EntryID":position.id, "FolderID":entry_data.entry.folder.id, "Title":entry_data.title,
+            page['Records'].append({"id":position.id, "folder_id":entry_data.entry.folder.id, "Title":entry_data.title,
                                     "Tags":entry_data.tags,"CSS":entry_data.css_id,"Published":str(position.state)})
         except DBAPIError:
             return {"Result":"ERROR","Message":"Coś jest nie tak :/"}
     page['TotalRecordCount']=query.count()
     return page
 
-@view_config(route_name='delete_entry', renderer='jsonp')
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.entries.delete', 'id'])
 def delete_entry(request):
     logged_in = authenticated_userid(request)
     if not logged_in:
@@ -1191,7 +1187,8 @@ def delete_entry(request):
             return {"Result":"ERROR","Message":"Coś poszło nie tak :/"}
     return {"Result":"Fail"}
 
-@view_config(route_name='update_entry', renderer='jsonp')
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.entries.edit', 'id'])
 def update_entry(request):
     logged_in = authenticated_userid(request)
     if not logged_in:
@@ -1211,7 +1208,8 @@ def update_entry(request):
             return {"Result":"ERROR","Message":"Coś poszło nie tak :/"}
     return {"Result":"ERROR","Message":"Not enought data."}
 
-@view_config(route_name='create_entry', renderer='jsonp')
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
+            'method=lerni.entries.add', 'id'])
 def create_entry(request):
     logged_in = authenticated_userid(request)
     if not logged_in:
@@ -1304,96 +1302,6 @@ def api_jsonp_lerni_tweets_edit(request):
 @view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp','method=lerni.tweets.add',
             "first_name", "second_name", "last_name", "pesel", "birth_date", "email", "password", "group"])
 def api_jsonp_lerni_tweets_add(request):
-    page={"Result":"OK","Record":[]}
-    try:
-        session = DBSession()
-        wallet = Wallet(0)
-        session.add(wallet)
-        session.flush()
-        session.refresh(wallet)
-        user = People(request.params["first_name"], request.params["second_name"], request.params["last_name"],
-                      request.params["pesel"],
-                      datetime.datetime(*(time.strptime(request.params['birth_date'], "%Y-%m-%d")[0:6])),
-                      request.params["phone_number"],request.params["email"],request.params["password"],
-                      "","",wallet.id,0,0,0,request.params["group"])
-        session.add(user)
-        page['Record'].append({"user_id":user.id,"first_name":user.first_name,
-                                "second_name":user.second_name,"last_name":user.last_name,
-                                "pesel":user.pesel,"birth_date":str(user.birth_date.date()),
-                                "email":user.email,"phone_number":user.phone_number,
-                                "password":"do_not_change","group":1})
-        transaction.commit()
-    except DBAPIError:
-        return {"Result":"ERROR","Message":"Form is not valid! Please correct it and try again."}
-    except ValueError:
-        return {"Result":"ERROR","Message":"Nieprawidłowa data urodzenia :/"}
-    return page
-
-
-############
-# Folders ##
-############
-@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.folders.getList'])
-def api_jsonp_lerni_folders_getlist(request):
-    page = {"Result":"OK","Records":[]}
-    start_index = request.params['jtStartIndex']
-    page_size = request.params['jtPageSize']
-    if 'jtSorting' in request.params:
-        sorting = request.params['jtSorting'].split(" ")
-    query = DBSession.query(Tweets).offset(int(start_index)).limit(int(page_size))
-    for position in query:
-        cat = []
-        for x in position.categories:
-            cat.append(x.category.name)
-        page['Records'].append({u"tweet_id": position.id,
-                                u"user": position.user_id,
-                                u"text": position.text,
-                                u"link_name": position.link_name,
-                                u"link": position.link,
-                                u"state": position.state,
-                                u"categories": " ".join(cat),
-                                u"modification_date": str(position.modification_date)})
-    page['TotalRecordCount'] = DBSession.query(Tweets).count()
-    return page
-
-@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.folders.delete','user_id'])
-def api_jsonp_lerni_folders_delete(request):
-    session = DBSession()
-    user = DBSession.query(People).filter_by(id=request.params['user_id']).first()
-    if not user:
-        return {"Result":"ERROR","Message":"Coś poszło nie tak :/"}
-    elif not user.email_confirmed:
-        session.delete(user)
-        transaction.commit()
-        return {"Result":"OK"}
-    else:
-        return {"Result": "ERROR", "Message": "Nie można usunąć użytkownika, który potwierdził swój adres email."}
-
-@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.folders.edit',
-                                                                "user_id", "first_name", "second_name", "last_name",
-                                                                "pesel", "birth_date", "email", "password", "group"])
-def api_jsonp_lerni_folders_edit(request):
-    session = DBSession()
-    user = DBSession.query(People).filter_by(id=request.params['user_id']).first()
-    if not user:
-        return {"Result":"ERROR","Message":"Coś poszło nie tak :/"}
-    user.first_name = request.params["first_name"]
-    user.second_name = request.params["second_name"]
-    user.last_name = request.params["last_name"]
-    user.pesel = request.params["pesel"]
-    user.birth_date = datetime.datetime(*(time.strptime(request.params['birth_date'], "%Y-%m-%d")[0:6]))
-    user.phone_number = request.params["phone_number"]
-    user.email = request.params["email"]
-    if request.params["password"] != "do_not_change":
-        user.password = hashlib.sha512(unicode(request.params["password"]+
-                                               str(user.registration_date).encode('utf-8'))).hexdigest()
-    user.group_id = request.params["group"]
-    transaction.commit()
-    return {"Result":"OK"}
-
-@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp','method=lerni.folders.add',
-            "first_name", "second_name", "last_name", "pesel", "birth_date", "email", "password", "group"])
-def api_jsonp_lerni_folders_add(request):
     page={"Result":"OK","Record":[]}
     try:
         session = DBSession()

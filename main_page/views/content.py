@@ -129,7 +129,7 @@ def loading(request):
    page={'editor':0, 'allerts':[]}
    logged_in = authenticated_userid(request)
    try:
-    user = DBSession.query(People).filter_by(email=logged_in).first()
+       user = DBSession.query(People).filter_by(email=logged_in).first()
    except DBAPIError:
       return Response("Mysql connection error", content_type='text/plain', status_int=500)
    return page

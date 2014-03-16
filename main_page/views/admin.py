@@ -336,24 +336,50 @@ def admin_log_folders(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Przedmioty"]], 'allerts': [],
             'tables': []}
     page.update(get_basic_account_info(request))
-    page['title'] = u"Wszystkie Foldery"
+    page['title'] = u"Wszystkie foldery"
     page['title_desc'] = u"Oto lista wszystkich folderów w bazie danych twojej szkoły."
     page['sorting'] = True
-    page['defaultSorting'] = "name ASC"
+    page['defaultSorting'] = "folder_id ASC"
     page['selecting'] = True
     page['list'] = "/api?format=jsonp&method=lerni.folders.getList"
     page['delete'] = "/api?format=jsonp&method=lerni.folders.delete"
     page['update'] = "/api?format=jsonp&method=lerni.folders.edit"
     page['create'] = "/api?format=jsonp&method=lerni.folders.add"
-    page['fields'] = [{'name': "tweet_id", 'key': True, "list": False, "create": "true", "edit": False}]
-    page['fields'].append({'name': "user", "title": u"Autor"})
-    page['fields'].append({'name': "text", "title": u"Text"})
-    page['fields'].append({'name': "link_name", "title": u"Text Linku"})
-    page['fields'].append({'name': "link", "title": u"Link"})
-    page['fields'].append({'name': "categories", "title": u"Kategorie"})
-    page['fields'].append({'name': "state", "title": u"Stan"})
-    page['fields'].append({'name': "modification_date", "title": "Data Modyfikacji", "type": "date",
-                           "displayFormat": "dd.mm.yy", "create": False, "edit": False, "sorting": False})
+    page['fields'] = [{'name': "folder_id", 'key': True, "list": False, "create": "true", "edit": False}]
+    page['fields'].append({'name': "title", "title": u"Nazwa folderu"})
+    page['fields'].append({'name': "tags", "title": u"Tagi"})
+    #page['fields'].append({'name': "link_name", "title": u"Text Linku"})
+    #page['fields'].append({'name': "link", "title": u"Link"})
+    #page['fields'].append({'name': "categories", "title": u"Kategorie"})
+    #page['fields'].append({'name': "state", "title": u"Stan"})
+    #page['fields'].append({'name': "modification_date", "title": "Data Modyfikacji", "type": "date",
+    #                       "displayFormat": "dd.mm.yy", "create": False, "edit": False, "sorting": False})
+    return page
+
+@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=all', 'page=entries'])
+def admin_all_entries(request):
+    page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Przedmioty"]], 'allerts': [],
+            'tables': []}
+    page.update(get_basic_account_info(request))
+    page['title'] = u"Wszystkie wpisy"
+    page['title_desc'] = u"Oto lista wszystkich wpisów w bazie danych twojej szkoły."
+    page['sorting'] = True
+    page['defaultSorting'] = "id ASC"
+    page['selecting'] = True
+    page['list'] = "/api?format=jsonp&method=lerni.entries.getList"
+    page['delete'] = "/api?format=jsonp&method=lerni.entries.delete"
+    page['update'] = "/api?format=jsonp&method=lerni.entries.edit"
+    page['create'] = "/api?format=jsonp&method=lerni.entries.add"
+    page['fields'] = [{'name': "id", 'key': True, "list": False, "create": "true", "edit": False}]
+    page['fields'].append({'name': u"folder_id", "title": u"Folder", "options": "/api?format=jsonp&method=lerni.folders.nameList"})
+    page['fields'].append({'name': "title", "title": u"Nazwa folderu"})
+    page['fields'].append({'name': "tags", "title": u"Tagi"})
+    #page['fields'].append({'name': "link_name", "title": u"Text Linku"})
+    #page['fields'].append({'name': "link", "title": u"Link"})
+    #page['fields'].append({'name': "categories", "title": u"Kategorie"})
+    #page['fields'].append({'name': "state", "title": u"Stan"})
+    #page['fields'].append({'name': "modification_date", "title": "Data Modyfikacji", "type": "date",
+    #                       "displayFormat": "dd.mm.yy", "create": False, "edit": False, "sorting": False})
     return page
 
 @view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=log', 'page=lucky'])

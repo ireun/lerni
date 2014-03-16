@@ -249,3 +249,23 @@ margin: 10px 0;
 .hidden-phone {
 display: none !important;
 }
+
+
+div .lucky_number {
+    border: 1px solid;
+    text-align: center;
+    width: 200px;
+    color: white;
+    background-color: #333;
+}
+
+.lucky_number_number {
+    font-size: 140px;
+    width: 200px;
+    height: 175px;
+    border-bottom: 2px solid #ff0066;
+}
+
+.lucky_number_date {
+    font-size: 30px;
+}
