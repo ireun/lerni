@@ -1,18 +1,26 @@
 from __future__ import absolute_import
-from celery.task import Task
-from celery.task import task
-from celery import Celery
+import celery
+import subprocess
 
-from .models import (
+from main_page.models import (
     DBSession,
-    TaskItem,
-)
+    PingResults,
+    PingIPs)
+import transaction
 
-import time
-import random
 
-#app = Celery('main_page.tasks', backend='redis://', broker='amqp://')
-
-@task(name='task')
+@celery.task
 def task(x, y):
     return x + y
+
+
+@celery.task
+def ping():
+    session = DBSession()
+    for host in DBSession.query(PingIPs):
+        res = subprocess.call(['ping', '-c', '3', host.ip])
+        if res == 0:
+            session.add(PingResults(host.id, True))
+        else:
+            session.add(PingResults(host.id, False))
+    transaction.commit()

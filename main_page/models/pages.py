@@ -118,7 +118,7 @@ class CompetitorsGroups(Base):
     def __init__(self, name):
         self.name = name
 
-        
+
 class CompetitorsCompetitions(Base):
     __tablename__ = 'competitors_competitions'
     id = Column(Integer, primary_key=True)
@@ -131,7 +131,7 @@ class CompetitorsCompetitions(Base):
         self.name = name
         self.subject_id = subject_id
 
-        
+
 class CompetitorsTypes(Base):
     __tablename__ = 'competitors_types'
     id = Column(Integer, primary_key=True)
@@ -141,7 +141,7 @@ class CompetitorsTypes(Base):
     def __init__(self, name):
         self.name = name
 
-        
+
 class CompetitorsTutors(Base):
     __tablename__ = 'competitors_tutors'
     id = Column(Integer, primary_key=True)
@@ -150,3 +150,31 @@ class CompetitorsTutors(Base):
 
     def __init__(self, name):
         self.name = name
+
+
+class PingResults(Base):
+    __tablename__ = 'ping_results'
+    id = Column(Integer, primary_key=True)
+    ip_id = Column(Integer, ForeignKey('ping_ips.id'))
+    ip = relationship("PingIPs")
+    result = Column(Boolean)
+    date = Column(DateTime)
+
+    def __init__(self, ip_id, result):
+        self.ip_id = ip_id
+        self.result = result
+        self.date = datetime.datetime.now()
+
+
+class PingIPs(Base):
+    __tablename__ = 'ping_ips'
+    id = Column(Integer, primary_key=True)
+    name = Column(Text)
+    ip = Column(Text)
+    scan = Column(Boolean)
+    results = relationship("PingResults")
+
+    def __init__(self, name, ip):
+        self.name = name
+        self.ip = ip
+        self.scan = True

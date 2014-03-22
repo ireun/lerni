@@ -83,6 +83,8 @@ from main_page.models import (
     CompetitorsTypes,
     CompetitorsGroups,
     Files,
+    PingResults,
+    PingIPs,
     )
     
 #import re
@@ -129,6 +131,12 @@ from contextlib import contextmanager
 import string
 valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
 import bbcode
+
+from main_page.tasks import ping
+import urllib2
+import celery
+from socket import error as socket_error
+import errno
 
 
 @contextmanager
@@ -187,10 +195,12 @@ parser.add_simple_formatter('p', '<p>%(value)s</p>')
 parser.add_simple_formatter('diagram', '<div class="diagram">%(value)s</div>')
 parser.add_simple_formatter('date', '<abbr class="timeago" title="%(value)s">%(value)s</abbr>')
 
+
 def render_widget(tag_name, value, options, parent, context):
     return render('widgets/'+tag_name+'.mak', dict(list(options.items()) + list({'value':value}.items())))
 for widget in ("map", "vimeo", 'support'):
     parser.add_formatter(widget, render_widget)
+
 
 def last_video(tag_name, value, options, parent, context):
     last_video=DBSession.query(VideosMain).order_by('-id').first().video
@@ -199,6 +209,7 @@ def last_video(tag_name, value, options, parent, context):
     elif last_video.hosting_id == 2:
         return render('widgets/vimeo.mak', {'value': last_video.link})
 parser.add_formatter("last_video", last_video)
+
 
 def tweets(tag_name, value, options, parent, context):
     to_return=""
@@ -215,15 +226,37 @@ def tweets(tag_name, value, options, parent, context):
 parser.add_formatter("tweets", tweets)
 
 
+def status(tag_name, value, options, parent, context):
+    page = {}
+    page['services'] = []
+    for x in value.split("|"):
+        page['services'].append([x.split(",")[0]])
+        for y in x.split(",")[1:]:
+            try:
+                service_id = DBSession.query(PingIPs).filter_by(name=y).first().ip
+                service_status = DBSession.query(PingResults).filter_by(id=service_id). \
+                    order_by(PingResults.date.desc()).service_status.first().result
+            except AttributeError:
+                service_status = None
+            page['services'][-1].append(service_status)
+    to_return = render('widgets/status.mak', page)
+    return to_return
+
+
+parser.add_formatter("status", status)
+
+
 def successes(tag_name, value, options, parent, context):
     to_return = render('widgets/competitors.mak',{})
     return to_return
 parser.add_formatter("successes", successes)
 
+
 def graduates(tag_name, value, options, parent, context):
     to_return = render('widgets/graduates.mak',{})
     return to_return
 parser.add_formatter("graduates", graduates)
+
 
 def bells(tag_name, value, options, parent, context):
     c = DBSession.query(Bells).join(BellsTypes).filter(BellsTypes.name.in_([value]))
@@ -283,7 +316,7 @@ def get_basic_account_info(request):
     return page
 
 def timetable(tag_name, value, options, parent, context):
-    return u'<table class="table table-striped"><tr><td> Plan lekcji pojawi się, gdy uzupełnisz swoje dane (klasa,lektorat/uczone klasy) </tr></td></table>'
+    #return u'<table class="table table-striped"><tr><td> Plan lekcji pojawi się, gdy uzupełnisz swoje dane (klasa,lektorat/uczone klasy) </tr></td></table>'
     page = {}
     page['lessons'] = [['1', [], [], [], [], []],['2', [], [], [], [], []],
                        ['3', [], [], [], [], []],['4', [], [], [], [], []],
