@@ -1,7 +1,7 @@
 /*
-    jTable localization file for 'Croatian' language.
-    Author: Nikola Novak
-*/
+ jTable localization file for 'Croatian' language.
+ Author: Nikola Novak
+ */
 (function ($) {
 
     $.extend(true, $.hik.jtable.prototype.options.messages, {
@@ -20,11 +20,11 @@
         error: 'Greška',
         close: 'Zatvori',
         cannotLoadOptionsFor: 'Ne mogu se učitati opcije za polje {0}',
-    	pagingInfo: 'Prikazuje se {0}-{1} od {2}',
-    	pageSizeChangeLabel: 'Broj zapisa',
-    	gotoPageLabel: 'Idi na stranicu',
-    	canNotDeletedRecords: 'Nije bilo moguće obrisati {0} od {1} zapisa!',
-    	deleteProggress: 'Obrisano {0} od {1} zapisa, u tijeku...'
+        pagingInfo: 'Prikazuje se {0}-{1} od {2}',
+        pageSizeChangeLabel: 'Broj zapisa',
+        gotoPageLabel: 'Idi na stranicu',
+        canNotDeletedRecords: 'Nije bilo moguće obrisati {0} od {1} zapisa!',
+        deleteProggress: 'Obrisano {0} od {1} zapisa, u tijeku...'
     });
 
 })(jQuery);

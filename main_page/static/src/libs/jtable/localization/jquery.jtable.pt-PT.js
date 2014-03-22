@@ -1,6 +1,6 @@
 ﻿/*
-    jTable localization file for 'Portuguese - Portugal' language.
-*/
+ jTable localization file for 'Portuguese - Portugal' language.
+ */
 (function ($) {
 
     $.extend(true, $.hik.jtable.prototype.options.messages, {

@@ -1,7 +1,7 @@
 ﻿/*
-    jTable localization file for 'Vietnamese' language.
-    Author: Lê Hoàng Hiếu
-*/
+ jTable localization file for 'Vietnamese' language.
+ Author: Lê Hoàng Hiếu
+ */
 (function ($) {
     $.extend(true, $.hik.jtable.prototype.options.messages, {
         serverCommunicationError: 'Có lỗi khi giao tiếp với máy chủ.',

@@ -1,7 +1,7 @@
 /*
-    jTable localization file for 'Romanian' language.
-    Author: Cristian CIOFU
-*/
+ jTable localization file for 'Romanian' language.
+ Author: Cristian CIOFU
+ */
 (function ($) {
 
     $.extend(true, $.hik.jtable.prototype.options.messages, {

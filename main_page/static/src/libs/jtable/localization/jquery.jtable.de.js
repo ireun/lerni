@@ -1,7 +1,7 @@
 /*
-    jTable localization file for 'German' language.
-    Author: Max Grass
-*/
+ jTable localization file for 'German' language.
+ Author: Max Grass
+ */
 (function ($) {
 
     $.extend(true, $.hik.jtable.prototype.options.messages, {

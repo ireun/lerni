@@ -1,7 +1,7 @@
 ﻿/*
-    jTable localization file for 'Portuguese - Brazilian' language.
-    Authors: Renato Bigliazzi, Paulo Soriano
-*/
+ jTable localization file for 'Portuguese - Brazilian' language.
+ Authors: Renato Bigliazzi, Paulo Soriano
+ */
 (function ($) {
 
     $.extend(true, $.hik.jtable.prototype.options.messages, {

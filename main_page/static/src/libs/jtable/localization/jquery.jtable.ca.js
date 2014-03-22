@@ -1,7 +1,7 @@
 /*
-    jTable localization file for 'Catalan' language.
-    Author: Manel Zaera
-*/
+ jTable localization file for 'Catalan' language.
+ Author: Manel Zaera
+ */
 (function ($) {
 
     $.extend(true, $.hik.jtable.prototype.options.messages, {

@@ -1,7 +1,7 @@
 ﻿/*
-    jTable localization file for 'French' language.
-    Author: Guillaume Vernet
-*/
+ jTable localization file for 'French' language.
+ Author: Guillaume Vernet
+ */
 (function ($) {
 
     $.extend(true, $.hik.jtable.prototype.options.messages, {

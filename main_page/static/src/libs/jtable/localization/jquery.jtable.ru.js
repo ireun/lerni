@@ -1,8 +1,8 @@
 ﻿/*
-   jTable localization file for 'Russian' language.
-   Author: Stanislav Reznikov
-   Updated: Andrei Lukovenko
-*/
+ jTable localization file for 'Russian' language.
+ Author: Stanislav Reznikov
+ Updated: Andrei Lukovenko
+ */
 (function ($) {
 
     $.extend(true, $.hik.jtable.prototype.options.messages, {
@@ -17,7 +17,7 @@
         saving: 'Сохранение...',
         cancel: 'Отмена',
         deleteText: 'Удалить',
-        deleting: 'Удаление...',                                                                                               
+        deleting: 'Удаление...',
         error: 'Ошибка',
         close: 'Закрыть',
         cannotLoadOptionsFor: 'Невозможно загрузить варианты для поля {0}',

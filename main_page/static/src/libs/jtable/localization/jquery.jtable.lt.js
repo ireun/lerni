@@ -1,7 +1,7 @@
 ﻿/*
-    jTable localization file for 'Lithuanian' language.
-    Author: Vygandas Šimkus
-*/
+ jTable localization file for 'Lithuanian' language.
+ Author: Vygandas Šimkus
+ */
 (function ($) {
 
     $.extend(true, $.hik.jtable.prototype.options.messages, {

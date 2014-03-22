@@ -1,7 +1,7 @@
 /*
-jTable localization file for 'Norwegian' language.
-Author: Tobias Flatin
-*/
+ jTable localization file for 'Norwegian' language.
+ Author: Tobias Flatin
+ */
 (function ($) {
 
     $.extend(true, $.hik.jtable.prototype.options.messages, {

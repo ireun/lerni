@@ -1,7 +1,7 @@
 ﻿/*
-    jTable localization file for 'Polish' language.
-    Author: Grzegorz Zbucki
-*/
+ jTable localization file for 'Polish' language.
+ Author: Grzegorz Zbucki
+ */
 (function ($) {
 
     $.extend(true, $.hik.jtable.prototype.options.messages, {

@@ -1,7 +1,7 @@
 /*
-    jTable localization file for 'Swedish' language.
-    Author: Mikael Holgersson
-*/
+ jTable localization file for 'Swedish' language.
+ Author: Mikael Holgersson
+ */
 (function ($) {
 
     $.extend(true, $.hik.jtable.prototype.options.messages, {

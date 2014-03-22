@@ -1,7 +1,7 @@
 ﻿/*
-    jTable localization file for 'Italian' language.
-    Author: Mauro Rulli
-*/
+ jTable localization file for 'Italian' language.
+ Author: Mauro Rulli
+ */
 (function ($) {
 
     $.extend(true, $.hik.jtable.prototype.options.messages, {

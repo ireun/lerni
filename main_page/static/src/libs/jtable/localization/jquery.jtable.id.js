@@ -1,8 +1,8 @@
 /*
-    jTable localization file for 'Bahasa (Indonesian)' language.
-    Author: Heribertus Kristianto
-    Author: Willy Sudiarto Raharjo
-*/
+ jTable localization file for 'Bahasa (Indonesian)' language.
+ Author: Heribertus Kristianto
+ Author: Willy Sudiarto Raharjo
+ */
 (function ($) {
 
     $.extend(true, $.hik.jtable.prototype.options.messages, {

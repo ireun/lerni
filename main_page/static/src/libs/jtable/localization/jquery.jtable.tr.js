@@ -1,7 +1,7 @@
 ﻿/*
-    jTable localization file for 'Turkish' language.
-    Author: Halil İbrahim Kalkan
-*/
+ jTable localization file for 'Turkish' language.
+ Author: Halil İbrahim Kalkan
+ */
 (function ($) {
 
     $.extend(true, $.hik.jtable.prototype.options.messages, {

@@ -1,7 +1,7 @@
 /*
-    jTable localization file for 'Chinese' language.
-    Author: monkeycraps
-*/
+ jTable localization file for 'Chinese' language.
+ Author: monkeycraps
+ */
 (function ($) {
 
     $.extend(true, $.hik.jtable.prototype.options.messages, {

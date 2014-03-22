@@ -1,7 +1,7 @@
 /*
-jTable localization file for 'Czech' language.
-Author: Jakub Stajner
-*/
+ jTable localization file for 'Czech' language.
+ Author: Jakub Stajner
+ */
 (function ($) {
 
     $.extend(true, $.hik.jtable.prototype.options.messages, {
