@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+'''
 from base import *
 import anki
 from anki.sync import Syncer, MediaSyncer
@@ -109,3 +110,4 @@ def anki_sync_remove(request):
             'musn': "self.col.media.usn()",
             'msg': '',
             'cont': True}
+            '''
