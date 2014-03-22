@@ -12,15 +12,16 @@ from webassets import Bundle
 from pyramid_webassets import get_webassets_env
 import os
 
+extra_environ = {'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'}
 
-extra_environ = {'HTTP_X_REQUESTED_WITH' : 'XMLHttpRequest'}
 
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
     engine = engine_from_config(settings, 'sqlalchemy.')
     DBSession.configure(bind=engine)
-    authn_policy = AuthTktAuthenticationPolicy('sosecret', callback=groupfinder, hashalg='sha512', timeout=60*60*24*7)  ## Change it
+    authn_policy = AuthTktAuthenticationPolicy('sosecret', callback=groupfinder, hashalg='sha512',
+                                               timeout=60 * 60 * 24 * 7)  ## Change it
     authz_policy = ACLAuthorizationPolicy()
     config = Configurator(settings=settings, root_factory='main_page.models.RootFactory')
     config.include('pyramid_mailer')
@@ -31,9 +32,8 @@ def main(global_config, **settings):
     #config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_static_view('assets', 'assets', cache_max_age=3600)
     config.add_route('home', '/')
-    config.add_route('install','/install')
-    config.add_route('radio','/radio')
-
+    config.add_route('install', '/install')
+    config.add_route('radio', '/radio')
 
     config.add_route('login', '/login')
     config.add_route('logout', '/logout')
@@ -86,7 +86,6 @@ def main(global_config, **settings):
 
     config.add_route('file_upload', '/file-upload')
 
-
     config.add_route('connection', '/connection')
 
     config.add_route('loading', '/loading')
@@ -113,24 +112,28 @@ def main(global_config, **settings):
     config.add_route('sync_host_key', '/synchostKey')
     config.add_route('sync_download', '/syncdownload')
 
+    config.add_route('joomla', '/joomla')
+
     config.add_route('easy_link', '/{link}')
 
     for x in os.walk("main_page/static/src/"):
         for y in x:
             for z in y:
-                if z[-7:]==".min.js":
-                    name=x[0][21:]+"/"+z
-                    print Bundle("src/"+name, output=name, filters=['closure_js']).urls(get_webassets_env(config))
-                if z[-3:]==".js":
-                    name=x[0][21:]+"/"+z
-                    print Bundle("src/"+name, output=name[:-3]+".min.js", filters=['closure_js']).urls(get_webassets_env(config))
+                if z[-7:] == ".min.js":
+                    name = x[0][21:] + "/" + z
+                    print Bundle("src/" + name, output=name, filters=['closure_js']).urls(get_webassets_env(config))
+                if z[-3:] == ".js":
+                    name = x[0][21:] + "/" + z
+                    print Bundle("src/" + name, output=name[:-3] + ".min.js", filters=['closure_js']).urls(
+                        get_webassets_env(config))
     for x in os.walk("main_page/static/src/"):
         for y in x:
             for z in y:
-                if z[-4:]==".css":
-                    name=x[0][21:]+"/"+z
-                    print Bundle("src/"+name, output=name[:-4]+".min.css").urls(get_webassets_env(config)) #, filters=['cssmin']
-    #scroll_up_css=Bundle("libs/scrollup/themes/pill.css")
+                if z[-4:] == ".css":
+                    name = x[0][21:] + "/" + z
+                    print Bundle("src/" + name, output=name[:-4] + ".min.css").urls(
+                        get_webassets_env(config)) #, filters=['cssmin']
+        #scroll_up_css=Bundle("libs/scrollup/themes/pill.css")
     #scroll_up_js=Bundle("libs/scrollup/jquery.scrollUp.min.js","js/scroll_up.js")
 
     #diagrams=Bundle("libs/raphael/raphael-min.js","libs/jquery.browser/jquery.browser.js","js/diagrams.js")

@@ -1,4 +1,3 @@
-@option debug_info: no;
 /*
 #inner-wrapper{	pointer-events: none;}
 */
@@ -21,8 +20,23 @@ body{
 
 #header {margin: 0 auto;max-width: 1280px;width: 100%;overflow: hidden; background: #efefef; padding: 0px}
 #main{position: relative; padding-bottom:20px; max-width: 1280px; margin: 0 auto; background: #efefef;}
-div#inner-wrapper {padding-bottom: 20px;position: relative; z-index: 3; margin: 0 auto; width: 98%; max-width: 1180px;}
-#wrapper {min-height:100%; height: auto !important; height: 100%; background: url('/static/images/background.png') fixed; margin: 0 auto -60px; overflow: hidden;}
+
+div#inner-wrapper {
+    padding-bottom: 20px;
+    position: relative;
+    z-index: 3;
+    margin: 0 auto;
+    width: 98%;
+}
+
+#wrapper {
+    min-height: 100%;
+    height: auto !important;
+    background: url('/static/images/background.png') fixed;
+    margin: 0 auto -60px;
+    overflow: hidden;
+}
+
 #header, #main {border: thin solid black; border-top: none;}
 #header {border-bottom: none;}
 #header, #main{width: 99% !important;}
@@ -245,18 +259,16 @@ margin: 10px 0;
 .navbar-brand {font-size: 20px!important;}
 #header{margin-top: 40px;}
 .navbar .container{max-width: 1280px;width: auto;}
-@media (max-width: 767px)
-.hidden-phone {
+
+@media (max-width: 767px) {
+    .hidden-phone {
 display: none !important;
 }
-
+}
 
 div .lucky_number {
     border: 1px solid;
     text-align: center;
-    width: 200px;
-    color: white;
-    background-color: #333;
 }
 
 .lucky_number_number {
