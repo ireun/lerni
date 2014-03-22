@@ -233,10 +233,10 @@ def status(tag_name, value, options, parent, context):
         page['services'].append([x.split(",")[0]])
         for y in x.split(",")[1:]:
             try:
-                service_id = DBSession.query(PingIPs).filter_by(name=y).first().ip
-                service_status = DBSession.query(PingResults).filter_by(id=service_id). \
-                    order_by(PingResults.date.desc()).service_status.first().result
-            except AttributeError:
+                service_id = DBSession.query(PingIPs).filter_by(name=y).first().id
+                service_status = DBSession.query(PingResults).filter_by(ip_id=service_id). \
+                    order_by(PingResults.date.desc()).first().result
+            except ValueError:
                 service_status = None
             page['services'][-1].append(service_status)
     to_return = render('widgets/status.mak', page)
