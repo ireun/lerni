@@ -191,7 +191,7 @@ def setting_save(name, value):
 
 
 def setting_load(name):
-    return DBSession.query(Settings).filter_by(name=name).first().value()
+    return DBSession.query(Settings).filter_by(name=name).first().value
 
 
 def send_mail(request,subject,recipients,body,fingerprint=False):

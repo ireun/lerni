@@ -67,5 +67,6 @@ def admin_log_graduates(request):
                                  'id': row['id'],
                                  'alias': row['alias']
         })
+    page['irc_users'] = setting_load("irc_users")
     connection.close()
     return page

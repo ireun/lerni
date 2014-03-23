@@ -7,7 +7,8 @@ README = open(os.path.join(here, 'README.md')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 dependency_links = [
-    'https://github.com/sontek/pyramid_celery/tarball/master#egg=pyramid_celery-1.3']
+    'https://github.com/jpunwin/pyramid_celery/tarball/master#egg=pyramid_celery-1.3'
+]
 
 requires = [
     'pyramid',
@@ -39,10 +40,11 @@ requires = [
     'pyaml',
     'flickrapi',
     'pyramid_celery==1.3',
-    'redis']
+    'redis',
+    'python-irclib'] ##Yup, you have to install paver, hgtools manualy first.
 
 setup(name='main_page',
-      version='0.0',
+      version='0.1',
       description='main_page',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
@@ -50,20 +52,22 @@ setup(name='main_page',
           "Framework :: Pyramid",
           "Topic :: Internet :: WWW/HTTP",
           "Topic :: Internet :: WWW/HTTP :: WSGI :: Application"],
-      author='',
-      author_email='',
-      url='',
-      keywords='web wsgi bfg pylons pyramid',
+      author='Kamil Danak',
+      author_email='kamilx3@gmail.com',
+      url='http://lerni.info',
+      keywords='lerni web wsgi bfg pylons pyramid',
       packages=find_packages(),
       include_package_data=True,
       zip_safe=False,
       test_suite='main_page',
       install_requires=requires,
       dependency_links=dependency_links,
-      entry_points="""\
-      [paste.app_factory]
-      main = main_page:main
-      [console_scripts]
-      initialize_main_page_db = main_page.scripts.initializedb:main
-      """,
-      )
+      entry_points={
+          'paste.app_factory': [
+              'main = main_page:main',
+          ],
+          'console_scripts': [
+              'initialize_main_page_db = main_page.scripts.initializedb:main',
+              'ircbot = main_page.scripts.ircbot:main',
+          ]}
+)
