@@ -148,7 +148,7 @@
                 <li><a href="/education">Dla Rodziców</a></li>
                 <li><a href="/about">Poznaj Staszica!</a></li>
                 <li><a href="http://staszic.edu.pl/support">Support</a></li>
-                <li><a href="http://pirc.pl/bramka/staszic/kandydat/ajax">Czat</a></li>
+                <li><a href="http://pirc.pl/bramka/staszic/kandydat/ajax">Czat (${int(irc_users)-1})</a></li>
             </ul>
         </div>
     </div>

@@ -41,6 +41,7 @@ requires = [
     'flickrapi',
     'pyramid_celery==1.3',
     'redis',
+    'mysql-python',
     'python-irclib'] ##Yup, you have to install paver, hgtools manualy first.
 
 setup(name='main_page',
