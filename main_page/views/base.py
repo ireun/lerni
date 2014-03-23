@@ -12,7 +12,7 @@ import random
 
 from recaptcha.client import captcha
 
-from sqlalchemy.exc import DBAPIError
+from sqlalchemy.exc import DBAPIError, OperationalError
 from sqlalchemy import or_
 import locale
 from sqlalchemy import desc
@@ -85,6 +85,7 @@ from main_page.models import (
     Files,
     PingResults,
     PingIPs,
+    Settings,
     )
     
 #import re
@@ -175,6 +176,22 @@ def username(logged_in):
     except DBAPIError:
         return Response("Mysql connection error", content_type='text/plain', status_int=500)
     return name
+
+
+def setting_save(name, value):
+    session = DBSession()
+    try:
+        setting = DBSession.query(Settings).filter_by(name=name).first()
+        setting.value = value
+    except AttributeError:
+        setting = Settings(name, value)
+        session.add(setting)
+    transaction.commit()
+    return True
+
+
+def setting_load(name):
+    return DBSession.query(Settings).filter_by(name=name).first().value()
 
 
 def send_mail(request,subject,recipients,body,fingerprint=False):
