@@ -24,27 +24,27 @@
         }
     };
 
-    $().ready(function () {
-        ;
-        (function ($) {
-            $.path = {};
-            $.fx.step.path = function (fx) {
-                var css = fx.end.css(1 - fx.pos);
-                if (css.bottom) {
-                    fx.elem.style.bottom = css.bottom;
-                }
-                if (css.top) {
-                    fx.elem.style.top = css.top;
-                }
-                if (css.right) {
-                    fx.elem.style.right = css.right;
-                }
-                if (css.left) {
-                    fx.elem.style.left = css.left;
-                }
-            };
-        })(jQuery);
-        head.js(ion_sound, jwerty, function () {
+    head.js(jquery, ion_sound, jwerty, function () {
+        $().ready(function () {
+            ;
+            (function ($) {
+                $.path = {};
+                $.fx.step.path = function (fx) {
+                    var css = fx.end.css(1 - fx.pos);
+                    if (css.bottom) {
+                        fx.elem.style.bottom = css.bottom;
+                    }
+                    if (css.top) {
+                        fx.elem.style.top = css.top;
+                    }
+                    if (css.right) {
+                        fx.elem.style.right = css.right;
+                    }
+                    if (css.left) {
+                        fx.elem.style.left = css.left;
+                    }
+                };
+            })(jQuery);
             $.ionSound({sounds: ["rasputin"]});
             jwerty.key('↑,↑,↓,↓,←,→,←,→,B,A', function () {
                 var natalia = $("#natalia");
@@ -69,6 +69,7 @@
 <style>
     .natalia {
         position: fixed;
+        display: none;
     }
 
     #header {
