@@ -366,12 +366,54 @@ def jsonp_graduates_list(request):
     query = query.offset(int(start_index)).limit(int(page_size))
 
     for position in query:
-        page['Records'].append({u"id": position.id,
-                                u"name": position.name,
-                                u"graduation": position.graduation,
-                                u"about": position.about})
+	if position != None:
+	        page['Records'].append({u"id": position.id,
+        	                        u"name": position.name,
+                	                u"graduation": position.graduation,
+                        	        u"about": position.about})
     return page
 
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.graduates.delete',
+                                                                'id'])
+def jsonp_graduatess_delete(request):
+    session = DBSession()
+    graduate = DBSession.query(Graduates).filter_by(id=request.params['id']).first()
+    if not graduate:
+        return {"Result":"ERROR","Message":"Co�^� posz�^�o nie tak :/"}
+    else:
+        session.delete(graduate)
+        transaction.commit()
+        return {"Result":"OK"}
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.graduates.edit',
+                                                                'id'])
+def jsonp_graduates_edit(request):
+    session = DBSession()
+    graduate = DBSession.query(Graduates).filter_by(id=request.params['id']).first()
+    if not graduate:
+        return {"Result": "ERROR", "Message": "Co�^� posz�^�o nie tak :/"}
+    graduate.name = request.params["name"]
+    graduate.graduation = request.params["graduation"]
+    graduate.about = request.params["about"]
+    transaction.commit()
+    return {"Result":"OK"}
+
+@view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.graduates.add',
+                                                                'name'])
+def jsonp_graduates_create(request):
+    page={"Result": "OK", "Record": []}
+    try:
+        session = DBSession()
+        graduate = Graduates(request.params["name"], request.params["graduation"], request.params["about"])
+        session.add(graduate)
+        page['Record'].append({u"id": graduate.id,
+                               u"name": graduate.name,
+                               u"graduation": graduate.graduation,
+                               u"about": graduate.about})
+        transaction.commit()
+    except DBAPIError:
+        return {"Result":"ERROR","Message":"Form is not valid! Please correct it and try again."}
+    return page
 
 #################
 # Competitors   #
