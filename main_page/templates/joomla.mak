@@ -227,7 +227,7 @@
         <div id="menu" class="col-sm-3 hidden-xs">
             <h4>O Szkole</h4>
             <ul class="nav nav-stacked">
-                <li><a href="/120-lecie-staszica">120-lecie Staszica</a></li>
+                <li><a href="http://www.120.ab.staszic.edu.pl">120-lecie Staszica</a></li>
                 <li><a href="http://staszic.edu.pl/historia">Historia i Patroni</a></li>
                 <li><a href="http://staszic.edu.pl/entry/8">Szkolne muzeum</a></li>
                 <li><a href="http://staszic.edu.pl/graduates">Absolwenci</a></li>
@@ -271,10 +271,10 @@
         <div id="article_main" class="col-sm-6">
             <div class="row">
                 <div class="col-sm-6">
-                    <img src="http://staszic.edu.pl//pliki/banners/baner.jpg" alt="120 lecie"/>
+                    <a href="http://www.120.ab.staszic.edu.pl"> <img src="http://staszic.edu.pl//pliki/banners/baner.jpg" alt="120 lecie"/> </a>
                 </div>
                 <div class="col-sm-6">
-                    Podstrona zawierajaca informacje o organizacji 120 - lecia naszego liceum wystartuje wkrótce
+                    Podstrona 120.ab.staszic.edu.pl zawierajaca informacje o organizacji 120 - lecia naszego liceum.
                 </div>
             </div>
             <br/>

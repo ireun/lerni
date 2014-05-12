@@ -53,7 +53,7 @@ def admin_log_graduates(request):
             all_numbers.remove(0)
     page['left'] = sorted(all_numbers)
 
-    engine = create_engine('mysql://kamil:tajne_haslo@192.168.0.3/staszic?charset=utf8')
+    engine = create_engine('mysql://kamil:tajne_haslo@localhost/staszic?charset=utf8')
     #engine.raw_connection().connection.text_factory = unicode
     connection = engine.connect()
     result = connection.execute("select * from j25_content where state=1 order by created desc limit " +
