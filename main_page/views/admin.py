@@ -279,7 +279,7 @@ def admin_log_graduates(request):
     page['defaultSorting'] = "id DESC"
     page['selecting'] = True
     page['list'] = "/api?format=jsonp&method=lerni.graduates.getList"
-    page['delete'] = "/api?format=jsonp&method=lerni.graduatess.delete"
+    page['delete'] = "/api?format=jsonp&method=lerni.graduates.delete"
     page['update'] = "/api?format=jsonp&method=lerni.graduates.edit"
     page['create'] = "/api?format=jsonp&method=lerni.graduates.add"
     page['fields'] = [{'name': u"id", 'key': True, "list": False, "create": False, "edit": False}]
