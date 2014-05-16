@@ -132,6 +132,7 @@
                     -->
                     <li class=""><a href="/admin/all/competitions"> <span class="icon icon-angle-right"></span>Konkursy</a></li>
                     <li class=""><a href="/admin/all/competitors"> <span class="icon icon-angle-right"></span>Konkursowicze</a></li>
+                      <li class=""><a href="/admin/all/graduates"> <span class="icon icon-angle-right"></span>Absolwenci</a></li>
                   </ul>
                 </li>
                 <li class="accordion-group ">

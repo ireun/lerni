@@ -515,6 +515,14 @@ def admin_log_timetables(request):
     page['delete'] = "/api?format=jsonp&method=lerni.timetables.delete"
     page['update'] = "/api?format=jsonp&method=lerni.timetables.edit"
     page['create'] = "/api?format=jsonp&method=lerni.timetables.add"
+    page['toolbar'] = [{'tooltip' : u'Kliknij tutaj aby edytować wybrany plan lekcji.',
+                        'icon': '/Content/images/Misc/excel.png',
+                        'text' : u'Edytuj plan lekcji',
+                        'click': '''$('#jtable').jtable('selectedRows').each(function () {
+                                        var record = $(this).data('record');
+                                        window.location = '/admin/log/timetables/'+record.timetable_id;
+                                    });
+                    '''}]
     page['fields'] = [{'name': "timetable_id", 'key': True, "list": False, "create": False, "edit": False}]
     page['fields'].append({'name': "start", "title": "start", "type": "date", "displayFormat": "dd.mm.yy",
                            "create": "false", "edit": "false", "sorting": "false"})
@@ -531,13 +539,14 @@ def admin_log_timetables_edit(request):
     page.update(get_basic_account_info(request))
     page['title'] = u"Plan lekcji"
     page['title_desc'] = u"Nie zapomnij zapisać zmian po skończeniu pracy."
+    #page['schedule_id'] =
     return page
 
 @view_config(route_name='admin_substitutions', renderer='admin_substitutions.mak')
 def my_view4(request):
     logged_in = authenticated_userid(request)
     locale.setlocale(locale.LC_ALL, 'pl_PL.UTF-8')
-    months=[u"stycznia",u"lutego",u"marca",u"kwietnia",u"maja",u"czerwca",u"lipca",u"sierpnia",u"września",u"października",u"listopada",u"grudnia"]
+    months = [u"stycznia",u"lutego",u"marca",u"kwietnia",u"maja",u"czerwca",u"lipca",u"sierpnia",u"września",u"października",u"listopada",u"grudnia"]
 
     menu_top_list =[]
     for position in DBSession.query(MenuTop):
@@ -545,7 +554,7 @@ def my_view4(request):
 
     substitutions=[]
     for position in DBSession.query(Substitutions).order_by(desc(Substitutions.id)):
-       month=months[position.date_for.month-1]
+       month = months[position.date_for.month-1]
        date_for = str(position.date_for.day)+" "+month+" "+position.date_for.strftime("%Y r. (%A)").decode('utf-8')
        link_view = request.route_url('admin_substitutions_view', id = position.id)
        link_edit = request.route_url('admin_substitutions_edit', id = position.id)

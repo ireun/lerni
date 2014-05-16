@@ -260,11 +260,11 @@ class Lessons(Base):
     __tablename__ = 'log_lessons'
     id = Column(Integer, primary_key=True)
     schedule_id = Column(Integer, ForeignKey('log_schedules.id'))
-    schedule = relationship("Schedules")
+    schedule = relationship("Schedules", backref=backref("lessons", cascade="all,delete"))
     teacher_id = Column(Integer, ForeignKey('log_teachers.id'))
-    teacher = relationship("Teachers")
+    teacher = relationship("Teachers", backref=backref("lessons", cascade="all,delete"))
     subject_id = Column(Integer, ForeignKey('log_subjects.id'))
-    subject = relationship("Subjects")
+    subject = relationship("Subjects", backref=backref("lessons", cascade="all,delete"))
     day = Column(Integer)
     order = Column(Integer)
     room = Column(Integer)
@@ -284,9 +284,9 @@ class LessonsGroups(Base):
     __tablename__ = 'log_lessons_groups'
     id = Column(Integer, primary_key=True)
     lesson_id = Column(Integer, ForeignKey('log_lessons.id'))
-    lesson = relationship("Lessons")
+    lesson = relationship("Lessons", backref=backref("lessons_groups", cascade="all,delete"))
     group_id = Column(Integer, ForeignKey('log_groups.id'))
-    group = relationship("Groups")
+    group = relationship("Groups", backref=backref("lessons_groups", cascade="all,delete"))
 
     def __init__(self, lesson_id, group_id):
         self.lesson_id = lesson_id

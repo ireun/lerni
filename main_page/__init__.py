@@ -61,7 +61,7 @@ def main(global_config, **settings):
     config.add_route('admin_log_years_groups', '/admin/log/years/groups/{year}')
     config.add_route('admin_log_years_groups_students', '/admin/log/years/groups/{year}/{group}')
     config.add_route('admin_log_timetables', '/admin/log/timetables')
-    config.add_route('admin_log_timetables_edit', '/admin/log/timetables/edit')
+    config.add_route('admin_log_timetables_edit', '/admin/log/timetables/{id}')
 
     config.add_route('admin_substitutions', '/admin/substitutions')
     config.add_route('admin_substitutions_add', '/admin/substitutions/add')
@@ -103,6 +103,7 @@ def main(global_config, **settings):
     config.add_route('sis_home', '/sis')
     config.add_route('sis_about', '/sis/about')
     config.add_route('schedule', '/sis/schedule')
+    config.add_route('map', '/map')
 
 
     #    config.add_route('anki_sync_meta', '/syncmeta')

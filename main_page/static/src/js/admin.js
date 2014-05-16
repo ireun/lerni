@@ -168,6 +168,19 @@ var polishMessages = {
     canNotDeletedRecords: 'Nie można usunąć {1} kayıttan {0}',
     deleteProggress: '{1} usuwanie {0} adedi silindi, devam ediliyor...'
 };
+function getVars(url)
+{
+    var formData = new FormData();
+    var split;
+    $.each(url.split("&"), function(key, value) {
+        split = value.split("=");
+        formData.append(split[0], decodeURIComponent(split[1].replace(/\+/g, " ")));
+    });
+
+    return formData;
+}
+
+
 var make_table = function(x){
         $('#table'+x).jtable({
         messages: polishMessages,
@@ -179,8 +192,51 @@ var make_table = function(x){
         actions: {
             listAction: '/api?format=jsonp&method=lerni.timetables.lessons.getList&timetable_id=1&day='+x.substr(0,1)+'&hour='+x.substr(1),
             deleteAction: '/api?format=jsonp&method=lerni.timetables.lessons.delete&timetable_id=1&day='+x.substr(0,1)+'&hour='+x.substr(1),
-            updateAction: '/api?format=jsonp&method=lerni.timetables.lessons.edit&timetable_id=1&day='+x.substr(0,1)+'&hour='+x.substr(1),
-            createAction: '/api?format=jsonp&method=lerni.timetables.lessons.add&timetable_id=1&day='+x.substr(0,1)+'&hour='+x.substr(1)
+            updateAction: function (postData) {
+                    var formData = getVars(postData);
+                    var groups = JSON.stringify( $("#e6").select2('data') );
+                    formData.append("groups", groups);
+
+                    return $.Deferred(function ($dfd) {
+                        $.ajax({
+                            url: '/api?format=jsonp&method=lerni.timetables.lessons.edit&timetable_id=1&day='+x.substr(0,1)+'&hour='+x.substr(1),
+                            type: 'POST',
+                            dataType: 'json',
+                            data: formData,
+                            processData: false, // Don't process the files
+                            contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+                            success: function (data) {
+                                $dfd.resolve(data);
+                                $('#table'+x).jtable('reload');
+                            },
+                            error: function () {
+                                $dfd.reject();
+                            }
+                        });
+                    });
+                },
+            createAction: function (postData) {
+                    var formData = getVars(postData);
+                    var groups = JSON.stringify( $("#e6").select2('data') );
+                    formData.append("groups", groups);
+
+                    return $.Deferred(function ($dfd) {
+                        $.ajax({
+                            url: '/api?format=jsonp&method=lerni.timetables.lessons.add&timetable_id=1&day='+x.substr(0,1)+'&hour='+x.substr(1),
+                            type: 'POST',
+                            dataType: 'json',
+                            data: formData,
+                            processData: false, // Don't process the files
+                            contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+                            success: function (data) {
+                                $dfd.resolve(data);
+                            },
+                            error: function () {
+                                $dfd.reject();
+                            }
+                        });
+                    });
+                }
         },
         fields: {
             lesson_id: {
@@ -191,29 +247,45 @@ var make_table = function(x){
             },
             teacher: {
                 title: 'Nauczyciel',
-                options: "/api?format=jsonp&method=lerni.teachers.getList"
+                options: "/api?format=jsonp&method=lerni.teachers.nameList"
             },
             subject: {
                 title: 'Przedmiot',
-                options: "/api/jsonp/options-subjects-list"
+                options: "/api?format=jsonp&method=lerni.subjects.nameList"
             },
             group: {
                 title: 'Grupy',
-                /*options: "/api/jsonp/options-groups-list/"+"1"*/
                 input: function (data) {
                         if (data.record) {
-                            /*return '<input type="text" name="Name" style="width:200px" value="' + data.record.Name + '" />';*/
-                            return '<input type="hidden" id="e6" style="width: 500px;" value="34:Donnie Darko,54:Heat,27:No Country for Old Men"  />'
-                        } else {
-                            return '<input type="hidden" id="e6" style="width: 500px;" value="34:Donnie Darko,54:Heat,27:No Country for Old Men"  />' +
+                            return '<div id="Edit-groups"><input type="hidden" id="e6" style="width: 500px;" value="'+
+                            data.value + '"  /></div>' +
                                 '<script>' +
                                 'head.js(select2, function(){ \
-                                MultiAjaxAutoComplete("#e6", "http://api.rottentomatoes.com/api/public/v1.0/movies.json");\
-                                console.log("Q!#!#!#!");\
+                                MultiAjaxAutoComplete("#e6", "/api?format=jsonp&method=lerni.groups.nameList");\
+                                })' +
+                                '</script>'
+                        } else {
+                            return '<div id="Edit-groups"><input type="hidden" id="e6" style="width: 500px;" value=""  /></div>' +
+                                '<script>' +
+                                'head.js(select2, function(){ \
+                                MultiAjaxAutoComplete("#e6", "/api?format=jsonp&method=lerni.groups.nameList");\
                                 })' +
                                 '</script>'
                         }
 
+                },
+                options: function (data) {
+                    var rdata = [];
+                    var display = "";
+                    $(data.value.split(',')).each(function(i) {
+                        var item = this.split(':');
+                        display = display + item[1] + ", "
+                    });
+                    rdata.push({
+                        Value: data.value,
+                        DisplayText: display
+                    });
+                    return rdata;
                 }
             },
             room: {
@@ -241,6 +313,8 @@ var make_table = function(x){
             placeholder: "Search for a movie",
             minimumInputLength: 1,
             multiple: true,
+            id: function(element){
+                return element.Value},
             ajax: {
                 url: url,
                 dataType: 'jsonp',
@@ -248,14 +322,11 @@ var make_table = function(x){
 
                     return {
                         q: term,
-                        page_limit: 10,
-                        apikey: "z4vbb4bjmgsb7dy33kvux3ea" //my own apikey
+                        page_limit: 10
                     };
                 },
                 results: function(data, page) {
-                    return {
-                        results: data.movies
-                    };
+                    return { results: data.Options };
                 }
             },
             formatResult: formatResult,
@@ -265,8 +336,8 @@ var make_table = function(x){
                 $(element.val().split(",")).each(function(i) {
                     var item = this.split(':');
                     data.push({
-                        id: item[0],
-                        title: item[1]
+                        Value: item[0],
+                        DisplayText: item[1]
                     });
                 });
                 //$(element).val('');
@@ -275,13 +346,9 @@ var make_table = function(x){
         });
     };
 
-    function formatResult(movie) {
-        return '<div>' + movie.title + '</div>';
-    };
+    function formatResult(movie) { return '<div>' + movie.DisplayText + '</div>'; };
 
-    function formatSelection(data) {
-        return data.title;
-    };
+    function formatSelection(data) { return data.DisplayText; };
 
 
 
@@ -300,103 +367,9 @@ head.ready("jtable", function() {
             done.push(id);
             make_table(id);
         }
-    })
-
-/* Add lesson button in timetable view */
-    weee='\
-        <span id="add-lessons" class="jtable-toolbar-item jtable-toolbar-item-add-record" style="">\
-        <span class="jtable-toolbar-item-icon"></span>\
-        <span class="jtable-toolbar-item-text"> Dodaj lekcje</span></span>'
-    $('.jtable-toolbar').append(weee)
-    $('#add-lessons').hover(function() {
-    $(this).addClass("jtable-toolbar-item-hover");
-        }, function() {
-    $(this).removeClass("jtable-toolbar-item-hover");
-    });
-    $('#add-lessons').click(function(){ if ($('#jtable').jtable('selectedRows').first().data('record')){
-    window.location = '/admin/log/timetables/edit?id='+$('#jtable').jtable('selectedRows').first().data('record').timetable_id }else{
-        alert("Wybierz plan do którego chcesz dodać lekcje.") } });
+    }) });
 
 /*first_name,second_name,last_name,pesel,birthdate,phonenumber,email,password,key_data,fingerprint,wallet_id,email_confirmed,gpg_confirmed,phone_confirmed,group_id):*/
-
-
-    send_welcome_button='\
-        <span id="send-welcome-button" class="jtable-toolbar-item jtable-toolbar-item-add-record" style="">\
-        <span class="jtable-toolbar-item-icon"></span>\
-        <span class="jtable-toolbar-item-text"> Wyślij wiadomość powitalną </span></span>'
-    $('#table_users .jtable-toolbar').append(send_welcome_button)
-    $('#send-welcome-button').hover(function() {
-    $(this).addClass("jtable-toolbar-item-hover");
-        }, function() {
-    $(this).removeClass("jtable-toolbar-item-hover");
-    });
-    $('#send-welcome-button').click(function(){ if ($('#table_users').jtable('selectedRows').first().data('record')){
-    window.location = '/admin/log/timetables/edit?id='+$('#table_timetables').jtable('selectedRows').first().data('record').TimetableId }else{
-        alert("Wybierz użytkownika.") } });
-
-
-
-/* Foldery  */
-    $('#table_folders').jtable({
-        messages: polishMessages,
-        title: 'Moje foldery',
-        paging: true, pageSize: 10, //Enable pagin
-        sorting: true, selecting: true, //
-        defaultSorting: 'folder_id DESC', //Set default sorting
-        actions: {
-            listAction: '/api?format=jsonp&method=lerni.folders.getList',
-            deleteAction: '/api?format=jsonp&method=lerni.folders.delete',
-            updateAction: '/api?format=jsonp&method=lerni.folders.edit',
-            createAction: '/api?format=jsonp&method=lerni.folders.add'
-        },
-        fields: {
-            folder_id: {key: true,create: false,edit: false,list: false},
-            title: {title: 'Tytuł'},
-            tags: {title: 'Tagi'},
-            css: {title: 'Własny CSS'},
-            gpg: {title: 'Podpis GPG (to do)'},
-            published: {title: 'Opublikowany', options: {'False':'Nie', 'True':'Tak'}}
-        }
-    });
-    $('#table_folders').jtable('load');
-/* Wpisy  */
-    $('#table_entries').jtable({
-        messages: polishMessages,
-        title: 'Moje Wpisy',
-        paging: true, pageSize: 10, //Enable pagin
-        sorting: true, selecting: true, //
-        defaultSorting: 'EntryID DESC', //Set default sorting
-        actions: {
-            listAction: '/api/jsonp/entry-list', deleteAction: '/api/jsonp/delete-entry',
-            updateAction: '/api/jsonp/update-entry', createAction: '/api/jsonp/create-entry'
-        },
-        fields: {
-            EntryID: {key: true,create: false,edit: false,list: false},
-            FolderID: {title: 'Folder', options: "/api/jsonp/options-folders-list"},
-            Title: {title: 'Tytuł'},
-            Tags: {title: 'Tagi'},
-            CSS: {title: 'Własny CSS'},
-            Published: {title: 'Opublikowany', options: {'False':'Nie', 'True':'Tak'}}
-        }
-    });
-    $('#table_entries').jtable('load');
-    edit_entry_button='\
-        <span id="edit-entry-button" class="jtable-toolbar-item jtable-toolbar-item-add-record" style="">\
-        <span class="jtable-toolbar-item-icon"></span>\
-        <span class="jtable-toolbar-item-text"> Edytuj treść wpisu. </span></span>'
-    $('#table_entries .jtable-toolbar').append(send_welcome_button)
-    $('edit-entry-button').hover(function() {
-    $(this).addClass("jtable-toolbar-item-hover");
-        }, function() {
-    $(this).removeClass("jtable-toolbar-item-hover");
-    });
-    $('#edit-entry-button').click(function(){ if ($('#table_entires').jtable('selectedRows').first().data('record')){
-    window.location = '/admin/log/timetables/edit?id='+$('#table_entries').jtable('selectedRows').first().data('record').TimetableId }else{
-        alert("Wybierz wpis.") } });
-
-
-
-});
 
 /*
 head.js(fit_vids, function () {

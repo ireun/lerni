@@ -3,6 +3,7 @@ from base import *
 import psutil
 from pyramid.security import authenticated_userid
 import datetime
+import json
 
 @view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.competitors.competitions.nameList'])
 def api_jsonp_lerni_competitors_competitions_getlist(request):
@@ -793,11 +794,11 @@ def jsonp_lessons_list(request):
     for lesson in query:
         groups = []
         for lesson_group in DBSession.query(LessonsGroups).filter_by(lesson=lesson):
-            groups.append(lesson_group.group.name)
+            groups.append(str(lesson_group.group.id)+":"+str(lesson_group.group.name))
         page['Records'].append({"lesson_id": lesson.id,
                                 "teacher": lesson.teacher_id,
                                 "subject": lesson.subject_id,
-                                "group": "; ".join(groups),
+                                "group": ",".join(groups),
                                 "room": lesson.room,
                                 "modification_date": str(lesson.updated.date())})
     page['TotalRecordCount'] = DBSession.query(Lessons).filter_by(schedule_id=schedule_id).filter_by(day=day).\
@@ -806,7 +807,7 @@ def jsonp_lessons_list(request):
 
 
 @view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
-             'method=lerni.timetables.lessons.delete', 'lesson_id'])
+                                                                'method=lerni.timetables.lessons.delete', 'lesson_id'])
 def jsonp_lessons_delete(request):
     session = DBSession()
     lesson = DBSession.query(Lessons).filter_by(id=request.params['lesson_id']).first()
@@ -818,7 +819,8 @@ def jsonp_lessons_delete(request):
 
 
 @view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
-            'method=lerni.timetables.lessons.edit', 'timetable_id', 'day', 'hour'])
+                                                                'method=lerni.timetables.lessons.edit',
+                                                                'timetable_id', 'day', 'hour'])
 def jsonp_lessons_update(request):
     session = DBSession()
     lesson = DBSession.query(Lessons).filter_by(id=request.params['lesson_id']).first()
@@ -830,15 +832,22 @@ def jsonp_lessons_update(request):
     lesson.day=request.params["day"]
     lesson.order=request.params["hour"]
     lesson.room=request.params["room"]
+    DBSession.query(LessonsGroups).filter_by(lesson=lesson).delete()
+    groups = json.loads(request.params["groups"])
+    for group in groups:
+        lesson_group = LessonsGroups(lesson.id, group['Value'])
+        session.add(lesson_group)
     transaction.commit()
     return {"Result":"OK"}
 
 
 @view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
-            'method=lerni.timetables.lessons.edit', 'timetable_id', 'teacher', 'subject', 'day', 'hour', 'room'])
-def jsonp_lessons_create(request):
+                                                                'method=lerni.timetables.lessons.add',
+                                                                'timetable_id', 'teacher', 'subject', 'day', 'hour',
+                                                                'room', 'groups'])
+def jsonp_lessons_add(request):
     page={"Result":"OK"}
-    session = DBSession()
+    session = DBSession() #[{"DisplayText":"1gm1","Value":1},{"DisplayText":"1gm2","Value":2}]
     lesson = Lessons(request.params["timetable_id"],
                      request.params["teacher"],
                      request.params["subject"],
@@ -846,10 +855,19 @@ def jsonp_lessons_create(request):
                      request.params["hour"],
                      request.params["room"])
     session.add(lesson)
-    page["Record"]={"lesson_id": lesson.id,
+    session.flush()
+    session.refresh(lesson)
+    groups = json.loads(request.params["groups"])
+    for group in groups:
+        lesson_group = LessonsGroups(lesson.id, group['Value'])
+        session.add(lesson_group)
+    groups = []
+    for lesson_group in DBSession.query(LessonsGroups).filter_by(lesson=lesson):
+        groups.append(str(lesson_group.group.id)+":"+str(lesson_group.group.name))
+    page["Record"] = {"lesson_id": lesson.id,
                     "teacher": lesson.teacher_id,
                     "subject": lesson.subject_id,
-                    "group": "lesson.groups", #fuck
+                    "group": "; ".join(groups),
                     "room": lesson.room}
     transaction.commit()
     return page
@@ -880,9 +898,11 @@ def jsonp_timetables_list(request):
 def jsonp_timetables_delete(request):
     session = DBSession()
     schedule = DBSession.query(Schedules).filter_by(id=request.params['timetable_id']).first()
+    if not schedule:
+        return {"Result":"ERROR","Message":"Coś poszło nie tak :/"}
     session.delete(schedule)
     transaction.commit()
-
+    return {"Result":"OK"}
 
 @view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp',
             'method=lerni.timetables.edit', 'timetable_id', 'start', 'end'])
@@ -899,8 +919,11 @@ def jsonp_timetables_edit(request):
 def jsonp_timetables_create(request):
     page={"Result":"OK"}
     session = DBSession()
-    start=datetime.datetime(*(time.strptime(request.params['start'], "%Y-%m-%d")[0:6]))
-    end=datetime.datetime(*(time.strptime(request.params['end'], "%Y-%m-%d")[0:6]))
+    try:
+        start = datetime.datetime(*(time.strptime(request.params['start'], "%Y-%m-%d")[0:6]))
+        end = datetime.datetime(*(time.strptime(request.params['end'], "%Y-%m-%d")[0:6]))
+    except ValueError:
+         return {"Result": u"ERROR", "Message": u"Data w niewłaściwym formacie."}
     schedule = Schedules(start,end)
     session.add(schedule)
     page["Record"]={"timetable_id": schedule.id,
@@ -1111,7 +1134,6 @@ def options_groups_list(request):
     for position in DBSession.query(Groups):
         page['Options'].append({"DisplayText":position.name,"Value":position.id})
     return page
-
 
 ############
 # Folders ##
