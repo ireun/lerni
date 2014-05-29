@@ -60,6 +60,8 @@ def admin_log_graduates(request):
     result = connection.execute("select * from j25_content where state=1 order by created desc limit " +
                                 str((page['page_id'] - 1) * 10) + "," + str((page['page_id']) * 10))
     for row in result:
+        if row['fulltext'].strip() != "":
+            row['introtext'] = row['fulltext'].strip()
         page['articles'].append({'title': row['title'],
                                  'introtext': row['introtext'],
                                  'fulltext': row['fulltext'].strip() != "",

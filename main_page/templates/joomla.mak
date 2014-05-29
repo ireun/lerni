@@ -26,7 +26,6 @@
 
     head.js(jquery, ion_sound, jwerty, function () {
         $().ready(function () {
-            ;
             (function ($) {
                 $.path = {};
                 $.fx.step.path = function (fx) {
@@ -63,6 +62,12 @@
                 $.ionSound.play("rasputin");
             });
         });
+    });
+
+    head.js(jquery, readmore, function(){
+        $().ready(function () {
+        $('.article > .panel-body').readmore();
+        })
     });
 </script>
 
@@ -140,7 +145,7 @@
         background: #FFF
     }
 
-    .readmore a {
+    .readmore-js-toggle{
         font-weight: bold;
         padding: 2px 5px 2px 10px;
         margin-top: 5px;
@@ -152,7 +157,7 @@
         width: 100%;
     }
 
-    .readmore a:hover {
+    .readmore-js-toggle:hover {
         background: #444;
         color: #FFF
     }
@@ -289,14 +294,8 @@
                             <div class='timeago' title="${x['time']}">${x['created']}</div>
                         </div>
                         <div class='panel-body'>
-                            ${x['introtext'] |n}
+                            ${x['fulltext'] |n}
                         </div>
-                        %if x['fulltext']:
-                            <p class="readmore">
-                                <a href="/article/${x['id']}-${x['alias']}">
-                                    Czytaj więcej: ${x['title']}</a>
-                            </p>
-                        %endif
                     </div>
                 % endfor
             </div>
