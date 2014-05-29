@@ -161,11 +161,11 @@ def response_pdf(request, html, filename):
     response = request.response
     with tempinput(html) as tempfilename:
         with tempinput("") as output_file:
-            wk = pdfkit.from_file(tempfilename, output_file)
+            #wk = pdfkit.from_file(tempfilename, output_file)
             #,dpi="300",screen_resolution=[1280, 1024])
             response.body_file = pdfkit.from_file('test.html', False)
             response.content_type = 'application/pdf'
-            filename = filename.replace(" ","_")
+            filename = filename.replace(" ", "_")
             filename = pl_to_ascii(filename)
             filename = ''.join(c for c in filename if c in valid_chars).strip(".")
             response.headerlist.append(("Content-Disposition", "attachment; filename='"+str(filename)+".pdf'"))
@@ -198,7 +198,7 @@ def setting_load(name):
     return DBSession.query(Settings).filter_by(name=name).first().value
 
 
-def send_mail(request,subject,recipients,body,fingerprint=False):
+def send_mail(request, subject, recipients, body, fingerprint=False):
     #if fingerprint:
     #    body=str(gpg.encrypt(body, fingerprint, always_trust=True))
     mailer = request.registry['mailer']
@@ -339,14 +339,14 @@ def get_basic_account_info(request):
 def timetable(tag_name, value, options, parent, context):
     #return u'<table class="table table-striped"><tr><td> Plan lekcji pojawi się, gdy uzupełnisz swoje dane (klasa,lektorat/uczone klasy) </tr></td></table>'
     page = {}
-    page['lessons'] = [['1', [], [], [], [], []],['2', [], [], [], [], []],
-                       ['3', [], [], [], [], []],['4', [], [], [], [], []],
-                       ['5', [], [], [], [], []],['6', [], [], [], [], []],
-                       ['7', [], [], [], [], []],['8', [], [], [], [], []]]
-    page['lessons2'] = [['1', [], [], [], [], []],['2', [], [], [], [], []],
-                       ['3', [], [], [], [], []],['4', [], [], [], [], []],
-                       ['5', [], [], [], [], []],['6', [], [], [], [], []],
-                       ['7', [], [], [], [], []],['8', [], [], [], [], []]]
+    page['lessons'] = [['1', [], [], [], [], []], ['2', [], [], [], [], []],
+                       ['3', [], [], [], [], []], ['4', [], [], [], [], []],
+                       ['5', [], [], [], [], []], ['6', [], [], [], [], []],
+                       ['7', [], [], [], [], []], ['8', [], [], [], [], []]]
+    page['lessons2'] = [['1', [], [], [], [], []], ['2', [], [], [], [], []],
+                       ['3', [], [], [], [], []], ['4', [], [], [], [], []],
+                       ['5', [], [], [], [], []], ['6', [], [], [], [], []],
+                       ['7', [], [], [], [], []], ['8', [], [], [], [], []]]
 
     if 'teacher' in options:
         page['who'] = options['teacher']
@@ -382,13 +382,13 @@ def timetable(tag_name, value, options, parent, context):
                     s_name = p.lesson.subject.name
                 else:
                     s_name = "unknown"
-                page['lessons'][p.lesson.order-1][p.lesson.day+1][g_id] = s_name+"["+str(p.lesson.room)+"]"
+                page['lessons'][p.lesson.order-1][p.lesson.day][g_id] = s_name+"[" + str(p.lesson.room) + "]"
             g_id += 1
         for order in range(len(page['lessons'])):
             for lesson in range(len(page['lessons'][order])):
-                l=page['lessons'][order][lesson]
-                if len(l)==2 and l[0]==l[1]:
-                    page['lessons'][order][lesson]=[l[0]]
+                l = page['lessons'][order][lesson]
+                if len(l) == 2 and l[0] == l[1]:
+                    page['lessons'][order][lesson] = [l[0]]
     else:
         return "error"
     return render('widgets/timetable.mak', page)
