@@ -162,6 +162,10 @@
         color: #FFF
     }
 
+    .readmore-js-expanded {
+        height: 100% !important;
+    }
+
     .published {
         font-size: 12px;
     }
@@ -294,7 +298,7 @@
                             <div class='timeago' title="${x['time']}">${x['created']}</div>
                         </div>
                         <div class='panel-body'>
-                            ${x['fulltext'] |n}
+                            ${x['introtext'] |n}
                         </div>
                     </div>
                 % endfor
