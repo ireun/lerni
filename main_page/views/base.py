@@ -92,10 +92,10 @@ from main_page.models import (
 #from docutils.core import publish_parts
 
 from pyramid.httpexceptions import (
-    HTTPFound,
-    HTTPNotFound,
-    exception_response,
-    )    
+                                    HTTPFound,
+                                    HTTPNotFound,
+                                    exception_response,
+                                    )
     
 from pyramid.view import (
     view_config,
@@ -147,18 +147,22 @@ def tempinput(data):
     temp.close()
     yield temp.name
     os.unlink(temp.name)
-    
+
+
 def pl_to_ascii(tekst):
     pl = {ord(u'Ą'): u'A', ord(u'Ć'): u'C', ord(u'Ę'): u'E', ord(u'Ł'): u'L', ord(u'Ó'): u'O', ord(u'Ś'): u'S',
           ord(u'Ź'): u'Z', ord(u'Ż'): u'Z',
           ord(u'ą'): u'a', ord(u'ć'): u'c', ord(u'ę'): u'e', ord(u'ł'): u'l', ord(u'ó'): u'o', ord(u'ś'): u's',
           ord(u'ź'): u'z', ord(u'ż'): u'z'}
     return tekst.translate(pl)
-def response_pdf(request,html,filename):
+
+
+def response_pdf(request, html, filename):
     response = request.response
     with tempinput(html) as tempfilename:
         with tempinput("") as output_file:
-            wk = pdfkit.from_file(tempfilename, output_file) #,dpi="300",screen_resolution=[1280, 1024])
+            wk = pdfkit.from_file(tempfilename, output_file)
+            #,dpi="300",screen_resolution=[1280, 1024])
             response.body_file = pdfkit.from_file('test.html', False)
             response.content_type = 'application/pdf'
             filename = filename.replace(" ","_")
@@ -220,7 +224,7 @@ for widget in ("map", "vimeo", 'support'):
 
 
 def last_video(tag_name, value, options, parent, context):
-    last_video=DBSession.query(VideosMain).order_by('-id').first().video
+    last_video = DBSession.query(VideosMain).order_by('-id').first().video
     if last_video.hosting_id == 1:
         return ""
     elif last_video.hosting_id == 2:
@@ -232,13 +236,13 @@ def tweets(tag_name, value, options, parent, context):
     to_return=""
     c = DBSession.query(TweetsCategoriesList).filter_by(name=value).first()
     for position in DBSession.query(TweetsCategories).order_by('-id').filter_by(category=c).limit(8):
-        to_return+="<div class='article'>"
-        to_return+="<div class='author'>"+position.tweet.user.full_name+"</div>"
-        to_return+="<div class='timeago' title='"+str(position.tweet.date)+"'></div> <br>"
-        to_return+="<div class='content'>"+position.tweet.text
+        to_return += "<div class='article'>"
+        to_return += "<div class='author'>"+position.tweet.user.full_name+"</div>"
+        to_return += "<div class='timeago' title='"+str(position.tweet.date)+"'></div> <br>"
+        to_return += "<div class='content'>"+position.tweet.text
         if position.tweet.link != None:
-            to_return+="<a href='"+position.tweet.link+"'>"+position.tweet.link_name+"</a>"
-        to_return+="</div></div>"
+            to_return += "<a href='"+position.tweet.link+"'>"+position.tweet.link_name+"</a>"
+        to_return += "</div></div>"
     return to_return
 parser.add_formatter("tweets", tweets)
 

@@ -6,7 +6,8 @@ from base import *
              request_param=['action', 'topic', 'email'])
 def support_ticket_send(request):
     page = {'editor': 0, 'allerts': [], 'recaptcha_public': recaptcha_public}
-    page['page_title']="ZSO nr 15 w Sosnowcu"
+    page.update(get_basic_account_info(request))
+    page['page_title'] = "ZSO nr 15 w Sosnowcu"
     page['banners'] = []
     for position in DBSession.query(Banners).limit(6):
         page['banners'].append([position.link, position.alternative])
@@ -39,7 +40,7 @@ def support_ticket_send(request):
                       sender="mailer.staszic@gmail.com",
                       recipients=[r['email']],
                       body=u"Twoje zapytanie zostało odebrane, aby potwierdzić swoją tożsamość kliknij link poniżej.\n"
-                      + request.route_url('support_ask_ticket', id = confirmation_code)
+                      + request.route_url('support_ask_ticket', id=confirmation_code)
                       )
     mailer.send(message)
     #[u"Wiadomość została wysłana, sprawdź emaila w celu uwierzytelnienia.","success","topRight"]
@@ -49,18 +50,16 @@ def support_ticket_send(request):
 @view_config(route_name='support_ask', renderer='support_ask.mak')
 def support_ask(request):
     page = {'recaptcha_public': recaptcha_public}
+    page.update(get_basic_account_info(request))
     page['banners'] = []
-    page['page_title']="ZSO nr 15 w Sosnowcu"
+    page['page_title'] = "ZSO nr 15 w Sosnowcu"
     for position in DBSession.query(Banners).limit(6):
-        page['banners'].append([position.link,position.alternative])
-    logged_in = authenticated_userid(request)
-    page['logged_in']=logged_in
-    page['name']=username(logged_in)
-    page['sections']=[]
+        page['banners'].append([position.link, position.alternative])
+    page['sections'] = []
     for position in DBSession.query(SupportSections):
-        page["sections"].append([position.name,[]])
+        page["sections"].append([position.name, []])
         for position2 in DBSession.query(SupportSubSections).filter_by(section_id=position.id):
-            page["sections"][-1][1].append([position2.name,position2.short_name])
+            page["sections"][-1][1].append([position2.name, position2.short_name])
     return page
 
 
@@ -79,7 +78,8 @@ def support_ask_ticket_anser(request):
 @view_config(route_name='support_ask_ticket', renderer='support_ask_ticket.mak')
 def support_ask_ticket(request):
     page = {'editor': 0, 'allerts': [], 'recaptcha_public': recaptcha_public}
-    page['page_title']="ZSO nr 15 w Sosnowcu"
+    page.update(get_basic_account_info(request))
+    page['page_title'] = "ZSO nr 15 w Sosnowcu"
     page['banners'] = []
     for position in DBSession.query(Banners).limit(6):
         page['banners'].append([position.link, position.alternative])
@@ -92,7 +92,7 @@ def support_ask_ticket(request):
     page['ticket_id'] = ticket.topic
     page['messages'] = []
     for x in DBSession.query(SupportQuestions).filter_by(ticket=ticket).order_by(SupportQuestions.add_date):
-        page['messages'].append(["kamilx3@gmail.com", x.add_date,x.text])
+        page['messages'].append(["kamilx3@gmail.com", x.add_date, x.text])
     return page
 
 #if logged_in:

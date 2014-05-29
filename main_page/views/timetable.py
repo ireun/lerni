@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from base import *
 
+
 @view_config(route_name='sis_home', renderer='sis/home.mak')
 def sis_home(request):
-    page = {'allerts': []}
+    page = {'alerts': []}
     page.update(get_basic_account_info(request))
     page['last_update'] = '2013-11-01'
     return page
@@ -11,7 +12,7 @@ def sis_home(request):
 
 @view_config(route_name='sis_about', renderer='sis/about.mak')
 def sis_about(request):
-    page = {'allerts': []}
+    page = {'alerts': []}
     page.update(get_basic_account_info(request))
     page['last_update'] = '2013-11-01'
     return page
@@ -19,7 +20,7 @@ def sis_about(request):
 
 @view_config(route_name='schedule', renderer='sis/timetable.mak')
 def plan(request):
-    page = {'allerts': []}
+    page = {'alerts': []}
     page.update(get_basic_account_info(request))
     page['last_update'] = '2013-11-01'
     page['groups'] = []
@@ -36,7 +37,7 @@ def plan(request):
 
 @view_config(route_name='schedule', renderer='sis/timetable_show.mak', request_method='POST')
 def plan_post(request):
-    page = {'allerts': []}
+    page = {'alerts': []}
     page.update(get_basic_account_info(request))
     page['last_update'] = '2013-11-01'
     page['groups'] = []
@@ -52,7 +53,7 @@ def plan_post(request):
 
 @view_config(route_name='lucky', renderer='sis/lucky.mak', permission='view')
 def lucky(request):
-    page = {'allerts': []}
+    page = {'alerts': []}
     page.update(get_basic_account_info(request))
     lucky_number = DBSession.query(LuckyNumbers).filter_by(date=datetime.datetime.now().date()+datetime.timedelta(1))
     lucky_number = lucky_number.first()

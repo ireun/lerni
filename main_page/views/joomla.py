@@ -10,13 +10,14 @@ from sqlalchemy import create_engine
 @view_config(route_name='joomla', renderer='joomla.mak')
 def admin_log_graduates(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Absolwenci"]], 'allerts': []}
+    page.update(get_basic_account_info(request))
     page['articles'] = []
     page['page_title'] = "ZSO nr 15 w Sosnowcu"
     page['page_id'] = 1
     if 'page' in request.params:
         try:
             page['page_id'] = int(request.params['page'])
-        except:
+        except ValueError:
             pass
     page['banners'] = []
     for position in DBSession.query(Banners).limit(6):
