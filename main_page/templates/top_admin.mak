@@ -115,6 +115,7 @@
                     <span class="text">Dekretacja</span><span class="arrow icon-caret-down"></span>
                   </a>
                   <ul id="submenu3" style="height: 0px;">
+                    <li class=""><a href="/admin/dec/articles"> <span class="icon icon-angle-right"></span>Artykuły</a></li>
                     <li class=""><a href="/admin/dec/tweets"> <span class="icon icon-angle-right"></span>Tweety</a></li>
                     <li class=""><a href="/admin/dec/registrations"> <span class="icon icon-angle-right"></span>Rejestracja</a></li>
                     <li class=""><a href="/admin/dec/petitions"> <span class="icon icon-angle-right"></span>Wnioski</a></li>

@@ -7,6 +7,24 @@ import json
 
 
 @view_config(route_name='api', renderer='jsonp',
+             request_param=['format=jsonp', 'method=lerni.articles_propose.getList', 'jtStartIndex', 'jtPageSize']) #.
+def jsonp_articles_propose_list(request):
+    page = {"Result": "OK", "Records": []}
+    page.update(get_basic_account_info(request))
+    start_index = request.params['jtStartIndex']
+    page_size = request.params['jtPageSize']
+    #sorting = request.params['jtSorting'].split(" ")
+    query = DBSession.query(ArticlesProposed).order_by(ArticlesProposed.id.desc()).offset(int(start_index)).limit(int(page_size))
+    for position in query:
+        page['Records'].append({u"article_id": position.id,
+                                u"title": position.title,
+                                u"email": position.email,
+                                u"modification_date": str(position.date.date())})
+    page['TotalRecordCount'] = DBSession.query(CompetitorsCompetitions).count()
+    return page
+
+
+@view_config(route_name='api', renderer='jsonp',
              request_param=['format=jsonp', 'method=lerni.articles.raptor.propose'])
 def api_jsonp_lerni_articles_raptor_propose(request):
     page = {"Result": "OK", "Options": []}

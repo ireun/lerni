@@ -459,6 +459,27 @@ def admin_log_lucky(request):
     return page
 
 
+@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=dec', 'page=articles'])
+def admin_dec_articles(request):
+    page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", "Kategorie klas"]], 'allerts': [],
+            'tables': []}
+    page.update(get_basic_account_info(request))
+    page['title'] = u"Kategorie klas"
+    page['title_desc'] = u"Utwórz listę kategorii klas w twojej szkole."
+    page['sorting'] = True
+    page['defaultSorting'] = "name ASC"
+    page['list'] = "/api?format=jsonp&method=lerni.articles_propose.getList"
+    page['delete'] = "/api?format=jsonp&method=lerni.articles_propose.delete"
+    page['update'] = "/api?format=jsonp&method=lerni.articles_propose.edit"
+    page['create'] = "/api?format=jsonp&method=lerni.articles_propose.add"
+    page['fields'] = [{'name': 'article_id', 'key': True, "create": False, "edit": False, "list": False}]
+    page['fields'].append({'name': u"title", "title": u"Tytuł"})
+    page['fields'].append({'name': u"email", "title": u"Adres email"})
+    page['fields'].append({'name': u"modification_date", "title": u"Data Modyfikacji", "type": "date",
+                           "displayFormat": "dd.mm.yy", "create": "false", "edit": "false", "sorting": "false"})
+    return page
+
+
 @view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=log', 'page=divisions'])
 def admin_log_divisions(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", "Kategorie klas"]], 'allerts': [],
