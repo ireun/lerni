@@ -1,5 +1,7 @@
 <%include file="top_new.mak"/>
 <%include file="snippets/header.mak"/>
+<link type='text/css' rel='stylesheet' href='/static/libs/raptor/raptor-front-end.min.css'/>
+
 <script>
     var NWave = function () {
         this.css = function (p) {
@@ -69,9 +71,68 @@
         $('.article > .panel-body').readmore();
         })
     });
+    head.js(jquery, jquery_ui, function(){
+        $().ready(function () {
+            $('#button_add_article').click(function() {
+            $('#button_add_article').hide();
+            var a = $("<div class='article panel panel-default'>\
+                        <div class='panel-heading' style='padding: 4px 4px 10px 4px;'>\
+                            <h4 data-id=\"title-1\" class='title editable'>Wpisz tytuł tutaj.</h4>\
+                            <div class='author editable'>Tutaj adres email (nie będzie publicznie widoczny)</div>\
+                        </div>\
+                        <div data-id=\"body-1\" class='panel-body'>\
+                            <div class=\"editable\"> A tutaj text artykułu.</div>\
+                        </div>\
+                    </div>");
+            $('.articles').prepend(a);
+
+            $(function($){
+            $(a).raptor({partialEdit: $(".editable"),
+                                           layouts: {
+                                               toolbar: {
+                                                   uiOrder: [
+                                                            ['historyUndo', 'historyRedo','cancel','save'],
+                                                            ['tagMenu','classMenu','alignLeft', 'alignCenter', 'alignJustify', 'alignRight','textBold', 'textItalic', 'textUnderline', 'textStrike'],
+                                                            ['textSuper', 'textSub'],
+                                                            ['colorMenuBasic'],
+                                                            ['snippetMenu', 'specialCharacters'],
+                                                            ['listUnordered', 'listOrdered'],
+                                                            ['hrCreate', 'textBlockQuote'],
+                                                            ['textSizeDecrease', 'textSizeIncrease'],
+                                                            ['floatLeft', 'floatNone', 'floatRight'],
+                                                            ['tableCreate', 'tableInsertRow', 'tableDeleteRow', 'tableInsertColumn', 'tableDeleteColumn'],
+                                                            ['guides','viewSource']
+                                                   ]
+                                               },
+                                               hoverPanel: {
+                                                  uiOrder: [['clickButtonToEdit']]
+                                               }
+                                           },
+                                           enablePlugins: true,
+                                           reloadOnDisable: true,
+                                           plugins:{
+                                                    dock: { docked: true, dockToScreen: true,persist: false},
+                                                    save: { plugin: 'saveJson'},
+                                                    saveJson: {url: '/entry/save', postName: 'raptor-content', id: function() { return 1} },
+                                                    textBlockQuote: false
+                                           }
+                                        });
+            });
+        });
+    });
+});
 </script>
 
 <style>
+    .raptor-layout-toolbar-group .ui-button {
+        height: 20px;
+    }
+    .raptor-layout-toolbar-group .ui-button-text-icon-primary .ui-button-text {
+        padding: 0 16px 0 32px;
+    }
+    .raptor-layout-toolbar-group .ui-button-text-only .ui-button-text {
+        padding: 1px 16px 10px;
+    }
     .natalia {
         position: fixed;
         display: none;
@@ -190,6 +251,7 @@
         font-size: 13px !important;
         color: #888;
         margin-top: -10px;
+        min-width: 10px;
     }
 
     span {
@@ -279,12 +341,7 @@
         </div>
         <div id="article_main" class="col-sm-6">
             <div class="row">
-                <div class="col-sm-6">
-                    <a href="http://www.120.ab.staszic.edu.pl"> <img src="http://staszic.edu.pl//pliki/banners/baner.jpg" alt="120 lecie"/> </a>
-                </div>
-                <div class="col-sm-6">
-                    Podstrona 120.ab.staszic.edu.pl zawierajaca informacje o organizacji 120 - lecia naszego liceum.
-                </div>
+                    <button id="button_add_article" type="button" class="btn btn-default btn-lg btn-block">Dodaj artykuł</button>
             </div>
             <br/>
 
@@ -324,7 +381,7 @@
                 <div class="panel-heading">Nasze sukcesy (<a href="/nasze-sukcesy">więcej</a>)</div>
                 <table class="table">
                     <tr>
-                        <td>Łukasz Nawaro z klasy 3mat1 uzyskał tytuł laureata Olimpiady Wiedzy o Polsce i Świecie
+                        <td class="editable">Łukasz Nawaro z klasy 3mat1 uzyskał tytuł laureata Olimpiady Wiedzy o Polsce i Świecie
                             Współczesnym.
                         </td>
                     </tr>

@@ -26,9 +26,7 @@ jwerty = {jwerty: "/static/libs/jwerty/jwerty.min.js"}
 readmore = {readmore: "/static/libs/readmore/readmore.min.js"}
 
 uiji = {uiji: "/static/libs/uiji/uiji.min.js"}
-raptor = {raptor: "/static/libs/raptor/default.min.js"}
-raptor2 = {ratpor2: "/static/libs/raptor/tags.min.js"}
-raptor3 = {ratpor3: "/static/libs/raptor/raptor.min.js"}
+raptor = {raptor: "/static/libs/raptor/raptor.min.js"}
 reveal = {reveal: "/static/libs/reveal/reveal.min.js"}
 gridster = {gridster: "/static/libs/gridster/jquery.gridster.min.js"}
 leaflet = {leaflet: "//cdnjs.cloudflare.com/ajax/libs/leaflet/0.6.4/leaflet.js"}
@@ -60,6 +58,9 @@ sequence_diagram = "//cdnjs.cloudflare.com/ajax/libs/js-sequence-diagrams/1.0.4/
 noisy="//cdnjs.cloudflare.com/ajax/libs/noisy/1.1.1/jquery.noisy.min.js"
 fit_vids="//cdnjs.cloudflare.com/ajax/libs/fitvids/1.0.1/jquery.fitvids.min.js"
 holder="//cdnjs.cloudflare.com/ajax/libs/holder/2.0/holder.js"
+
+jquery = {jquery: "/static/js/blank.min.js"}
+jquery_ui = {jquery_ui: "/static/js/blank.min.js"}
 
 /*
 //cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.3.1/jquery.maskedinput.min.js

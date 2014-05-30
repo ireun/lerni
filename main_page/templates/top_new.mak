@@ -13,6 +13,10 @@
     <link rel="shortcut icon" href="/assets/ico/favicon.png">
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/normalize/2.1.0/normalize.css"/>
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <!-- Load Jquery first to allow raptor-editor to work -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+    <script src="/static/libs/raptor/raptor.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/headjs/0.99/head.min.js"></script>
     <script src="/static/js/libs.min.js"></script>
     <script src="/static/js/main.min.js"></script>
