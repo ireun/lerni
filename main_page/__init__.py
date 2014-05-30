@@ -115,6 +115,7 @@ def main(global_config, **settings):
     #    config.add_route('sync_download', '/syncdownload')
 
     config.add_route('joomla', '/joomla')
+    config.add_route('confirm', '/confirm')
 
     config.add_route('easy_link', '/{link}')
 

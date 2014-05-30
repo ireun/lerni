@@ -143,3 +143,25 @@ def about(request):
                     [u"Kontakt", ""], [u"Dojazd", "/p/dojazd"], [u"Plan lekcji", ""], [u"Panorama", ""],
                     [u"Kalendarium", ""], [u"Staszic na Facebooku", ""]]
     return page
+
+
+
+@view_config(route_name='confirm', renderer='message.mak')
+def confirm(request):
+    page = {'editor': 0, 'allerts': []}
+    r = request.params
+    page.update(get_basic_account_info(request))
+    page['page_title'] = "ZSO nr 15 w Sosnowcu"
+    page['banners'] = []
+    for position in DBSession.query(Banners).limit(6):
+        page['banners'].append([position.link, position.alternative])
+    confirmation_code = r['confirmation_code']
+    confirmation_type = r['type']
+    page['message'] = u"Coś poszło nie tak jak powinno, spróbuj jeszcze raz."
+    if confirmation_type == "article_proposed":
+        #email = URLSafeSerializer(secret, salt='article_propose').loads(confirmation_code)[0]
+        #art_id = URLSafeSerializer(secret, salt='article_propose').loads(confirmation_code)[1]
+        article = DBSession.query(ArticlesProposed).filter_by(confirmation_code=confirmation_code).first()
+        article.email_confirmed = True
+        page['message'] = u"Adres email został potwierdzony."
+    return page

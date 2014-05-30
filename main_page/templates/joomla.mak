@@ -77,11 +77,11 @@
             $('#button_add_article').hide();
             var a = $("<div class='article panel panel-default'>\
                         <div class='panel-heading' style='padding: 4px 4px 10px 4px;'>\
-                            <h4 data-id=\"title-1\" class='title editable'>Wpisz tytuł tutaj.</h4>\
-                            <div class='author editable'>Tutaj adres email (nie będzie publicznie widoczny)</div>\
+                            <h4 id=\"add_title\" class='title editable'>Wpisz tytuł tutaj.</h4>\
+                            <div id=\"add_email\" class='author editable'>Tutaj adres email (nie będzie publicznie widoczny)</div>\
                         </div>\
-                        <div data-id=\"body-1\" class='panel-body'>\
-                            <div class=\"editable\"> A tutaj text artykułu.</div>\
+                        <div class='panel-body'>\
+                            <div id=\"add_content\"> A tutaj text artykułu.</div>\
                         </div>\
                     </div>");
             $('.articles').prepend(a);
@@ -94,13 +94,14 @@
                                                             ['historyUndo', 'historyRedo','cancel','save'],
                                                             ['tagMenu','classMenu','alignLeft', 'alignCenter', 'alignJustify', 'alignRight','textBold', 'textItalic', 'textUnderline', 'textStrike'],
                                                             ['textSuper', 'textSub'],
-                                                            ['colorMenuBasic'],
+                                                            /*['colorMenuBasic'],*/
                                                             ['snippetMenu', 'specialCharacters'],
                                                             ['listUnordered', 'listOrdered'],
                                                             ['hrCreate', 'textBlockQuote'],
-                                                            ['textSizeDecrease', 'textSizeIncrease'],
+                                                            /*['textSizeDecrease', 'textSizeIncrease'],*/
                                                             ['floatLeft', 'floatNone', 'floatRight'],
                                                             ['tableCreate', 'tableInsertRow', 'tableDeleteRow', 'tableInsertColumn', 'tableDeleteColumn'],
+                                                            ['linkCreate', 'linkRemove', 'embed', 'insertFile'],
                                                             ['guides','viewSource']
                                                    ]
                                                },
@@ -113,7 +114,9 @@
                                            plugins:{
                                                     dock: { docked: true, dockToScreen: true,persist: false},
                                                     save: { plugin: 'saveJson'},
-                                                    saveJson: {url: '/entry/save', postName: 'raptor-content', id: function() { return 1} },
+                                                    saveJson: {url: '/api?format=jsonp&method=lerni.articles.raptor.propose',
+                                                               postName: 'raptor-content',
+                                                               id: function() { return 1 }},
                                                     textBlockQuote: false
                                            }
                                         });
@@ -132,6 +135,9 @@
     }
     .raptor-layout-toolbar-group .ui-button-text-only .ui-button-text {
         padding: 1px 16px 10px;
+    }
+    .ui-dialog{
+        z-index: 13002;
     }
     .natalia {
         position: fixed;

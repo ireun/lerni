@@ -416,3 +416,26 @@ class EasyLinks(Base):
         self.views = 0
         self.state = False
         self.deleted = False
+
+
+class ArticlesProposed(Base):
+    __tablename__ = "articles_proposed"
+    id = Column(Integer, primary_key=True)
+    title = Column(Text)
+    email = Column(Text)
+    text = Column(Text)
+    date = Column(DateTime)
+    approved = Column(Boolean)
+    approval_date = Column(DateTime)
+    confirmation_code = Column(Text)
+    email_confirmed = Column(Boolean)
+
+    def __init__(self, title, email, text):
+        self.title = title
+        self.email = email
+        self.text = text
+        self.date = datetime.datetime.now()
+        self.approved = False
+        self.approval_date = None
+        self.confirmation_code = None
+        self.email_confirmed = False

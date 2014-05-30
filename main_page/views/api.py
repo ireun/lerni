@@ -7,6 +7,36 @@ import json
 
 
 @view_config(route_name='api', renderer='jsonp',
+             request_param=['format=jsonp', 'method=lerni.articles.raptor.propose'])
+def api_jsonp_lerni_articles_raptor_propose(request):
+    page = {"Result": "OK", "Options": []}
+    r = request.params
+    page.update(get_basic_account_info(request))
+    soup = BeautifulSoup(json.loads(r['raptor-content'])["1"])
+    title = unicode(soup.find("h4", attrs={"id": "add_title"}).text)
+    email = unicode(soup.find("div", attrs={"id": "add_email"}).text)
+    content = "".join([unicode(x) for x in soup.find("div", attrs={"id": "add_content"}).contents])
+    session = DBSession()
+    article = ArticlesProposed(title, email, content)
+    session.add(article)
+    session.flush()
+    article_id = article.id
+    confirmation_code = URLSafeSerializer(secret, salt='article_propose').dumps([email, article_id])
+    article.confirmation_code = confirmation_code
+    transaction.commit()
+    mailer = request.registry['mailer']
+    message = Message(subject=u"Twój artykuł został dodany i oczekuje na akceptację.",
+                      sender="mailer.staszic@gmail.com",
+                      recipients=[email],
+                      body=u"Aby potwierdzić swoją tożsamość kliknij link poniżej.\n"
+                           + request.route_url('confirm') + "?id=" + str(article_id) +
+                           "&confirmation_code=" + confirmation_code + "&type=article_proposed"
+                      )
+    mailer.send(message)
+    return page
+
+
+@view_config(route_name='api', renderer='jsonp',
              request_param=['format=jsonp', 'method=lerni.competitors.competitions.nameList'])
 def api_jsonp_lerni_competitors_competitions_getlist(request):
     page = {"Result": "OK", "Options": []}
