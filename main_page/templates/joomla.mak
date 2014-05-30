@@ -81,7 +81,7 @@
                             <div id=\"add_email\" class='author editable'>Tutaj adres email (nie będzie publicznie widoczny)</div>\
                         </div>\
                         <div class='panel-body'>\
-                            <div id=\"add_content\"> A tutaj text artykułu.</div>\
+                            <div id=\"add_content\" class='editable'> A tutaj text artykułu.</div>\
                         </div>\
                     </div>");
             $('.articles').prepend(a);
