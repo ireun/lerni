@@ -149,12 +149,12 @@ def tempinput(data):
     os.unlink(temp.name)
 
 
-def pl_to_ascii(tekst):
+def pl_to_ascii(text):
     pl = {ord(u'Ą'): u'A', ord(u'Ć'): u'C', ord(u'Ę'): u'E', ord(u'Ł'): u'L', ord(u'Ó'): u'O', ord(u'Ś'): u'S',
           ord(u'Ź'): u'Z', ord(u'Ż'): u'Z',
           ord(u'ą'): u'a', ord(u'ć'): u'c', ord(u'ę'): u'e', ord(u'ł'): u'l', ord(u'ó'): u'o', ord(u'ś'): u's',
           ord(u'ź'): u'z', ord(u'ż'): u'z'}
-    return tekst.translate(pl)
+    return text.translate(pl)
 
 
 def response_pdf(request, html, filename):

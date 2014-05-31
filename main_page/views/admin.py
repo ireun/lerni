@@ -7,7 +7,7 @@ def admin_home(request):
     return HTTPFound(location=request.route_path('admin', page='overview'))
 
 
-@view_config(route_name='admin', renderer='admin_overview.mak', match_param='page=overview')
+@view_config(route_name='admin', renderer='admin_overview.mak', match_param='page=overview', permission='settings')
 def admin_overview(request):
     page = {'allerts': []}
     page.update(get_basic_account_info(request))
@@ -27,7 +27,7 @@ def admin_gallery(request):
     return page
 
 
-@view_config(route_name='admin', renderer='admin_layout_edit.mak', match_param='page=layouts')
+@view_config(route_name='admin', renderer='admin_layout_edit.mak', match_param='page=layouts', permission='back-end')
 def admin_layouts(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Użytkownicy"]], 'allerts': []}
     page.update(get_basic_account_info(request))
@@ -36,7 +36,7 @@ def admin_layouts(request):
     return page
 
 
-@view_config(route_name='admin', renderer='admin_jtable.mak', match_param='page=easy_links')
+@view_config(route_name='admin', renderer='admin_jtable.mak', match_param='page=easy_links', permission='back-end')
 def admin_easy_links(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Proste linki"]], 'allerts': []}
     page.update(get_basic_account_info(request))
@@ -55,7 +55,7 @@ def admin_easy_links(request):
     return page
 
 
-@view_config(route_name='admin', renderer='admin_jtable.mak', match_param='page=pages')
+@view_config(route_name='admin', renderer='admin_jtable.mak', match_param='page=pages', permission='back-end')
 def admin_pages(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Podstrony"]], 'allerts': []}
     page.update(get_basic_account_info(request))
@@ -75,7 +75,7 @@ def admin_pages(request):
     return page
 
 
-@view_config(route_name='admin', renderer='admin_jtable.mak', match_param='page=bells_types')
+@view_config(route_name='admin', renderer='admin_jtable.mak', match_param='page=bells_types', permission='technical')
 def admin_bells_types(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Dzwonki"]], 'allerts': []}
     page.update(get_basic_account_info(request))
@@ -93,7 +93,7 @@ def admin_bells_types(request):
     return page
 
 
-@view_config(route_name='admin', renderer='admin_jtable.mak', match_param='page=bells')
+@view_config(route_name='admin', renderer='admin_jtable.mak', match_param='page=bells', permission='technical')
 def admin_bells(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Dzwonki"]], 'allerts': []}
     page.update(get_basic_account_info(request))
@@ -118,7 +118,7 @@ def admin_bells(request):
     return page
 
 
-@view_config(route_name='admin', renderer='admin_jtable.mak', match_param='page=users')
+@view_config(route_name='admin', renderer='admin_jtable.mak', match_param='page=users', permission='sensitive')
 def admin_users(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Użytkownicy"]], 'allerts': []}
     page.update(get_basic_account_info(request))
@@ -146,7 +146,7 @@ def admin_users(request):
     return page
 
 
-@view_config(route_name='admin', renderer='admin_people.mak', match_param='page=people')
+@view_config(route_name='admin', renderer='admin_people.mak', match_param='page=people', permission='sensitive')
 def admin_people(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", "Nauczyciele"]], 'allerts': [],
             'tables': []}
@@ -186,7 +186,7 @@ def admin_people(request):
     return page
 
 
-@view_config(route_name='admin', renderer='admin_people.mak', match_param='page=personel')
+@view_config(route_name='admin', renderer='admin_people.mak', match_param='page=personel', permission='sensitive')
 def admin_personel(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", "Personel"]],
             'allerts': [], 'tables': []}
@@ -214,7 +214,8 @@ def admin_personel(request):
     return page
 
 
-@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=log', 'page=years'])
+@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=log', 'page=years'],
+             permission='timetable')
 def admin_log_years(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", "Lata szkolne"]],
             'allerts': [], 'tables': []}
@@ -238,7 +239,8 @@ def admin_log_years(request):
     return page
 
 
-@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=log', 'page=subjects'])
+@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=log', 'page=subjects'],
+             permission='timetable')
 def admin_log_subjects(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", "Przedmioty"]], 'allerts': [],
             'tables': []}
@@ -260,7 +262,8 @@ def admin_log_subjects(request):
     return page
 
 
-@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=all', 'page=tweets'])
+@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=all', 'page=tweets'],
+             permission='content')
 def admin_log_tweets(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", "Przedmioty"]], 'allerts': [],
             'tables': []}
@@ -286,7 +289,8 @@ def admin_log_tweets(request):
     return page
 
 
-@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=all', 'page=graduates'])
+@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=all', 'page=graduates'],
+             permission='history')
 def admin_log_graduates(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Absolwenci"]], 'allerts': []}
     page.update(get_basic_account_info(request))
@@ -306,7 +310,8 @@ def admin_log_graduates(request):
     return page
 
 
-@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=all', 'page=competitors'])
+@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=all', 'page=competitors'],
+             permission="history")
 def admin_log_competitors(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Użytkownicy"]], 'allerts': []}
     page.update(get_basic_account_info(request))
@@ -335,7 +340,8 @@ def admin_log_competitors(request):
     return page
 
 
-@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=all', 'page=competitions'])
+@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=all', 'page=competitions'],
+             permission="history")
 def admin_log_competitions(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Użytkownicy"]], 'allerts': []}
     page.update(get_basic_account_info(request))
@@ -355,7 +361,8 @@ def admin_log_competitions(request):
     return page
 
 
-@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=all', 'page=folders'])
+@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=all', 'page=folders'],
+             permission='content')
 def admin_log_folders(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Przedmioty"]], 'allerts': [],
             'tables': []}
@@ -381,7 +388,8 @@ def admin_log_folders(request):
     return page
 
 
-@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=all', 'page=entries'])
+@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=all', 'page=entries'],
+             permission='content')
 def admin_all_entries(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Przedmioty"]], 'allerts': [],
             'tables': []}
@@ -409,7 +417,8 @@ def admin_all_entries(request):
     return page
 
 
-@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=log', 'page=lucky'])
+@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=log', 'page=lucky'],
+             permission='luck')
 def admin_log_lucky(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", u"Szczęśliwe numerki"]], 'allerts': [],
             'tables': []}
@@ -459,7 +468,8 @@ def admin_log_lucky(request):
     return page
 
 
-@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=dec', 'page=articles'])
+@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=dec', 'page=articles'],
+             permission='assignment')
 def admin_dec_articles(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", "Kategorie klas"]], 'allerts': [],
             'tables': []}
@@ -480,7 +490,8 @@ def admin_dec_articles(request):
     return page
 
 
-@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=log', 'page=divisions'])
+@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=log', 'page=divisions'],
+             permission='timetable')
 def admin_log_divisions(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", "Kategorie klas"]], 'allerts': [],
             'tables': []}
@@ -501,7 +512,8 @@ def admin_log_divisions(request):
     return page
 
 
-@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=log', 'page=rooms'])
+@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=log', 'page=rooms'],
+             permission='timetable')
 def admin_log_divisions(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", "Kategorie klas"]], 'allerts': [],
             'tables': []}
@@ -522,7 +534,7 @@ def admin_log_divisions(request):
     return page
 
 
-@view_config(route_name='admin_log_years_groups', renderer='admin_log_groups.mak')
+@view_config(route_name='admin_log_years_groups', renderer='admin_log_groups.mak', permission='timetable')
 def admin_log_groups(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", "Lata szkolne"], ["", "2012"]],
             'allerts': [], 'tables': []}
@@ -538,7 +550,7 @@ def admin_log_groups(request):
     return page
 
 
-@view_config(route_name='admin_log_years_groups_students', renderer='admin_log_groups.mak')
+@view_config(route_name='admin_log_years_groups_students', renderer='admin_log_groups.mak', permission='timetable')
 def admin_log_groups_students(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", "Lata szkolne"], ["", "2012"]],
             'allerts': [], 'tables': []}
@@ -553,7 +565,8 @@ def admin_log_groups_students(request):
     return page
 
 
-@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=log', 'page=timetables'])
+@view_config(route_name='admin_pp', renderer='admin_jtable.mak', match_param=['pp=log', 'page=timetables'],
+             permission='timetable')
 def admin_log_timetables(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", "Lata szkolne"]],
             'allerts': [], 'tables': []}
@@ -586,7 +599,7 @@ def admin_log_timetables(request):
     return page
 
 
-@view_config(route_name='admin_log_timetables_edit', renderer='admin_log_timetables_edit.mak')
+@view_config(route_name='admin_log_timetables_edit', renderer='admin_log_timetables_edit.mak', permission='timetable')
 def admin_log_timetables_edit(request):
     page = {'editor': 0, 'breadcrumbs': [["/admin/overview", u"Dashboard"], ["", "Lata szkolne"]],
             'allerts': [], 'tables': []}
@@ -597,7 +610,7 @@ def admin_log_timetables_edit(request):
     return page
 
 
-@view_config(route_name='admin_substitutions', renderer='admin_substitutions.mak')
+@view_config(route_name='admin_substitutions', renderer='admin_substitutions.mak', permission='timetable')
 def my_view4(request):
     logged_in = authenticated_userid(request)
     locale.setlocale(locale.LC_ALL, 'pl_PL.UTF-8')

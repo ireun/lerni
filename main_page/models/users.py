@@ -2,6 +2,7 @@
 from .meta import *
 import re
 
+
 class People(Base):
     __tablename__ = 'people'
     id = Column(Integer, primary_key=True)
@@ -32,7 +33,6 @@ class People(Base):
     bitcoin = Column(Text)
     web_page = Column(Text)
     title = Column(Text)
-    group_id = Column(Integer)
     folders = relationship("Folders", lazy="dynamic")
     folders_css = relationship("FoldersCSS", lazy="dynamic")
     entries_css = relationship("EntriesCSS", lazy="dynamic")
@@ -63,7 +63,6 @@ class People(Base):
         self.gpg_confirmed = gpg_confirmed
         self.phone_confirmed = phone_confirmed
         self.is_male = True
-        self.group_id = group_id
         num = DBSession.query(People).filter_by(first_name=first_name).filter_by(last_name=last_name).count()
         if not first_name:
             first_name = ""
@@ -87,6 +86,24 @@ class People(Base):
 
     def __str__(self):
         return (self.first_name+" "+self.last_name).strip()
+
+
+class PeopleGroups(Base):
+    __tablename__ = 'people_groups'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('people.id'))
+    user = relationship("People", backref=backref("groups", cascade="all,delete"))
+    group_id = Column(Integer, ForeignKey('groups.id'))
+    group = relationship("UsersGroups", backref=backref("users"))
+
+
+class UsersGroups(Base):
+    __tablename__ = 'groups'
+    id = Column(Integer, primary_key=True)
+    name = Column(Text)
+
+    def __init__(self, name):
+        self.name = name
 
 
 class AALogin(Base):
@@ -160,6 +177,7 @@ class AppCodes(Base):
         self.phone_id = phone_id
         self.code = code
 
+
 from pyramid.security import (
     Allow,
     Everyone,
@@ -168,13 +186,13 @@ from pyramid.security import (
 
 class RootFactory(object):
     __acl__ = [(Allow, Everyone, 'view'),
-               (Allow, 'group:super_admin', ALL_PERMISSIONS),
-               (Allow, 'group:dyrektor', 'dyrektor'),
-               (Allow, 'group:teacher', 'oceny'),
-               (Allow, 'group:admin', 'edit_articlesa'),
-               (Allow, 'group:redaktor', 'edit_articles'),
-               (Allow, 'group:student', ('view_subs', 'edit')),
-               (Allow, 'group:basic', ('account_settings', 'edit'))]
+               (Allow, u'g:super_admin', ALL_PERMISSIONS),
+               (Allow, u'g:dyrektor', 'dyrektor'),
+               (Allow, u'g:teacher', 'oceny'),
+               (Allow, u'g:admin', ('edit_articlesa', 'back-end')),
+               (Allow, u'g:redaktor', 'edit_articles'),
+               (Allow, u'g:student', ('view_subs', 'edit')),
+               (Allow, u'g:basic', ('settings', 'edit'))]
 
     def __init__(self, request):
       pass

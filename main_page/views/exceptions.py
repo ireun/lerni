@@ -8,6 +8,7 @@ from pyramid.view import notfound_view_config
 def forbidden(request):
     page = {'editor': 0, 'allerts': [], 'recaptcha_public': recaptcha_public, 'active': 'login'}
     next_page = request.params.get('next') or request.route_url('home')
+    page['page_title'] = "ZSO nr 15 w Sosnowcu"
     #login = ''
     logged_in = authenticated_userid(request)
     page['logged_in'] = logged_in

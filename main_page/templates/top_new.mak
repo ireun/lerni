@@ -12,7 +12,7 @@
     <link rel="apple-touch-icon-precomposed" href="/assets/ico/apple-touch-icon-57-precomposed.png">
     <link rel="shortcut icon" href="/assets/ico/favicon.png">
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/normalize/2.1.0/normalize.css"/>
-    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- Load Jquery first to allow raptor-editor to work -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
@@ -60,7 +60,7 @@
                     <div class="pull-right">
                         <ul class="nav navbar-nav">
                             <li><a href="/logout">Wyloguj</a></li>
-                            <li style="font-size: 22px;"><a href="/admin" class="icon-cog"></a></li>
+                            <li style="font-size: 22px;"><a href="/admin" class="fa fa-cog"></a></li>
                         </ul>
                     </div>
                 %endif

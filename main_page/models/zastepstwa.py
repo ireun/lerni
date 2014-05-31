@@ -145,9 +145,10 @@ class Places(Base):
     
     def __init__(self, name):
         self.name = name
-        
+
+
 class Association(Base):
-    __tablename__ = 'people_groups'
+    __tablename__ = 'log_people_groups'
     id = Column(Integer, primary_key=True)
     people_id = Column(Integer, ForeignKey('people.id'))
     #student = relationship("People")
@@ -155,7 +156,7 @@ class Association(Base):
     #groups = relationship("Groups")
     part_1 = Column(Boolean)
     part_2 = Column(Boolean)
-    
+
     def __init__(self, people_id, groups_id, part_1, part_2):
         self.people_id = people_id
         self.groups_id = groups_id
