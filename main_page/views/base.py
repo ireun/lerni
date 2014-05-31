@@ -9,6 +9,7 @@ import linecache
 import uuid
 import hashlib
 import random
+import re
 
 from recaptcha.client import captcha
 

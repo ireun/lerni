@@ -33,6 +33,9 @@ def api_jsonp_lerni_articles_raptor_propose(request):
     soup = BeautifulSoup(json.loads(r['raptor-content'])["1"])
     title = unicode(soup.find("h4", attrs={"id": "add_title"}).text)
     email = unicode(soup.find("div", attrs={"id": "add_email"}).text)
+    if not re.match(r"^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$", email):
+        raise exception_response(400)
+
     content = "".join([unicode(x) for x in soup.find("div", attrs={"id": "add_content"}).contents])
     session = DBSession()
     article = ArticlesProposed(title, email, content)
