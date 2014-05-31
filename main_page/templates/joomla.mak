@@ -165,10 +165,6 @@
         background: #FFF
     }
 
-    #wrapper {
-        background: #E0DEDF;
-    }
-
     #masthead a {
         padding: 4px;
         color: #707070;
@@ -439,10 +435,11 @@
                     js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1&appId=231650380180066";
                     fjs.parentNode.insertBefore(js, fjs);
                 }(document, 'script', 'facebook-jssdk'));</script>
-                <div style="overflow: hidden; width: 220px; margin: auto;">
-                    <div class="fb-like-box" data-href="https://www.facebook.com/sustaszic" data-width="280"
-                         data-colorscheme="light" data-show-faces="false" data-header="false" data-stream="true"
-                         data-show-border="false" style="margin-left: -60px;"></div>
+                <div style="overflow: hidden; margin: auto; margin-right: 5px;">
+                <div class="fb-like-box" data-href="https://www.facebook.com/sustaszic" data-height="80"
+                                         data-colorscheme="light" data-show-faces="false" data-header="true"
+                                         data-stream="false" data-show-border="true" style="margin-left: -60px;"></div>
+
                 </div>
 
             </div>
