@@ -127,23 +127,6 @@
 </script>
 
 <style>
-    .raptor-layout-toolbar-group .ui-button {
-        height: 20px;
-    }
-    .raptor-layout-toolbar-group .ui-button-text-icon-primary .ui-button-text {
-        padding: 0 16px 0 32px;
-    }
-    .raptor-layout-toolbar-group .ui-button-text-only .ui-button-text {
-        padding: 1px 16px 10px;
-    }
-    .ui-dialog{
-        z-index: 13002;
-    }
-    .natalia {
-        position: fixed;
-        display: none;
-    }
-
     #header {
         max-width: 1050px;
         border: none;
@@ -179,14 +162,6 @@
         position: relative;
         top: -7px;
         border-bottom: solid 1px lightgrey;
-    }
-
-    .navbar {
-        display: none;
-    }
-
-    #header {
-        margin-top: 0;
     }
 
     .nav-stacked > li > a {

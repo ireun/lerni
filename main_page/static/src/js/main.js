@@ -1,3 +1,4 @@
+head.js(bootstrap);
 head.js(jquery, autosize, function () {
     $(document).ready(function () {
         $('textarea').autosize();

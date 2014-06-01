@@ -3,21 +3,41 @@
 <link href="/static/libs/socialcount/socialcount-icons.min.css" rel="stylesheet">
 <link href="/static/css/social.min.css" rel="stylesheet">
 <link href="/static/css/entries.min.css" rel="stylesheet">
-
-<link href="/static/libs/raptor/raptor.min.css" rel="stylesheet"> <!-- Very ugly hack starts here -->
-<link href="/static/libs/raptor/raptor-front-end.min.css" rel="stylesheet">
-<link href="/static/libs/raptor/theme.min.css" rel="stylesheet">
-<link href="/static/libs/raptor/theme-icons.min.css" rel="stylesheet">
 % if edit:
     <script>
-        head.js(raptor, raptor2, raptor3, function(){
-            $('#text').raptor({
-                enablePlugins: true,
-                plugins:{
-                    save: { plugin: 'saveJson'},
-                    saveJson: {url: '/entry/save', postName: 'text', id: function() { return ${id}} }
-                }
-            });
+        $(function($){
+            $(".editable").raptor({layouts: {
+                                               toolbar: {
+                                                   uiOrder: [
+                                                            ['historyUndo', 'historyRedo','cancel','save'],
+                                                            ['tagMenu','classMenu','alignLeft', 'alignCenter', 'alignJustify', 'alignRight','textBold', 'textItalic', 'textUnderline', 'textStrike'],
+                                                            ['textSuper', 'textSub'],
+                                                            /*['colorMenuBasic'],*/
+                                                            ['snippetMenu', 'specialCharacters'],
+                                                            ['listUnordered', 'listOrdered'],
+                                                            ['hrCreate', 'textBlockQuote'],
+                                                            /*['textSizeDecrease', 'textSizeIncrease'],*/
+                                                            ['floatLeft', 'floatNone', 'floatRight'],
+                                                            ['tableCreate', 'tableInsertRow', 'tableDeleteRow', 'tableInsertColumn', 'tableDeleteColumn'],
+                                                            ['linkCreate', 'linkRemove', 'embed', 'insertFile'],
+                                                            ['guides','viewSource']
+                                                   ]
+                                               },
+                                               hoverPanel: {
+                                                  uiOrder: [['clickButtonToEdit']]
+                                               }
+                                           },
+                                           enablePlugins: true,
+                                           reloadOnDisable: true,
+                                           plugins:{
+                                                    dock: { docked: true, dockToScreen: true,persist: false},
+                                                    save: { plugin: 'saveJson'},
+                                                    saveJson: {url: '/api?format=jsonp&method=lerni.articles.raptor.propose',
+                                                               postName: 'raptor-content',
+                                                               id: function() { return 1 }},
+                                                    textBlockQuote: false
+                                           }
+                                        });
         });
     </script>
 % endif
@@ -71,7 +91,7 @@
             </div>
 -->
         <div class="row">
-            <section id="text" class="col-md-12">
+            <section id="text" class="col-md-12 editable">
                 ${content | n}
             </section>
         </div>

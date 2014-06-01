@@ -28,7 +28,7 @@ def set_view(request):
     page['boxes'] = []
     page['page_title'] = "ZSO nr 15 w Sosnowcu"
     for position in DBSession.query(Sets).filter_by(id=request.matchdict['id']).first().items:
-        page['boxes'].append([position.name, position.link])
+        page['boxes'].append([position.name, position.link, position.thumb])
     page['banners'] = []
     for position in DBSession.query(Banners).limit(6):
         page['banners'].append([position.link, position.alternative])

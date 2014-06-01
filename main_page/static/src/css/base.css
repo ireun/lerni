@@ -1,6 +1,123 @@
+/* -- DEFAULTS -- */
+
+div, ul, li{
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+/* -- FLUID GRID STYLES -- */
+
+#Grid{
+  margin-bottom: 40px;
+  text-align: justify;
+  font-size: 0.1px;
+}
+
+#Grid li{
+  display: inline-block;
+  background: #eee;
+  width: 23%;
+  padding-top: 23%; /* Used instead of height to give elements fluid, width-based height */
+  margin-bottom: 2.5%;
+}
+
+#Grid:after{
+  content: '';
+  display: inline-block;
+  width: 100%;
+  border-top: 10px dashed #922d8d; /* Border added to make element visible for demonstration purposes */
+}
+
+#Grid .placeholder{
+  padding: 0;
+  border-top: 10px solid #922d8d; /* Border added to make element visible for demonstration purposes */
+}
+
+
+/* -- MEDIA QUERIES DEFINING RESPONSIVE LAYOUTS -- */
+
+/* 3 COL */
+
+@media (max-width: 800px){
+  #Grid li{
+    width: 31%;
+    padding-top: 31%;
+    margin-bottom: 3%;
+  }
+}
+
+/* 2 COL */
+
+@media (max-width: 600px){
+  #Grid li{
+    width: 48%;
+    padding-top: 48%;
+    margin-bottom: 4%;
+  }
+}
+
+/* SINGLE COL */
+
+@media (max-width: 400px){
+  #Grid li{
+    width: 100%;
+    padding-top: 100%;
+    margin-bottom: 5%;
+  }
+}
+
+
+/* -- LEGEND STYLES (NOT PART OF GRID FRAMEWORK) -- */
+
+h1{
+  font: 600 20px "Helvetica Neue";
+  text-align: right;
+  text-transform: uppercase;
+}
+
+label{
+  padding: 8px 15px;
+  margin-bottom: 20px;
+  display: block;
+  font: 100 22px "Helvetica Neue";
+  border-left: 10px solid #922d8d;
+}
+
+label:last-of-type{
+  border-left: 10px dotted #922d8d;
+}
+
+p{
+  font: 200 15px/1.5em "Helvetica Neue";
+  max-width: 400px;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+
 /*
 #inner-wrapper{	pointer-events: none;}
 */
+.raptor-layout-toolbar-group .ui-button {
+    height: 20px;
+}
+.raptor-layout-toolbar-group .ui-button-text-icon-primary .ui-button-text {
+    padding: 0 16px 0 32px;
+}
+.raptor-layout-toolbar-group .ui-button-text-only .ui-button-text {
+    padding: 1px 16px 10px;
+}
+.ui-dialog{
+    z-index: 13002;
+}
+.natalia {
+    position: fixed;
+    display: none;
+}
+.raptor-plugin-dock-docked{
+    top: 40px!important;
+}
 .row [class*="span"]{
 	pointer-events: all;
 }
@@ -19,7 +136,10 @@ body{
 #footer {width:100%; height:60px; background-color: #f5f5f5;}
 
 #header {margin: 0 auto;max-width: 1280px;width: 100%;overflow: hidden; background: #efefef; padding: 0px}
-#main{position: relative; padding-bottom:20px; max-width: 1280px; margin: 0 auto; background: #efefef;}
+#main{position: relative; padding-bottom:20px; max-width: 1280px; margin: 0 auto;
+    /*background: #efefef;*/
+    background: #eaeaea;
+}
 
 div#inner-wrapper {
     padding-bottom: 20px;
