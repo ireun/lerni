@@ -515,7 +515,8 @@ def jsonp_competitors_list(request):
     start_index = request.params['jtStartIndex']
     page_size = request.params['jtPageSize']
     sorting = request.params['jtSorting'].split(" ")
-
+    if sorting[0] == 'competitor_id':
+        sorting[0] = "id"
     query = DBSession.query(Competitors).join(CompetitorsCompetitions).join(Subjects).join(CompetitorsGroups)\
         .join(CompetitorsTypes).join(CompetitorsTutors)
     if sorting[0] == "year":
@@ -556,10 +557,10 @@ def jsonp_competitors_list(request):
 
 
 @view_config(route_name='api', renderer='jsonp', request_param=['format=jsonp', 'method=lerni.competitors.delete',
-                                                                'competitor_id'])
+                                                                'id'])
 def jsonp_competitors_delete(request):
     session = DBSession()
-    competitor = DBSession.query(Competitors).filter_by(id=request.params['competitor_id']).first()
+    competitor = DBSession.query(Competitors).filter_by(id=request.params['id']).first()
     if not competitor:
         return {"Result": "ERROR", "Message": "Coś poszło nie tak :/"}
     else:
@@ -606,7 +607,7 @@ def jsonp_competitors_create(request):
                                u"competition_group_id": competitor.competition_group_id,
                                u"competition_id": competitor.competition_id,
                                u"competitor_type_id": competitor.competitor_type_id,
-                               u"subject_id": competitor.competition_subject_id,
+                               #u"subject_id": competitor.competition_subject_id,
                                u"competitor_tutor_id": competitor.competitor_tutor_id,
                                u"year": competitor.start_year,
                                u"group": 1})
@@ -860,7 +861,6 @@ def api_jsonp_lerni_users_edit(request):
     if request.params["password"] != "do_not_change":
         user.password = hashlib.sha512(unicode(request.params["password"] +
                                                str(user.registration_date).encode('utf-8'))).hexdigest()
-    user.group_id = request.params["group"]
     transaction.commit()
     return {"Result": "OK"}
 
@@ -880,7 +880,7 @@ def api_jsonp_lerni_users_add(request):
                       request.params["pesel"],
                       datetime.datetime(*(time.strptime(request.params['birth_date'], "%Y-%m-%d")[0:6])),
                       request.params["phone_number"], request.params["email"], request.params["password"],
-                      "", "", wallet.id, 0, 0, 0, request.params["group"])
+                      "", "", wallet.id, 0, 0, 0)
         session.add(user)
         page['Record'].append({"user_id": user.id, "first_name": user.first_name,
                                "second_name": user.second_name, "last_name": user.last_name,

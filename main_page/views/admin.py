@@ -324,7 +324,7 @@ def admin_log_competitors(request):
     page['delete'] = "/api?format=jsonp&method=lerni.competitors.delete"
     page['update'] = "/api?format=jsonp&method=lerni.competitors.edit"
     page['create'] = "/api?format=jsonp&method=lerni.competitors.add"
-    page['fields'] = [{'name': u"competitor_id", 'key': True, "list": False, "create": False, "edit": False}]
+    page['fields'] = [{'name': u"id", 'key': True, "list": False, "create": False, "edit": False}]
     page['fields'].append({'name': u"first_name", "title": u"Imię"})
     page['fields'].append({'name': u"last_name", "title": u"Nazwisko"})
 

@@ -44,7 +44,7 @@ class People(Base):
     full_name = property(_get_full_name)
 
     def __init__(self, first_name, second_name, last_name, pesel, birth_date, phone_number, email, password, key_data,
-                 fingerprint, wallet_id, email_confirmed, gpg_confirmed, phone_confirmed, group_id):
+                 fingerprint, wallet_id, email_confirmed, gpg_confirmed, phone_confirmed):
         self.registration_date = datetime.datetime.now()
         self.first_name = first_name
         self.second_name = second_name
