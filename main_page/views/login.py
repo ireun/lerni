@@ -5,9 +5,10 @@ from base import *
 @view_config(route_name='login', renderer='login.mak')
 ## Dodać "Aby zobaczyć tą stronę musisz się zalogować"###
 def login_view(request):
-    page = {'editor': 0, 'allerts': [], 'recaptcha_public': recaptcha_public, 'active': 'login'}
+    page = {'editor': 0, 'allerts': [], 'recaptcha_public': recaptcha_public}
     page.update(get_basic_account_info(request))
     page['page_title'] = "ZSO nr 15 w Sosnowcu"
+    page['active'] = {'forgot_password': '', 'register': '', 'login': 'active'}
     next_page = request.referer or request.url
     if next_page == request.route_url('login'):
         next_page = request.route_url('home')

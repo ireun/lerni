@@ -61,6 +61,21 @@ head.js(jquery, progression, mailcheck, function () {
 		width and height of the new current form.
 		After the animation, the new form is shown
 		*/
+        $("#skip_captcha").bind('click',function(e){
+            $("#captcha").toggle();
+            $("#recaptcha_response_field2").toggle();
+            $form_wrapper.children('form').each(function(i){
+                var $theForm	= $(this);
+                //solve the inline display none problem when using fadeIn fadeOut
+                if(!$theForm.hasClass('active'))
+                    $theForm.hide();
+                $theForm.data({
+                    'max-width'	: $theForm.width(),
+                    height	: $theForm.height()
+                });
+            });
+            setWrapperWidth();
+        });
 		$linkform.bind('click',function(e){
 			var $link	= $(this);
 			var target	= $link.attr('rel');
@@ -72,8 +87,9 @@ head.js(jquery, progression, mailcheck, function () {
 				//animate the wrapper
 				$form_wrapper.stop()
 							 .animate({
-								'max-width' : $currentForm.data('max-width') + 'px',
-								height : $currentForm.data('height') + 'px'
+								'max-width' : ($currentForm.data('max-width')+60) + 'px',
+                                'min-width'	: ($currentForm.data('max-width')+60) + 'px',
+								height : ($currentForm.data('height')+55) + 'px'
 							 },500,function(){
 								//new form gets class active
 								$currentForm.addClass('active');
@@ -86,8 +102,9 @@ head.js(jquery, progression, mailcheck, function () {
 		
 		function setWrapperWidth(){
 			$form_wrapper.css({
-				'max-width'	: $currentForm.data('max-width') + 'px',
-				height	: $currentForm.data('height') + 'px'
+				'max-width'	: ($currentForm.data('max-width')+60) + 'px',
+                'min-width'	: ($currentForm.data('max-width')+60) + 'px',
+				height	: ($currentForm.data('height')+55) + 'px'
 			});
 		}
 		
@@ -100,7 +117,7 @@ head.js(jquery, progression, mailcheck, function () {
 		$form_wrapper.find('input[type="submit"]')
 					 .click(function(e){
 						e.preventDefault();
-					 });	
+					 });
 		});
 	});
 });

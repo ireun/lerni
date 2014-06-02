@@ -20,9 +20,13 @@ head.js(jquery, jflickrfeed, owl, function () {
             stopOnHover: true
         });
     });
-
-    var show_allert = function (message, type, allert_location) {
+/*
+    var show_alert = function (message, type, allert_location) {
         var noty2 = $('.custom_container').noty({text: message, type: type, layout: allert_location})
+    };
+*/
+    var show_alert = function (message, type) {
+        var n= $('.custom_container').noty({text: message, type: type})
     };
     $(document).ready(function () {
         $('iframe[src*="about:blank"]').hide();

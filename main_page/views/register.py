@@ -2,90 +2,148 @@
 from base import *
 
 
-@view_config(route_name='register', renderer='login.mak')
-def register(request):
+@view_config(route_name='register', renderer='login.mak', request_method='POST')
+def register_post_all(request):
+    page = {}
+    response = captcha.submit(request.params['recaptcha_challenge_field'], request.params['recaptcha_response_field2'],
+                              recaptcha_private, request.remote_addr)
+    if request.params['name'] == "" or request.params['surname'] == "":
+        page['allerts'].append([u"Zapomniałeś podać swojego imienia bądź nazwiska.", "information"])
+    elif not is_pesel_correct(request.params['pesel']):
+        page['allerts'].append([u"Numer pesel nie jest poprawny.", "information"])
+    elif not is_date_correct(request.params['birthdate']):
+        page['allerts'].append([u"Podana data urodzenia jest nieprawidłowa.", "information"])
+    elif request.params['password'] != request.params['repeat-password']:
+        page['allerts'].append([u"Podane hasła nie są takie same.", "information"])
+    elif len(request.params['password']) < 6:
+        page['allerts'].append([u"Hasło zbyt krótkie."
+                                u"Aby hasło było bezpiecznie musi składać się z przynajmniej sześciu znaków.",
+                                "information"])
+    elif not response.is_valid:
+        page['allerts'].append([u"Captcha incorrect", "information", "topRight"])
+    else:
+        session = DBSession(expire_on_commit=False)
+        wallet = Wallet(0)
+        session.add(wallet)
+        ##Warto zrobić jakoś ładnie
+        transaction.commit()
+        session2 = DBSession()
+        user = People(request.params['name'], request.params['secondname'], request.params['surname'],
+                      request.params['pesel'],
+                      datetime.datetime.strptime(request.params['birthdate'], '%d/%m/%Y').date(),
+                      request.params['phonenumber'], request.params['email'], request.params['password'],
+                      "key_data", "fingerprint", wallet.id, 0, 0, 0, 0)
+        session2.add(user)
+        transaction.commit()
+        session.flush()
+        message = (u"Witaj " + request.params['name'] + " " + request.params['surname'] + "!\n"
+                   + u"Kliknij w poniższy link aby aktywować konto:\n"
+                   + request.route_url('activate_account',
+                                       _query={'token': URLSafeSerializer(secret, salt='activate-salt').
+                                       dumps(request.params['email'])})
+                   + "\n\n" + u"Pozdrawiamy,\nstaszic.edu.pl")
+        send_mail(request, u"Rejestracja - staszic.edu.pl", [request.params['email']], message)
+        return Response("Captcha correct", content_type='text/plain', status_int=500)
+    return Response("Somethin went wrong.", content_type='text/plain', status_int=500)
+
+
+@view_config(route_name='register', renderer='login.mak', request_method='POST',
+             request_param=['format=jsonp', 'method=lerni.bells.types.getList', 'jtStartIndex', 'jtPageSize'])
+def register_post_missing(request):
     page = {'allerts': [], 'recaptcha_public': recaptcha_public, 'active': 'register'}
     page.update(get_basic_account_info(request))
-    if {'recaptcha_challenge_field', 'recaptcha_response_field2', 'name', 'secondname', 'surname', 'pesel',
-            'birthdate', 'phonenumber', 'email', 'password', 'repeat-password', 'gpg'} <= set(request.params):
-        response = captcha.submit(request.params['recaptcha_challenge_field'],
-                                  request.params['recaptcha_response_field2'],
-                                  recaptcha_private, request.remote_addr)
-        #try:
-        #    input_file = request.POST['gpg'].file
-        #    key_data = input_file.read()
-        #    import_result = gpg.import_keys(key_data)
-        #    fingerprint = import_result.results[0]['fingerprint']
-        #    use_gpg = 1
-        #except AttributeError:
-        #    use_gpg = 0
-        #if use_gpg and not 'ok' in import_result.results[0]:
-        #    page['allerts'].append([u"Import klucza publicznego zakończony niepowodzeniem.","information","topRight"])
-        if request.params['name'] == "" or request.params['surname'] == "":
-            page['allerts'].append([u"Zapomniałeś podać swojego imienia bądź nazwiska.", "information", "topRight"])
-        elif not is_pesel_correct(request.params['pesel']):
-            page['allerts'].append([u"Numer pesel nie jest poprawny.", "information", "topRight"])
-        elif not is_date_correct(request.params['birthdate']):
-            page['allerts'].append([u"Podana data urodzenia jest nieprawidłowa.", "information", "topRight"])
-        elif request.params['password'] != request.params['repeat-password']:
-            page['allerts'].append([u"Podane hasła nie są takie same.", "information", "topRight"])
-        elif len(request.params['password']) < 6:
-            page['allerts'].append([u"Hasło zbyt krótkie."
-                                    u"Aby hasło było bezpiecznie musi składać się z przynajmniej sześciu znaków.",
-                                    "information", "topRight"])
-        elif not response.is_valid:
-            page['allerts'].append([u"Captcha incorrect", "information", "topRight"])
+    return page
+
+
+@view_config(route_name='register', renderer='login.mak')
+def register(request):
+    page = {'alerts': [], 'recaptcha_public': recaptcha_public, 'active': 'register'}
+    page.update(get_basic_account_info(request))
+    page['page_title'] = "ZSO nr 15 w Sosnowcu"
+    return page
+
+
+@view_config(route_name='forgot_password', renderer='reset_password.mak',  request_method='POST',
+             request_param=['token', 'new_password', 'new_password_repeat'])
+def set_password_view_change(request):
+    page = {'alerts': []}
+    page.update(get_basic_account_info(request))
+    page['page_title'] = "ZSO nr 15 w Sosnowcu"
+    r = request.params
+    try:
+        signed_string = URLSafeSerializer(secret, salt='new_password-salt').loads(r['token'])
+        s = TimestampSigner('secret-key')
+        email = s.unsign(signed_string, max_age=900)
+        if r['new_password'] == r['new_password_repeat']:
+            user = DBSession.query(People).filter_by(email=email).first()
+            user.set_password(r['new_password'])
+            user.password_date = datetime.datetime.now()
+            page['alerts'].append([u"Hasło poprawnie zmieniono.", 'information'])
         else:
-            session = DBSession(expire_on_commit=False)
-            wallet = Wallet(0)
-            session.add(wallet)
-            ##Warto zrobić jakoś ładnie
-            transaction.commit()
-            session2 = DBSession()
-            user = People(request.params['name'], request.params['secondname'], request.params['surname'],
-                          request.params['pesel'],
-                          datetime.datetime.strptime(request.params['birthdate'], '%d/%m/%Y').date(),
-                          request.params['phonenumber'], request.params['email'], request.params['password'],
-                          "key_data", "fingerprint", wallet.id, 0, 0, 0, 0)
-            session2.add(user)
-            transaction.commit()
-            session.flush()
-        if False:
-            message = (u"Witaj " + request.params['name'] + " " + request.params['surname'] +
-                       "!\n" + u"Kliknij w poniższy link aby aktywować konto:\n" +
-                       request.route_url('activate_account',
-                                         _query={'gpg-token': URLSafeSerializer(secret, salt='activate-salt-gpg')
-                                         .dumps(request.params['email'])})+"\n\n" +
-                       u"Pozdrawiamy,\nstaszic.edu.pl")
-            send_mail(request, u"Rejestracja - staszic.edu.pl", [request.params['email']], message, "fingerprint")
-        else:
-            message = (u"Witaj " + request.params['name'] + " " + request.params['surname'] + "!\n"
-                       + u"Kliknij w poniższy link aby aktywować konto:\n"
-                       + request.route_url('activate_account',
-                                           _query={'token': URLSafeSerializer(secret, salt='activate-salt').
-                                           dumps(request.params['email'])})
-                       + "\n\n" + u"Pozdrawiamy,\nstaszic.edu.pl")
-            send_mail(request, u"Rejestracja - staszic.edu.pl", [request.params['email']], message)
-        return Response("Captcha correct", content_type='text/plain', status_int=500)
+            page['alerts'].append([u"Hasła nie są takie same.", 'information'])
+    except SignatureExpired:
+        page['alerts'].append([u"Token resetu hasła wygasł.", 'information'])
+    except BadSignature:
+        page['alerts'].append([u"Błędna sygnatura.", 'information'])
+    except BadData:
+        page['alerts'].append([u"Sygnatura podpisuje inne dane.", 'information'])
+    page['token'] = r['token']
+    return page
+
+
+@view_config(route_name='forgot_password', renderer='reset_password.mak', request_param=['token'])
+def set_password_view(request):
+    page = {'alerts': []}
+    page.update(get_basic_account_info(request))
+    page['page_title'] = "ZSO nr 15 w Sosnowcu"
+    r = request.params
+    try:
+        signed_string = URLSafeSerializer(secret, salt='new_password-salt').loads(r['token'])
+        s = TimestampSigner('secret-key')
+        s.unsign(signed_string, max_age=900)
+    except SignatureExpired:
+        page['alerts'].append([u"Token resetu hasła wygasł.", 'information'])
+    except BadSignature:
+        page['alerts'].append([u"Błędna sygnatura.", 'information'])
+    except BadData:
+        page['alerts'].append([u"Sygnatura podpisuje inne dane.", 'information'])
+    page['token'] = r['token']
     return page
 
 
 @view_config(route_name='forgot_password', renderer='login.mak')
 def forgot_password(request):
-    page = {'editor': 0, 'allerts': [], 'recaptcha_public': recaptcha_public, 'active': 'forgot_password'}
+    page = {'allerts': [], 'recaptcha_public': recaptcha_public}
     page.update(get_basic_account_info(request))
+    page['active'] = {'forgot_password': 'active', 'register': '', 'login': ''}
+    page['page_title'] = "ZSO nr 15 w Sosnowcu"
+    page['copy_right'] = "ZSO nr 15, Sosnowiec 2008-2014"
+    r = request.params
     if 'email' in request.params:
+        if not DBSession.query(People).filter_by(email=r['email']).first():
+            page['allerts'].append([u"Nie znaleziono konta", "error"])
+            return page
+        renderer_dict = page
+        renderer_dict['email_name'] = DBSession.query(People).filter_by(email=r['email']).first().full_name
+        renderer_dict['signature'] = u"Dziękujemy,<br/>Zespół staszic.edu.pl"
+        renderer_dict['email_subject'] = u"Przypomnienie hasła - staszic.edu.pl"
+        renderer_dict['email_logo'] = ['http://staszic.edu.pl/static/images/h1.gif', u'Staszic Mail']
+        renderer_dict['facebook'] = ['http://staszic.edu.pl/static/images/fb.gif', u'sustaszic']
+        s = TimestampSigner('secret-key')
+        signed_string = s.sign(request.params['email'])
+        renderer_dict['recorvery_link'] = request.route_url('forgot_password',
+                                                            _query={'token': URLSafeSerializer(secret,
+                                                                                               salt='new_password-salt')
+                                                            .dumps(signed_string)})
         mailer = request.registry['mailer']
-        message = Message(subject=u"Przypomnienie hasła - staszic.edu.pl",
+        message = Message(subject=renderer_dict['email_subject'],
                           sender="mailer.staszic@gmail.com",
                           recipients=[request.params['email']],
-                          body=u"Witaj " + request.params['name'] + " " + request.params['surname'] + "!\n"
-                          + u"Kliknij w poniższy link aby aktywować konto:\n"
-                          + request.route_url('forgot_password',
-                                              _query={'token': URLSafeSerializer(secret, salt='new_password-salt')
-                                              .dumps(request.params['email'])})+"\n\n"
-                          + u"Pozdrawiamy,\nstaszic.edu.pl"
+                          html=unicode(render('email/password_recorvery.mak', renderer_dict, request))
                           )
+        #photo_data = open("main_page/templates/email/fb.gif", "rb").read()
+        #attachment = Attachment("images/fb.gif", "image/jpg", photo_data)
+        #message.attach(attachment)
         mailer.send_immediately(message)
     return page
 
@@ -93,8 +151,8 @@ def forgot_password(request):
 @view_config(route_name='activate_account', renderer='login.mak')
 def activate_account(request):
     page = {'editor': 0, 'allerts': [], 'recaptcha_public': recaptcha_public, 'active': 'forgot_password'}
-    page.update({'css_url': request.webassets_env['r_css'].urls()[0], 'js_url': request.webassets_env['r_js'].urls()[0],
-                 'libs_url': request.webassets_env['libs_js'].urls()[0]})
+    page.update(get_basic_account_info(request))
+    page['page_title'] = "ZSO nr 15 w Sosnowcu"
     logged_in = authenticated_userid(request)
     page['logged_in'] = logged_in
     page['name'] = username(logged_in)

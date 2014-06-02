@@ -113,8 +113,9 @@ from math import ceil
    
 from pyramid_mailer import get_mailer
 from pyramid_mailer.message import Message
+from pyramid_mailer.message import Attachment
 
-from itsdangerous import URLSafeSerializer
+from itsdangerous import URLSafeSerializer, TimestampSigner, BadSignature, BadData, SignatureExpired
 secret = 'secret-key'
 recaptcha_private = "6Lfz3OUSAAAAANh7eynb6CW4aehuKxK6yLgnPRg8"
 recaptcha_public = "6Lfz3OUSAAAAACtP35cn21roRF4k9eS5Tw6c6ik2"

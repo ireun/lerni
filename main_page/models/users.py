@@ -77,9 +77,12 @@ class People(Base):
         else:
             self.url_name = first_name + "." + last_name
 
-
     def check_password(self, passwd):
         return self.password == hashlib.sha512(unicode(passwd+str(self.registration_date)).encode('utf-8')).hexdigest()
+
+    def set_password(self, passwd):
+        self.password = hashlib.sha512(unicode(passwd+str(self.registration_date)).encode('utf-8')).hexdigest()
+        return True
 
     def __repr__(self):
         return '<User %r>' % (self.first_name+" "+self.last_name).strip()
