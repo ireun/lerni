@@ -1,3 +1,36 @@
+/* ANIMATIONS */
+@-webkit-keyframes slidein {
+  from {
+    margin-left: 0;
+  }
+
+  to {
+    margin-left: -128px;
+  }
+}
+@keyframes slidein {
+  from {
+    margin-left: 0;
+  }
+
+  to {
+    margin-left: -128px;
+  }
+}
+.important{background: #3b5998; color: #FFF; font-style: oblique; height: 20px; overflow: hidden;}
+.important::before {
+    -webkit-animation-duration: 3s;
+    -webkit-animation-name: slidein;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+    animation-duration: 3s;
+    animation-name: slidein;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    min-width: 644px;
+    display: block;
+    content: "*** NEWS *** PILNE *** NEWS *** PILNE *** NEWS *** PILNE *** NEWS *** PILNE *** NEWS *** PILNE *** NEWS *** PILNE *** NEWS *** PILNE *** NEWS *** PILNE"
+}
 /* -- DEFAULTS -- */
 
 div, ul, li{
