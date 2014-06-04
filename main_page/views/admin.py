@@ -17,6 +17,8 @@ def admin_overview(request):
         [s.extract() for s in soup(['script', 'iframe', 'img', 'object', 'embed', 'param'])]
         data = parser.format(unicode(soup), somevar='somevalue')
         page['rows'][position.row].append(["", position.size_x, position.add_class, data])
+    page['timetable'] = timetable("", "","","","")
+    print page['timetable']
     return page
 
 

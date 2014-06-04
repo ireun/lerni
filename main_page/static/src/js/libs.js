@@ -25,6 +25,7 @@ ion_sound = {ion_sound: "/static/libs/ion-sound/ion.sound.min.js"};
 jwerty = {jwerty: "/static/libs/jwerty/jwerty.min.js"};
 readmore = {readmore: "/static/libs/readmore/readmore.min.js"};
 magicsuggest = {magicsuggest: '/static/libs/magicsuggest/magicsuggest.min.js'};
+jquery_flot = {jquery_flot: '/static/libs/jquery.flot/jquery.flot.min.js'};
 
 uiji = {uiji: "/static/libs/uiji/uiji.min.js"};
 raptor = {raptor: "/static/libs/raptor/raptor.min.js"};

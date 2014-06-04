@@ -338,6 +338,7 @@ def get_basic_account_info(request):
     page['preparation'] = 100
     return page
 
+
 def timetable(tag_name, value, options, parent, context):
     #return u'<table class="table table-striped"><tr><td> Plan lekcji pojawi się, gdy uzupełnisz swoje dane (klasa,lektorat/uczone klasy) </tr></td></table>'
     page = {}
@@ -391,7 +392,7 @@ def timetable(tag_name, value, options, parent, context):
                 l = page['lessons'][order][lesson]
                 if len(l) == 2 and l[0] == l[1]:
                     page['lessons'][order][lesson] = [l[0]]
-    else:
-        return "error"
+    #else:
+    #    return "error"
     return render('widgets/timetable.mak', page)
 parser.add_formatter("timetable", timetable)

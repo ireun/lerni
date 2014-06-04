@@ -1,11 +1,11 @@
-<table border="1" style="width: 100%;">
+<table class="table table-striped table-bordered table-condensed">
 <tr>
-    <th>lp.</th>
-    <th>poniedziałek</th>
-    <th>wtorek</th>
-    <th>środa</th>
-    <th>czwartek</th>
-    <th>piątek</th>
+    <th></th>
+    <th>Poniedziałek</th>
+    <th>Wtorek</th>
+    <th>Środa</th>
+    <th>Czwartek</th>
+    <th>Piątek</th>
 </tr>
 %for x in lessons:
 <tr>
