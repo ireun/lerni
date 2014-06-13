@@ -3,6 +3,7 @@ from base import *
 import psutil
 from pyramid.security import authenticated_userid
 import datetime
+import re
 
 from sqlalchemy import create_engine
 
@@ -61,10 +62,24 @@ def admin_log_graduates(request):
                                 str((page['page_id'] - 1) * 10) + "," + str((page['page_id']) * 10))
     for row in result:
         introtext = row['introtext']
+        invalid_tags = ['strong', 'em']
+        soup = BeautifulSoup(introtext)
+        for tag in invalid_tags:
+            for match in soup.findAll(tag):
+                match.replaceWithChildren()
+        for tag in soup():
+            for attribute in ["style", "border", "width", 'align']:
+                del tag[attribute]
+        for tag in soup.findAll('img'):
+            try:
+                tag['alt']
+            except KeyError:
+                tag['alt'] = u"Nieopisany obrazek do artykułu"
+        introtext = unicode(soup).replace("\n", "")
         if row['fulltext'].strip() != "":
             introtext = row['fulltext'].strip()
         page['articles'].append({'title': row['title'],
-                                 'introtext': introtext,
+                                 'introtext': parser.format(re.sub( '[\t\r\f\v\xa0]+', ' ', introtext).strip(), somevar='somevalue'),
                                  'fulltext': row['fulltext'].strip() != "",
                                  'time': row['created'],
                                  'created': row['created'].strftime("%a, %d %B %Y"),

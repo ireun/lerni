@@ -58,7 +58,7 @@ masked_input = "//cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.3.1/jquery
 underscore = "//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.1/underscore-min.js";
 sequence_diagram = "//cdnjs.cloudflare.com/ajax/libs/js-sequence-diagrams/1.0.4/sequence-diagram-min.js";
 noisy="//cdnjs.cloudflare.com/ajax/libs/noisy/1.1.1/jquery.noisy.min.js";
-fit_vids="//cdnjs.cloudflare.com/ajax/libs/fitvids/1.0.1/jquery.fitvids.min.js";
+fit_vids="//cdnjs.cloudflare.com/ajax/libs/fitvids/1.1.0/jquery.fitvids.min.js";
 holder="//cdnjs.cloudflare.com/ajax/libs/holder/2.0/holder.js";
 
 jquery = {jquery: "/static/js/blank.min.js"};

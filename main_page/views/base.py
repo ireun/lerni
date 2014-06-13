@@ -270,9 +270,15 @@ parser.add_formatter("status", status)
 
 
 def successes(tag_name, value, options, parent, context):
-    to_return = render('widgets/competitors.mak',{})
+    to_return = render('widgets/competitors.mak', {})
     return to_return
 parser.add_formatter("successes", successes)
+
+
+def youtube(tag_name, value, options, parent, context):
+    to_return = render('widgets/youtube.mak', {'value': value})
+    return to_return
+parser.add_formatter("youtube", youtube)
 
 
 def graduates(tag_name, value, options, parent, context):

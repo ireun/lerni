@@ -71,6 +71,7 @@ $(function () {
         </div>
     </div>
     <div class="container">
+        <div id="canvas">
             <div class="row">
                 <div class="col-md-12" >
                     <div class="page-header line1"> <h4>Kokpit <small>Tutaj znajdują się wszystkie podstawowe informacje zgromadzone w jednym miejscu.</small></h4> </div>
@@ -87,12 +88,19 @@ $(function () {
                 </div>
                 <div class="col-md-4">
                     <div class="panel panel-default">
-                      <div class="panel-heading">
-                        <h3 class="panel-title">Lista TODO</h3>
-                      </div>
-                      <div class="panel-body">
-                        Panel content
-                      </div>
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Lista TODO</h3>
+                        </div>
+                        <ul class="list-group" style="max-height: 279px; overflow-y: scroll;">
+                            <li class="list-group-item">Cras justo odio</li>
+                            <li class="list-group-item">Dapibus ac facilisis in</li>
+                            <li class="list-group-item">Morbi leo risus</li>
+                            <li class="list-group-item">Porta ac consectetur ac</li>
+                            <li class="list-group-item">Vestibulum at eros</li>
+                            <li class="list-group-item">Morbi leo risus</li>
+                            <li class="list-group-item">Porta ac consectetur ac</li>
+                            <li class="list-group-item">Vestibulum at eros</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -108,7 +116,7 @@ $(function () {
                             </ul>
                         </div>
                         <style>.nav-tabs.border-none{border: none;} .nav-tabs.border-none > li.active > a{border: none; border-radius: 0;}</style>
-                        <div class="panel-body">
+                        <div class="panel-body" style="height: 330px;">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="home"></div>
                                 <div class="tab-pane" id="profile">...2</div>
@@ -130,5 +138,5 @@ $(function () {
                 </div>
             </div>
     </div>
-</section>
+
 <%include file="bottom_admin.mak"/>

@@ -1,6 +1,5 @@
 <%include file="top_new.mak"/>
 <%include file="snippets/header.mak"/>
-<link type='text/css' rel='stylesheet' href='/static/libs/raptor/raptor-front-end.min.css'/>
 
 <script>
     var NWave = function () {
@@ -126,137 +125,6 @@
 });
 </script>
 
-<style>
-    #header {
-        max-width: 1050px;
-        border: none;
-        background: #FFF;
-        max-height: 335px;
-    }
-
-    #header img {
-        max-width: 1050px;
-    }
-
-    #main {
-        max-width: 1050px;
-        border: none;
-        background: #FFF
-    }
-
-    #footer {
-        background: #FFF
-    }
-
-    #masthead a {
-        padding: 4px;
-        color: #707070;
-    }
-
-    #masthead .active a {
-        text-decoration: none;
-        color: black;
-    }
-
-    #masthead {
-        position: relative;
-        top: -7px;
-        border-bottom: solid 1px lightgrey;
-    }
-
-    .nav-stacked > li > a {
-        padding: 4px;
-        color: #606060;
-        border-bottom: solid 1px #E0E0E0;
-    }
-
-    .article .title {
-        font-size: 1.4em;
-        font-weight: normal;
-        color: #555;
-        font-family: Arial;
-        text-align: left;
-        line-height: 20px;
-    }
-
-    .article {
-        background: #FFF
-    }
-
-    .readmore-js-toggle{
-        font-weight: bold;
-        padding: 2px 5px 2px 10px;
-        margin-top: 5px;
-        text-decoration: none;
-        color: #095197;
-        border: 1px solid #DDD;
-        background: #EEE;
-        display: inline-block;
-        width: 100%;
-    }
-
-    .readmore-js-toggle:hover {
-        background: #444;
-        color: #FFF
-    }
-
-    .readmore-js-expanded {
-        height: 100% !important;
-    }
-
-    .published {
-        font-size: 12px;
-    }
-
-    #login-form li {
-        list-style: none;
-        margin-left: -40px;
-        font-size: 13px;
-    }
-
-    @media (min-width: 992px) {
-        #menu {
-            width: 23%;
-        }
-
-        #article_main {
-            width: 52%;
-        }
-    }
-
-    .timeago, .author {
-        font-size: 13px !important;
-        color: #888;
-        margin-top: -10px;
-        min-width: 10px;
-    }
-
-    span {
-        font-size: inherit !important;
-    }
-
-    p {
-        margin: 0 !important;
-    }
-
-    .article .panel-heading {
-        background: #DEDEDE;
-    }
-
-    .lucky_number {
-        font-size: 140px;
-        border: none !important;
-        width: 100% !important;
-        color: #444;
-        margin-top: -30px;
-    }
-
-    .lucky_number_date {
-        margin-top: -50px;
-        text-align: center;
-        color: #BBB;
-    }
-</style>
 <div id="main" class="container">
     <div class="row">
         <div id="masthead">
@@ -316,10 +184,24 @@
                 <li><a href="/">PO DRUGIEJ STRONIE LUSTRA</a></li>
             </ul>
         </div>
+
         <div id="article_main" class="col-sm-6">
             <div class="row">
-                    <button id="button_add_article" type="button" class="btn btn-default btn-lg btn-block">Dodaj artykuł</button>
+
+                <div class="col-sm-6">
+                    <a href="http://www.120.ab.staszic.edu.pl"> <img src="http://staszic.edu.pl//pliki/banners/baner.jpg" alt="120 lecie"/> </a>
+                </div>
+                <div class="col-sm-6">
+                    Podstrona 120.ab.staszic.edu.pl zawierajaca informacje o organizacji 120 - lecia naszego liceum.
+                </div>
             </div>
+            <!--
+            <div class="row">
+                <div class="col-sm-12">
+                    <button id="button_add_article" type="button" class="btn btn-default btn-lg btn-block">Dodaj artykuł</button>
+                </div>
+            </div>
+            -->
             <br/>
 
             <div class="articles">
@@ -331,7 +213,7 @@
                             <div class='author'>Administrator</div>
                             <div class='timeago' title="${x['time']}">${x['created']}</div>
                         </div>
-                        <div class='panel-body'>
+                        <div class='panel-body video'>
                             ${x['introtext'] |n}
                         </div>
                     </div>
@@ -395,6 +277,7 @@
                     <li><a href="/component/users/?view=registration">Załóż swoje konto!</a></li>
                 </ul>
             </form>
+            -->
             <!--
             <a href="/administrator">Panel administratora</a>
             <a href="/admin">Panel Lerni</a>
@@ -420,16 +303,16 @@
             </div>
 
             <div class="panel panel-default">
-                <div class="panel-heading">Szczęśliwy numerek</div>
+                <div class="panel-heading">Szczęśliwy numerek (<a href="/lucky">więcej</a>)</div>
                 <div class="lucky_number">${lucky_number}</div>
                 <div class="lucky_number_date">${lucky_number_date}&nbsp;</div>
             </div>
+	    <img src="/static/uploads/zebra.png" alt="Zebra - maskotka Staszica.">
         </div>
         <!-- end right -->
     </div>
     <!-- end row -->
-    <div id="space"></div>
 </div>
-<img class="natalia" id="natalia" src="/static/images/natalia_poklonskaya.png"/>
-<img class="natalia" id="natalia2" src="/static/images/natalia_poklonskaya2.png"/>
+<img class="natalia" id="natalia" src="/static/images/natalia_poklonskaya.png" alt=""/>
+<img class="natalia" id="natalia2" src="/static/images/natalia_poklonskaya2.png" alt=""/>
 <%include file="bottom_new.mak"/>

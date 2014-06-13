@@ -13,6 +13,7 @@
     <link rel="shortcut icon" href="/assets/ico/favicon.png">
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/normalize/2.1.0/normalize.css"/>
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link type='text/css' rel='stylesheet' href='/static/libs/raptor/raptor-front-end.min.css'/>
     <!-- Load Jquery first to allow raptor-editor to work -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
@@ -20,7 +21,6 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/headjs/0.99/head.min.js"></script>
     <script src="/static/js/libs.min.js"></script>
     <script src="/static/js/main.min.js"></script>
-    <link href="/static/css/base.min.css" rel="stylesheet">
     <link href="/static/libs/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="/static/libs/typeahead/typeahead.js-bootstrap.min.css" rel="stylesheet">
     <link href="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/css/base/jquery.ui.all.min.css" rel="stylesheet">
@@ -32,6 +32,7 @@
     <link href="/static/libs/gridforms/gridforms.min.css" rel="stylesheet">
     <link href="/static/libs/footable/footable.core.min.css" rel="stylesheet">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.6.4/leaflet.css" type="text/css"/>
+    <link href="/static/css/base.min.css" rel="stylesheet">
 </head>
 <body>
 <div id="wrapper">
