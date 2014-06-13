@@ -57,12 +57,34 @@ def connection(request):
     return response
 
 
+@view_config(route_name='gallery_list', renderer='gallery.mak')
+def gallery_list(request):
+    return None
+
+
 @view_config(route_name='gallery', renderer='gallery.mak')
 def gallery(request):
     page = {'editor': 0, 'allerts': []}
     logged_in = authenticated_userid(request)
+    page['page_title'] = "ZSO nr 15 w Sosnowcu"
     page['logged_in'] = logged_in
     page['breadcrumbs'] = [["", "Galeria"]]
     page['menu_left_list'] = []
     page['name'] = username(logged_in)
+
+    page['images'] = []
+    api_key = setting_load('flickr_api_key')
+    flickr = flickrapi.FlickrAPI(api_key)
+    l = json.loads
+    photos = l(flickr.photosets_getPhotos(photoset_id=request.matchdict['id'], format='json', nojsoncallback=1))
+    for photo in photos['photoset']['photo']:
+        new_image = {}
+        images = l(flickr.photos_getSizes(photo_id=photo['id'], format='json', nojsoncallback=1))
+        for image in images['sizes']['size']:
+            if image['label'] == 'Original':
+                new_image['Original'] = image['source']
+            if image['label'] == "Square":
+                new_image['Square'] = image['source']
+        page['images'].append(new_image)
+    print page['images']
     return page

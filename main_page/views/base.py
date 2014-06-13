@@ -10,6 +10,7 @@ import uuid
 import hashlib
 import random
 import re
+import flickrapi
 
 from recaptcha.client import captcha
 

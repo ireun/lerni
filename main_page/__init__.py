@@ -82,7 +82,8 @@ def main(global_config, **settings):
     config.add_route('support_ask_ticket', '/support/ticket-{id}')
     config.add_route('support_faq', '/support/faq')
 
-    config.add_route('gallery', '/galeria')
+    config.add_route('gallery_list', '/gallery')
+    config.add_route('gallery', '/gallery/{id}')
 
     config.add_route('file_upload', '/file-upload')
 
