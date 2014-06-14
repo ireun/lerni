@@ -45,7 +45,7 @@ a {text-decoration: none;}
 .header-nav.pull-left{left: 10px;}
 header > .container {
     background: rgba(0,0,0,0.03);
-    width: 99% !important;
+    width: 100% !important;
     position: relative;
 }
 header {

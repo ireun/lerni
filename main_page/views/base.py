@@ -87,7 +87,11 @@ from main_page.models import (DBSession,
                               PingResults,
                               PingIPs,
                               Settings,
-                              ArticlesProposed
+                              Cache,
+                              ArticlesProposed,
+                              SyllabusYears,
+                              SyllabusProfiles,
+                              SyllabusExtensions
                               )
     
 #import re
@@ -199,6 +203,30 @@ def setting_save(name, value):
 
 def setting_load(name):
     return DBSession.query(Settings).filter_by(name=name).first().value
+
+
+def cache_save(name, value):
+    session = DBSession()
+    try:
+        cache = DBSession.query(Cache).filter_by(name=name).first()
+        cache.value = value
+        cache.date = datetime.datetime.now()
+    except AttributeError:
+        cache = Cache(name, value)
+        session.add(cache)
+    transaction.commit()
+    return True
+
+
+def get_banners():
+    banners = []
+    for position in DBSession.query(Banners).limit(6):
+        banners.append([position.link, position.alternative])
+    return banners
+
+
+def cache_load(name):
+    return DBSession.query(Cache).filter_by(name=name).first().value
 
 
 def send_mail(request, subject, recipients, body, fingerprint=False):

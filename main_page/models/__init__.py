@@ -12,3 +12,4 @@ from .content import *
 from .apps import *
 from .tasks import *
 from .settings import *
+from .syllabus import *

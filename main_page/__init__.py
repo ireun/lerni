@@ -85,6 +85,12 @@ def main(global_config, **settings):
     config.add_route('gallery_list', '/gallery')
     config.add_route('gallery', '/gallery/{id}')
 
+    config.add_route('syllabus', '/syllabus')
+    config.add_route('syllabus_year', '/syllabus/{year}')
+    config.add_route('syllabus_profile', '/syllabus/{year}/{profile}')
+    config.add_route('syllabus_extension', '/syllabus/{year}/{profile}/{extension}')
+    #config.add_route('gallery_list', '/gallery')
+
     config.add_route('file_upload', '/file-upload')
 
     config.add_route('connection', '/connection')
