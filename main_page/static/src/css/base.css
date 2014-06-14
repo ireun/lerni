@@ -58,7 +58,7 @@ div, ul, li{
   display: inline-block;
   background: #ddd;
   width: 23%;
-  padding-top: 17%; /* Used instead of height to give elements fluid, width-based height */
+  /*padding-top: 17%; Used instead of height to give elements fluid, width-based height */
   margin-bottom: 2.5%;
   vertical-align: top;
 }
@@ -70,19 +70,28 @@ div, ul, li{
 }
 
 #Grid img{
-    width:100% !important;
-    height:100% !important;
-    display:block;
-    margin-top:-74%;
+    position: absolute;
+    display: block;
+    max-width: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
 }
 .athumbnail{
     position: relative;
     float: left;
+    display: block;
+    width: 100%;
+    height: 0;
+    padding: 66.25% 0 0 0;
+    overflow: hidden;
 }
 div.caption{
     position: absolute; /* absolute position (so we can position it where we want)*/
-    bottom: 0px; /* position will be on bottom */
-    left: 0px;
+    bottom: 0; /* position will be on bottom */
+    left: 0;
     width: 100%;
 }
 .caption p{
@@ -108,7 +117,6 @@ div.caption{
 @media (max-width: 994px){
   #Grid li{
     width: 31%;
-    padding-top: 23%;
     margin-bottom: 3%;
   }
 }
@@ -118,7 +126,6 @@ div.caption{
 @media (max-width: 760px){
   #Grid li{
     width: 48%;
-    padding-top: 35%;
     margin-bottom: 4%;
   }
 }
@@ -128,7 +135,6 @@ div.caption{
 @media (max-width: 500px){
   #Grid li{
     width: 100%;
-    padding-top: 74%;
     margin-bottom: 5%;
   }
 }
