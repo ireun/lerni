@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from .meta import *
-import re
 
 
 class People(Base):
@@ -198,4 +197,4 @@ class RootFactory(object):
                (Allow, u'g:basic', ('settings', 'edit'))]
 
     def __init__(self, request):
-      pass
+        pass
