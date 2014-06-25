@@ -417,7 +417,7 @@ margin: 10px 0;
     background-image: -o-linear-gradient(top, #222222, #111111);
 }
 .navbar-brand {font-size: 20px!important;}
-#header{margin-top: 40px;}
+#wrapper{margin-top: 40px;}
 .navbar .container{max-width: 1280px;width: auto;}
 
 @media (max-width: 767px) {

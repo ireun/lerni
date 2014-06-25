@@ -1,73 +1,9 @@
 <%include file="top_new.mak"/>
 <%include file="snippets/header.mak"/>
-
 <script>
-    var NWave = function () {
-        this.css = function (p) {
-            var path_len = $(document).width() - 300;
-            var s = Math.abs(Math.sin(p * 60));
-            var x = path_len - p * path_len;
-            var y = s * 50 - 50;
-            var o = 0;
-            /*((s+2)/4+0.1)*/
-            return {bottom: y + "px", left: x + "px", opacity: 1}
-        }
-    };
-    var NWave2 = function () {
-        this.css = function (p) {
-            var path_len = $(document).width() - 300;
-            var s = Math.abs(Math.sin(p * 60));
-            var x = path_len - p * path_len;
-            var y = s * 50 - 50;
-            var o = 0;
-            /*((s+2)/4+0.1)*/
-            return {top: y + "px", right: x + "px", opacity: 1}
-        }
-    };
-
-    head.js(jquery, ion_sound, jwerty, function () {
-        $().ready(function () {
-            (function ($) {
-                $.path = {};
-                $.fx.step.path = function (fx) {
-                    var css = fx.end.css(1 - fx.pos);
-                    if (css.bottom) {
-                        fx.elem.style.bottom = css.bottom;
-                    }
-                    if (css.top) {
-                        fx.elem.style.top = css.top;
-                    }
-                    if (css.right) {
-                        fx.elem.style.right = css.right;
-                    }
-                    if (css.left) {
-                        fx.elem.style.left = css.left;
-                    }
-                };
-            })(jQuery);
-            $.ionSound({sounds: ["rasputin"]});
-            jwerty.key('↑,↑,↓,↓,←,→,←,→,B,A', function () {
-                var natalia = $("#natalia");
-                var natalia2 = $("#natalia2");
-                natalia.width($(document).width() / 6);
-                natalia2.width($(document).width() / 6);
-                natalia.delay(200).show();
-                natalia.delay(200).animate({path: new NWave}, 7800, "linear", function () {
-                    natalia.hide();
-                    natalia2.show()
-                    natalia2.animate({path: new NWave2}, 8300, "linear", function () {
-                        natalia2.hide()
-                    });
-
-                });
-                $.ionSound.play("rasputin");
-            });
-        });
-    });
-
     head.js(jquery, readmore, function(){
         $().ready(function () {
-        $('.article > .panel-body').readmore();
+        $('.article > .panel-body.read_more').readmore();
         })
     });
     head.js(jquery, jquery_ui, function(){
@@ -126,7 +62,7 @@
 </script>
 
 <div id="main" class="container">
-    <div class="row">
+    <div class="row hidden-xs">
         <div id="masthead">
             <ul class="nav nav-justified">
                 <li class="item current active"><a href="/strona-glowna">Strona Główna</a></li>
@@ -141,53 +77,18 @@
     </div>
     <div class="row">
         <div id="menu" class="col-sm-3 hidden-xs">
-            <h4>O Szkole</h4>
-            <ul class="nav nav-stacked">
-                <li><a href="http://www.120.ab.staszic.edu.pl">120-lecie Staszica</a></li>
-                <li><a href="http://staszic.edu.pl/historia">Historia i Patroni</a></li>
-                <li><a href="http://staszic.edu.pl/entry/8">Szkolne muzeum</a></li>
-                <li><a href="http://staszic.edu.pl/graduates">Absolwenci</a></li>
-                <li><a href="/fundacja">Fundacja</a></li>
-                <li><a href="/towarzystwo-szkol-tworczych">Towarzystwo Szkół Twórczych</a></li>
-                <li><a href="http://staszic.edu.pl/dokumenty">Statuty i Regulaminy</a></li>
-                <li><a href="/galeria">Galeria</a></li>
-                <li><a href="/kontakt">Kontakt</a></li>
-                <li><a href="/dojazd">Dojazd</a></li>
-                <li><a href="http://sis.staszic.edu.pl/schedule">Plan lekcji</a></li>
-                <li><a href="/pliki/kalendarium2013-14.pdf">Kalendarium</a></li>
-                <li><a href="http://www.facebook.com/sustaszic">Staszic na Facebooku</a></li>
-            </ul>
-            <h3>Edukacja</h3>
-            <ul class="nav nav-stacked">
-                <li><a href="/podreczniki">Podręczniki i Programy</a></li>
-                <li><a href="/pliki/matura2014.doc">Tematy maturalne</a></li>
-                <li><a href="/pliki/bibl.pdf">Bibliografia</a></li>
-                <li><a href="/comenius">Comenius</a></li>
-                <li><a href="http://www.ab.staszic.edu.pl">Informatyka</a></li>
-            </ul>
-            <h3>Strefa uczniowska</h3>
-            <ul class="nav nav-stacked">
-                <li><a href="http://staszic.edu.pl/lucky">Szczęśliwy numerek</a></li>
-                <li><a href="/su">Samorząd Uczniowski</a></li>
-                <li><a href="/staszictv">StaszicTV</a></li>
-                <li><a href="/poczta/">Poczta</a></li>
-                <li><a href="/p/dla-kandydatow">Serwis dla Kandydatów</a></li>
-                <li><a href="/sport">Sport</a></li>
-                <li><a href="/pliki/KONSULTACJE.pdf">Konsultacje</a></li>
-                <li><a href="/pliki/dyżury.pdf">Dyżury klas</a></li>
-                <li><a href="/dzwonki">Dzwonki</a></li>
-            </ul>
-            <h3>Na skróty</h3>
-            <ul class="nav nav-stacked">
-                <li><a href="http://staszic.edu.pl/competitions">Konkursy</a></li>
-                <li><a href="/klub-podroznika">Klub Podróżnika</a></li>
-                <li><a href="/">PO DRUGIEJ STRONIE LUSTRA</a></li>
-            </ul>
+            %for set in menu_left:
+                <h4>${set['name']}</h4>
+                <ul class="nav nav-stacked">
+                %for item in set['items']:
+                    <li><a href="${item['link']}">${item['name']}</a></li>
+                %endfor
+                </ul>
+            %endfor
         </div>
 
         <div id="article_main" class="col-sm-6">
-            <div class="row">
-
+            <div class="row hidden-xs">
                 <div class="col-sm-6">
                     <a href="http://www.120.ab.staszic.edu.pl"> <img src="http://staszic.edu.pl//pliki/banners/baner.jpg" alt="120 lecie"/> </a>
                 </div>
@@ -195,13 +96,11 @@
                     Podstrona 120.ab.staszic.edu.pl zawierajaca informacje o organizacji 120 - lecia naszego liceum.
                 </div>
             </div>
-            <!--
-            <div class="row">
+            <div class="row hidden-xs">
                 <div class="col-sm-12">
-                    <button id="button_add_article" type="button" class="btn btn-default btn-lg btn-block">Dodaj artykuł</button>
+                    <button id="button_add_article" type="button" class="btn btn-default btn-lg btn-block">Zaproponuj artykuł</button>
                 </div>
             </div>
-            -->
             <br/>
 
             <div class="articles">
@@ -210,11 +109,23 @@
                         <div class="panel-heading" style="padding: 4px 4px 10px 4px;">
                             <h4 class="title">${x['title']}</h4>
 
-                            <div class='author'>Administrator</div>
-                            <div class='timeago' title="${x['time']}">${x['created']}</div>
+                            <div class='author'>${x['author']}</div>
+                            <time class="timeago" datetime="${x['time']}">${x['created']}</time>
+                            <!--
+                            <div class="reading_time">${x['reading_time']}</div>
+                            -->
+
+                            <div class="dropdown" style="font-size: 13px !important;color: #888;position: absolute; top: 5px; right: 10px;">
+                              <a id="drop1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><b class="caret"></b></a>
+                              <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
+                                <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1">Action</a></li>
+                                <li role="presentation" class="disabled"><a role="menuitem" tabindex="-1">Zaproponuj poprawkę</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="http://twitter.com/fat">Link bezpośredni</a></li>
+                              </ul>
+                            </div>
                         </div>
-                        <div class='panel-body video'>
-                            ${x['introtext'] |n}
+                        <div class='panel-body video ${['', 'read_more'][int(x['read_more'])]}'>
+                            ${x['text'] |n}
                         </div>
                     </div>
                 % endfor
@@ -236,70 +147,54 @@
         <!-- end wrapper -->
 
         <div id="right" class="col-sm-3  hidden-xs">
+            % if last_gallery:
             <div class="panel panel-default">
-                <div class="panel-heading">Nasze sukcesy (<a href="/nasze-sukcesy">więcej</a>)</div>
+                <div class="panel-heading">Ostatnio w galerii (<a href="/gallery">więcej</a>)</div>
+                <ul id="Grid" style="margin-bottom: 0;">
+                    <li style="width: 100%; margin-bottom: 0;">
+                        <a href="${last_gallery[1]}" class="athumbnail">
+                            <img src="${last_gallery[2]}" alt="">
+                            <div class="caption">
+                            <p>${last_gallery[0]}</p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            % endif
+            <style>
+                .panel-default > .panel-heading {position: relative;}
+                .panel-heading > .add{position: absolute; top: -2px;right: -1px;color: #DDD;}
+                .panel-heading > .add:hover{color: #AAA; cursor: pointer;}
+            </style>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Nasze sukcesy (<a href="/nasze-sukcesy">więcej</a>)
+                    <i class="fa fa-plus-square fa-2x add"></i>
+                </div>
                 <table class="table">
                     <tr>
-                        <td class="editable">Łukasz Nawaro z klasy 3mat1 uzyskał tytuł laureata Olimpiady Wiedzy o Polsce i Świecie
-                            Współczesnym.
+                        <td class="editable">
+                            Na podstawie komunikatu przesłanego przez Wydział Edukacji, informujemy że wśród 39 laureatów
+                            wojewódzkich konkursów przedmiotowych dla uczniów gimnazjów z ternu miasta Sosnowca,
+                            aż 20 to nasi uczniowie.<br/>
+                            Wśród szkół licealnych w Sosnowcu tytuł laureata i finalisty Ogólnopolskiej Olimpiady
+                            przedmiotowe uzyskało 5 uczniów, z tego aż 4 stanowią nasi uczniowie.
                         </td>
-                    </tr>
-                    <tr>
-                        <td>Justyna Motyka z klasy 3mat1 zdobyła tytuł finalistki Olimpiady Języka Francuskiego.</td>
                     </tr>
                 </table>
             </div>
-            <!--
-            <h4>Logowanie</h4>
-            <form action="https://staszic.edu.pl/strona-glowna" id="login-form" method="post" name="login-form">
-                <fieldset class="userdata">
-                    <div class="input-group">
-                      <span class="input-group-addon">@</span>
-                      <input id="modlgn-username" name="username" type="text" class="form-control" placeholder="Użytkownik">
-                    </div>
-                   <div class="input-group">
-                      <span class="input-group-addon">***</span>
-                      <input id="modlgn-passwd" name="password" type="password" class="form-control" placeholder="Hasło">
-                    </div>
-                    <div class="checkbox pull-right">
-                        <label>
-                          <input class="inputbox pull-left" id="modlgn-remember" name="remember" type="checkbox" value="yes">Zapamiętaj
-                        </label>
-                    </div>
-                    <button type="submit" name="Submit" value="Zaloguj" class="btn btn-default pull-left">Zaloguj</button>
-                    <input name="option" type="hidden" value="com_users"> <input name="task" type="hidden" value="user.login">
-                    <input name="return" type="hidden" value="aW5kZXgucGhwP0l0ZW1pZD0z">
-                    <input name="f99f4e842d3454782ffb695eeb5fb978" type="hidden" value="1">
-                </fieldset>
-                <ul>
-                    <li><a href="/component/users/?view=reset">Nie pamiętasz hasła?</a></li>
-                    <li><a href="/component/users/?view=remind">Nie pamiętasz nazwy?</a></li>
-                    <li><a href="/component/users/?view=registration">Załóż swoje konto!</a></li>
-                </ul>
-            </form>
-            -->
-            <!--
-            <a href="/administrator">Panel administratora</a>
-            <a href="/admin">Panel Lerni</a>
-            -->
+            <style>.panel-body > a{text-decoration: underline;
+            font-family: 'Helvetica Neue', Helvetica, Arial, 'lucida grande',tahoma,verdana,arial,sans-serif;
+
+            }</style>
             <div class="panel panel-default">
                 <div class="panel-heading">Facebook</div>
-                <div id="fb-root"></div>
-                <script>(function (d, s, id) {
-                    var js, fjs = d.getElementsByTagName(s)[0];
-                    if (d.getElementById(id)) return;
-                    js = d.createElement(s);
-                    js.id = id;
-                    js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1&appId=231650380180066";
-                    fjs.parentNode.insertBefore(js, fjs);
-                }(document, 'script', 'facebook-jssdk'));</script>
-                <div style="overflow: hidden; margin: auto; margin-right: 5px;">
-                <div class="fb-like-box" data-href="https://www.facebook.com/sustaszic" data-height="80"
-                                         data-colorscheme="light" data-show-faces="false" data-header="true"
-                                         data-stream="false" data-show-border="true" style="margin-left: -60px;"></div>
-
+                <div class="panel-body" style="padding: 6px;">
+                    <a href="https://www.facebook.com/sustaszic" style="color: #3b5998;cursor: pointer;text-decoration: none;font-weight: bold;font-size: 13px;">Samorząd Uczniowski IV LO im. Stanisława Staszica w Sosnowcu</a>
+                    <%include file="snippets/fb-root.mak"/>
+                    <div class="fb-like" data-href="https://www.facebook.com/sustaszic" data-width="200" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div>
                 </div>
-
             </div>
 
             <div class="panel panel-default">
@@ -307,12 +202,20 @@
                 <div class="lucky_number">${lucky_number}</div>
                 <div class="lucky_number_date">${lucky_number_date}&nbsp;</div>
             </div>
-	    <img src="/static/uploads/zebra.png" alt="Zebra - maskotka Staszica.">
+	        <img src="/static/uploads/zebra.png" alt="Zebra - maskotka Staszica." style="margin-bottom: 20px;">
+            <!--
+            <a href="/syllabus"><img src="/static/uploads/syllabus.png" alt="Syllabus"></a>
+            -->
+            <div class="panel panel-default">
+                <div class="panel-heading">Changelog (<a href="https://github.com/kamilx3/lerni/commits/master">więcej</a>)</div>
+                ---14.06.2014---<br />
+                Dodano cache galerii i szkic <a href="/syllabus">syllabusa.</a><br />
+                ---13.06.2014---<br />
+                Nowa <a href="/gallery"> galeria </a> (fotorama + flickr).<br />
+                ---13.06.2014---<br />
+                Dodano bbcode dla youtube.<br />
+            </div>
         </div>
-        <!-- end right -->
     </div>
-    <!-- end row -->
 </div>
-<img class="natalia" id="natalia" src="/static/images/natalia_poklonskaya.png" alt=""/>
-<img class="natalia" id="natalia2" src="/static/images/natalia_poklonskaya2.png" alt=""/>
 <%include file="bottom_new.mak"/>

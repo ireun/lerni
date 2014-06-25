@@ -1,3 +1,4 @@
+<%include file="snippets/natalia.mak"/>
 <div id="space"></div>
 </div>
 <div id="footer" class="content-wrapper">
