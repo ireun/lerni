@@ -19,80 +19,7 @@ from sqlalchemy import or_
 import locale
 from sqlalchemy import desc
 from sqlalchemy import asc
-from main_page.models import (DBSession,
-                              MenuTop,
-                              MenuLeft,
-                              Base,
-                              Substitutions,
-                              People,
-                              AALogin,
-                              Wallet,
-
-                              Folders,
-                              FoldersVersions,
-                              FoldersCSS,
-                              FoldersCSSVersions,
-                              FoldersTags,
-                              Entries,
-                              EntriesVersions,
-                              EntriesCSS,
-                              EntriesCSSVersions,
-                              EntriesLikes,
-                              EntriesTags,
-                              Tags,
-
-                              Tweets,
-                              TweetsCategories,
-                              TweetsCategoriesList,
-                              Videos,
-                              VideosMain,
-                              Banners,
-                              Sets,
-                              SetsItems,
-                              EasyLinks,
-
-                              Teachers,
-                              Absent,
-                              Replace,
-                              Duty,
-                              Shift,
-                              Places,
-                              Subjects,
-                              Schedules,
-                              LuckyNumbers,
-                              SchoolYears,
-                              Terms,
-                              DivisionsCategories,
-                              Divisions,
-                              Groups,
-                              Lessons,
-                              LessonsGroups,
-                              Association,
-                              AppCodes,
-                              SupportSections,
-                              SupportSubSections,
-                              SupportTickets,
-                              SupportQuestions,
-                              Pages,
-                              Widgets,
-                              Bells,
-                              BellsTypes,
-                              Graduates,
-                              Competitors,
-                              CompetitorsCompetitions,
-                              CompetitorsTutors,
-                              CompetitorsTypes,
-                              CompetitorsGroups,
-                              Files,
-                              PingResults,
-                              PingIPs,
-                              Settings,
-                              Cache,
-                              ArticlesProposed,
-                              SyllabusYears,
-                              SyllabusProfiles,
-                              SyllabusExtensions
-                              )
+from main_page.models import *
     
 #import re
 #from docutils.core import publish_parts
@@ -154,6 +81,24 @@ def tempinput(data):
     temp.close()
     yield temp.name
     os.unlink(temp.name)
+
+l = json.loads
+d = json.dumps
+
+
+def send_email(request, renderer, renderer_dict):
+    renderer_dict['email_logo'] = ['http://staszic.edu.pl/static/images/h1.gif', u'Staszic Mail']
+    renderer_dict['facebook'] = ['http://staszic.edu.pl/static/images/fb.gif', u'sustaszic']
+    renderer_dict['copy_right'] = "ZSO nr 15, Sosnowiec 2008-2014"
+    mailer = request.registry['mailer']
+    message = Message(subject=renderer_dict['email_subject'],
+                      sender="mailer.staszic@gmail.com",
+                      recipients=[renderer_dict['email']],
+                      html=unicode(render(renderer, renderer_dict, request)))
+    #photo_data = open("main_page/templates/email/fb.gif", "rb").read()
+    #attachment = Attachment("images/fb.gif", "image/jpg", photo_data)
+    #message.attach(attachment)
+    mailer.send_immediately(message)
 
 
 def pl_to_ascii(text):

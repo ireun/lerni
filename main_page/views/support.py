@@ -35,14 +35,23 @@ def support_ticket_send(request):
 
     with transaction.manager:
         DBSession.add_all([SupportQuestions(ticket_id, r['question'], time_now, r['name'])])
-    mailer = request.registry['mailer']
-    message = Message(subject=u"Dziękujemy za zadanie pytania!",
-                      sender="mailer.staszic@gmail.com",
-                      recipients=[r['email']],
-                      body=u"Twoje zapytanie zostało odebrane, aby potwierdzić swoją tożsamość kliknij link poniżej.\n"
-                      + request.route_url('support_ask_ticket', id=confirmation_code)
-                      )
-    mailer.send(message)
+    email = r['email']
+    page['message'] = u"Dziękujemy za zadanie pytania!"
+    from smtplib import SMTPRecipientsRefused
+    try:
+        send_email(request, 'email/support_new_thread.mak',
+                   {'email': email,
+                    'email_name': email,
+                    'signature': u"Dziękujemy,<br/>Zespół staszic.edu.pl",
+                    'email_subject': u"Support - staszic.edu.pl",
+                    'confirmation_link': request.route_url('support_ask_ticket', id=confirmation_code),
+                    'question': r['question']
+                    })
+    except SMTPRecipientsRefused:
+        page['message'] = u"Niestety podałeś błędny adres email, spróbuj jeszcze raz."
+
+    #body=u"Twoje zapytanie zostało odebrane, aby potwierdzić swoją tożsamość kliknij link poniżej.\n"
+
     #[u"Wiadomość została wysłana, sprawdź emaila w celu uwierzytelnienia.","success","topRight"]
     return page
 
