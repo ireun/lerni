@@ -126,23 +126,28 @@ def main(global_config, **settings):
 
     config.add_route('easy_link', '/{link}')
 
+    wa_env = get_webassets_env(config)
     for x in os.walk("main_page/static/src/"):
         for y in x:
             for z in y:
                 if z[-7:] == ".min.js":
                     name = x[0][21:] + "/" + z
-                    print Bundle("src/" + name, output=name, filters=['closure_js']).urls(get_webassets_env(config))
+                    b = Bundle("src/" + name, output=name, filters=['closure_js'])
+                    wa_env.register(name+"h", b)
+                    print b.urls()
                 if z[-3:] == ".js":
                     name = x[0][21:] + "/" + z
-                    print Bundle("src/" + name, output=name[:-3] + ".min.js", filters=['closure_js']).urls(
-                        get_webassets_env(config))
+                    b = Bundle("src/" + name, output=name[:-3] + ".min.js", filters=['closure_js'])
+                    wa_env.register(name, b)
+                    print b.urls()
     for x in os.walk("main_page/static/src/"):
         for y in x:
             for z in y:
                 if z[-4:] == ".css":
                     name = x[0][21:] + "/" + z
-                    print Bundle("src/" + name, output=name[:-4] + ".min.css").urls(
-                        get_webassets_env(config)) #, filters=['cssmin']
+                    b = Bundle("src/" + name, output=name[:-4] + ".min.css")
+                    wa_env.register(name, b)
+                    print b.urls()
         #scroll_up_css=Bundle("libs/scrollup/themes/pill.css")
     #scroll_up_js=Bundle("libs/scrollup/jquery.scrollUp.min.js","js/scroll_up.js")
 
