@@ -97,6 +97,64 @@ head.js(holder);
  }
  */
 
+head.js(jquery, bootstrap, angularjs, angularui, socketio, function () {
+    angular.module('Lerni', ['ui.utils'])
+        .controller('LerniCtrl', function($scope, $socketio) {
+            console.log("WE ARE IN!");
+            $scope.who = "Mama";
+            $scope.username = "";
+            $scope.messages = [];
+            $scope.members = [];
+            $scope.chat_choose_nick = "";
+            $scope.chat_message = "";
+            $scope.keypressCallback = function($event) {
+                $socketio.emit("chat", $scope.chat_message);
+                $scope.messages.push({user: $scope.username, text: $scope.chat_message});
+                $scope.chat_message = "";
+                $event.preventDefault();
+            };
+            $scope.setUsername = function() {
+                $socketio.emit("set_username", $scope.chat_choose_nick);
+                $socketio.emit("join", "main");
+            };
+            $socketio.on('set_username', function(data) {
+                $scope.username = data;
+            });
+            $socketio.on('message', function(data) {
+                $scope.messages.push({
+                user: data.us,
+                text: data.text
+                });
+            });
+            $socketio.on('userlist', function(data) {
+                $scope.members = data;
+                console.log("GOT USERLIST");
+                console.log(data);
+            });
+        })
 
-
-
+        .factory('$socketio', function ($rootScope) {
+            var socket = io.connect('/chat');
+            return {
+                on: function (eventName, callback) {
+                    socket.on(eventName, function () {
+                        var args = arguments;
+                        $rootScope.$apply(function () {
+                            callback.apply(socket, args);
+                        });
+                    });
+                },
+                emit: function (eventName, data, callback) {
+                    socket.emit(eventName, data, function () {
+                        var args = arguments;
+                        $rootScope.$apply(function () {
+                            if (callback) {
+                                callback.apply(socket, args);
+                            }
+                        });
+                    })
+                }
+            };
+        });
+    angular.bootstrap(document, ['Lerni']);
+});

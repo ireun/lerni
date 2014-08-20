@@ -1,3 +1,6 @@
+.conversation{
+    padding: 4px;
+}
 .articles img{
 width: 100%;
 }
@@ -572,4 +575,13 @@ p {
     margin-top: -50px;
     text-align: center;
     color: #BBB;
+}
+
+#chat{z-index: 1;}
+.conversation > li.ng-scope {
+    /*border-bottom: grey 1px solid;
+    padding: 10px;*/
+}
+.conversation > li > div{
+    display: inline-block;
 }

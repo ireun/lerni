@@ -27,10 +27,11 @@ magicsuggest = {magicsuggest: '/static/libs/magicsuggest/magicsuggest.min.js'};
 jquery_flot = {jquery_flot: '/static/libs/jquery.flot/jquery.flot.min.js'};
 
 uiji = {uiji: "/static/libs/uiji/uiji.min.js"};
+
 raptor = {raptor: "/static/libs/raptor/raptor.min.js"};
 reveal = {reveal: "/static/libs/reveal/reveal.min.js"};
 gridster = {gridster: "/static/libs/gridster/jquery.gridster.min.js"};
-leaflet = {leaflet: "//cdnjs.cloudflare.com/ajax/libs/leaflet/0.6.4/leaflet.js"};
+leaflet = {leaflet: "//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"};
 
 jquery = {jquery:"//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"};
 jquery_cookie = "//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.3.1/jquery.cookie.min.js";
@@ -53,6 +54,10 @@ jquery_noty_t_l = "//cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.0.3/layouts/to
 jquery_noty_t_r = "//cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.0.3/layouts/topRight.min.js";
 jquery_noty_t_d = "//cdnjs.cloudflare.com/ajax/libs/jquery-noty/2.0.3/themes/default.min.js";
 masked_input = "//cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.3.1/jquery.maskedinput.min.js";
+angularjs = "//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js";
+angularui = "//cdnjs.cloudflare.com/ajax/libs/angular-ui-utils/0.1.1/angular-ui-utils.min.js";
+bootstrap = "//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js";
+socketio = "//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js";
 
 underscore = "//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.1/underscore-min.js";
 sequence_diagram = "//cdnjs.cloudflare.com/ajax/libs/js-sequence-diagrams/1.0.4/sequence-diagram-min.js";

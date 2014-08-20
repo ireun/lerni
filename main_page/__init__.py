@@ -45,11 +45,6 @@ def main(global_config, **settings):
     config.add_renderer('jsonp', JSONP(param_name='callback'))
 
     config.add_route('api', '/api')
-    config.add_route('jsonp_post_comments', '/api/jsonp/post_comments')
-    config.add_route('jsonp_year_add', '/api/jsonp/year/add') #articles zrobic podobnie#
-    config.add_route('jsonp_year', '/api/jsonp/year/{year}')
-    config.add_route('jsonp_people', '/api/jsonp/people')
-    config.add_route('jsonp_groups', '/api/jsonp/groups')
     config.add_route('jsonp_mobile_login', '/api/jsonp/mobile_login')
 
     config.add_route('jsonp_system_info', '/api/jsonp/system_info')
@@ -89,7 +84,7 @@ def main(global_config, **settings):
     config.add_route('syllabus_year', '/syllabus/{year}')
     config.add_route('syllabus_profile', '/syllabus/{year}/{profile}')
     config.add_route('syllabus_extension', '/syllabus/{year}/{profile}/{extension}')
-    #config.add_route('gallery_list', '/gallery')
+    config.add_route('competitions', '/competitions/{path_name}')
 
     config.add_route('file_upload', '/file-upload')
 
@@ -111,6 +106,7 @@ def main(global_config, **settings):
     config.add_route('sis_about', '/sis/about')
     config.add_route('schedule', '/sis/schedule')
     config.add_route('map', '/map')
+    config.add_route('socketio', 'socket.io/*remaining')
 
 
     #    config.add_route('anki_sync_meta', '/syncmeta')
@@ -148,6 +144,7 @@ def main(global_config, **settings):
                     b = Bundle("src/" + name, output=name[:-4] + ".min.css")
                     wa_env.register(name, b)
                     print b.urls()
+    #, filters=['cssmin']
         #scroll_up_css=Bundle("libs/scrollup/themes/pill.css")
     #scroll_up_js=Bundle("libs/scrollup/jquery.scrollUp.min.js","js/scroll_up.js")
 

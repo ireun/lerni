@@ -41,8 +41,56 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.6.4/leaflet.css" type="text/css"/>
     <link href="/static/css/base.min.css" rel="stylesheet">
 </head>
-<body>
+<body ng-controller="LerniCtrl">
 <div id="wrapper">
+    <section id="chat" class="panel panel-primary" style="width: 400px;background: #FFF; position: fixed; bottom: -23px; right: 20px; overflow: hidden;">
+        <header class="panel-heading top-bar">
+            <i class="fa fa-comment"></i>
+            Live Chat
+            <i class="fa fa-minus pull-right"></i>
+        </header>
+        <div class="panel-body" style="padding: 6px;" ng-show="username == ''">
+            <h3 style="text-align: center;">
+            Wybierz swój pseudonim i kliknij<br>"Dołącz do chatu".<br>
+            <br>
+            <input type="text" ng-model="chat_choose_nick" placeholder="Twój pseudonim"></input>
+            </h3>
+            <button class="btn btn-default" ng-click="setUsername()">Dołącz do chatu</button>
+            <button class="btn btn-default disabled">Skontaktuj się z pomocą techniczną</button>
+        </div>
+        <div ng-show="username != ''">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#chatroom" role="tab" data-toggle="tab">Chat</a></li>
+                <li><a href="#users" role="tab" data-toggle="tab">Użytkownicy</a></li>
+                <li><a href="#messages" role="tab" data-toggle="tab">PM</a></li>
+                <li><a href="#settings" role="tab" data-toggle="tab">Ustawienia</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="chatroom">
+                    <ol class="conversation" style="height: 320px; overflow-y: scroll;">
+                        <li ng-repeat="message in messages">
+                            <div class="user">
+                                <p>{{message.user}}</p>
+                            </div>
+                            <div class="message" >
+                            <p>{{message.text}}</p>
+                            </div>
+                        <li>
+                    </ol>
+                    <input type="text" ui-keypress="{13:'keypressCallback($event)'}" ng-model="chat_message"></input>
+                </div>
+                <div class="tab-pane" id="users">
+                    <ol class="user_list" style="height: 320px; overflow-y: scroll;">
+                        <li class="{{member.type}}" ng-repeat="member in members">
+                            {{member.nick}}
+                        </li>
+                    </ol>
+                </div>
+                <div class="tab-pane" id="messages">Work in progress ;)</div>
+                <div class="tab-pane" id="settings">...</div>
+            </div>
+        </div>
+    </section>
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
             <div class="navbar-header">
